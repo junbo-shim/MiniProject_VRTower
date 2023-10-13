@@ -18,8 +18,17 @@ public class AddShopList : MonoBehaviour
     void Start()
     {
         shopObjList = new List<GameObject>();
+        for (int i = 0; i < explanation_Texts.Length; i++)
+        {
+            shopObjList.Add(Instantiate( shopList));
+        }
         //리스트 추가 함수
         ShopItemListAdd();
+        for(int i = 0; i < explanation_Texts.Length; i++)
+        {
+            TMP_Text explanation = shopObjList[i].transform.Find("Explanation").transform.Find("Explanation_Text").transform.GetComponent<TMP_Text>();
+            Debug.Log(explanation.text);
+        }
         //상점 아이템 추가
         ShopItemAdd();
         
@@ -30,14 +39,14 @@ public class AddShopList : MonoBehaviour
     {
         for (int i = 0; i < explanation_Texts.Length; i++)// 추
         {
-            shopObjList.Add(shopList);
+            
 
+            Debug.Log(shopObjList[i].name);
             //{설명 텍스트 추가
-            TMP_Text explanation = shopObjList[i].transform.Find("Explanation").transform.Find("Explanation_Text").transform.GetComponent<TMP_Text>();
-            Debug.Log(explanation);
+            TMP_Text explanation = shopObjList[i].transform.Find("Explanation").transform.Find("Explanation_Text").transform.GetComponent<TMP_Text>();   
             explanation.text = explanation_Texts[i];
             //}설명 텍스트 
-
+         
             //{시간 텍스트 추가
             TMP_Text Time = shopObjList[i].transform.Find("Item_Information").Find("TimeIcon").Find("TimeText").GetComponent<TMP_Text>();
             Time.text = times[i].ToString();
@@ -48,15 +57,23 @@ public class AddShopList : MonoBehaviour
             Buy.text = buyCoins[i].ToString();
             //}구매 텍스트 
 
+            //{시간 텍스트 추가
+            Image img = shopObjList[i].transform.Find("Item_Information").Find("TurretImg").GetComponent<Image>();
+            img.sprite = itemImg[i];
+            //}시간 텍스트 추가
+
+            shopObjList[i].name = img.sprite.name;
         }
 
     }
     //상점 아이템 추가
     void ShopItemAdd()
     {
-
+        
         for (int i = 0; i < shopObjList.Count; i++)
         {
+            //TMP_Text explanation = shopObjList[i].transform.Find("Explanation").transform.Find("Explanation_Text").transform.GetComponent<TMP_Text>();
+          
 
             GameObject newObject = Instantiate(shopObjList[i]);
             newObject.transform.SetParent(transform);
@@ -70,7 +87,7 @@ public class AddShopList : MonoBehaviour
 
 
             newObjcetRT.localScale = new Vector3(0.8f, 0.8f, 1f);
-            Debug.Log(newObjcetRT.sizeDelta);
+            
         }
     }
   
