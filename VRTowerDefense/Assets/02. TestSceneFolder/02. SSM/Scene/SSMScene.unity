@@ -252,14 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopList: {fileID: 1608152038133695396, guid: 6da7bb61698da244b9d8b6f16105ce84, type: 3}
-  explanation_Texts:
-  - 1
-  - 2
-  buyCoins: 0100000002000000
-  times: 0000000002000000
-  itemImg:
-  - {fileID: 21300000, guid: 3b94b347403aeaa4682fbe3c94df54a7, type: 3}
-  - {fileID: 21300000, guid: 1807a777c4f85ef4cb489ad055d1eab2, type: 3}
+  itemDataScriptableObject: {fileID: 11400000, guid: 0a35484030ba51a4ea96d3eae87c2f32, type: 2}
 --- !u!1 &226124576
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,6 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 134ca78ec5758e84e99f84b89ce90136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemDataScriptableObject: {fileID: 11400000, guid: 0a35484030ba51a4ea96d3eae87c2f32, type: 2}
 --- !u!4 &226124578
 Transform:
   m_ObjectHideFlags: 0

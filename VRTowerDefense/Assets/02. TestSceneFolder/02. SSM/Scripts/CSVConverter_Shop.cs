@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 public class CSVConverter_Shop : MonoBehaviour
 {
     private static CSVConverter converter_Instance;
@@ -55,7 +56,7 @@ public class CSVConverter_Shop : MonoBehaviour
         itemDataListCopy();
        // Test();
     }
-
+    //ScriptableObject로 만들기
     private void itemDataListCopy()
     {
         List<ItemData> ShopItemDataList = new List<ItemData>();
@@ -73,7 +74,10 @@ public class CSVConverter_Shop : MonoBehaviour
 
             ShopItemDataList.Add(item);
         }
-        itemDataScriptableObject.items = ShopItemDataList;
+
+        // CSVID를 기준으로 오름차순 정렬
+        List<ItemData> sortedShopItemDataList = ShopItemDataList.OrderBy(item => item.CSVID).ToList();
+        itemDataScriptableObject.items = sortedShopItemDataList;
 
        
     }

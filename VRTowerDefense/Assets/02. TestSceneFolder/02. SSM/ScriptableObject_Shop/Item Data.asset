@@ -13,23 +13,23 @@ MonoBehaviour:
   m_Name: Item Data
   m_EditorClassIdentifier: 
   items:
-  - CSVID: 0
-    Description: 
-    UnitID: 0
-    Price: 0
-    TotalNum: 0
-  - CSVID: 0
-    Description: 
-    UnitID: 0
-    Price: 0
-    TotalNum: 0
-  - CSVID: 0
-    Description: 
-    UnitID: 0
-    Price: 0
-    TotalNum: 0
-  - CSVID: 0
-    Description: 
-    UnitID: 0
-    Price: 0
-    TotalNum: 0
+  - CSVID: 1
+    Description: "\uBB34\uAE30\uAC15\uD654\uC720\uB2DB"
+    UnitID: 101
+    Price: 105
+    TotalNum: 10
+  - CSVID: 2
+    Description: "\uC57D\uC810\uAC15\uD654\uC720\uB2DB"
+    UnitID: 100
+    Price: 100
+    TotalNum: 10
+  - CSVID: 3
+    Description: "\uC804\uD22C\uD615\uBC30\uCE58\uC720\uB2DB"
+    UnitID: 102
+    Price: 110
+    TotalNum: 5
+  - CSVID: 4
+    Description: "\uC0C1\uD0DC\uC774\uC0C1\uBC30\uCE58\uC720\uB2DB"
+    UnitID: 103
+    Price: 120
+    TotalNum: 5
