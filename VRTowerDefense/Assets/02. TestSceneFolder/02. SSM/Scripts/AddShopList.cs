@@ -13,10 +13,19 @@ public class AddShopList : MonoBehaviour
     public int[] times; // 시간초
     public Sprite[] itemImg;
     private List<GameObject> shopObjList; // 추가한 샵리스트
-    
+    public ItemDataScriptableObject itemDataScriptableObject; // Inspector에서 할당
+
     // Start is called before the first frame update
     void Start()
     {
+        // 로그 csv
+        foreach (var item in itemDataScriptableObject.items)
+        {
+            Debug.Log("CSVID: " + item.CSVID + ", Description: " + item.Description + ", UnitID: " + item.UnitID);
+        }
+        // csv
+
+
         shopObjList = new List<GameObject>();
         for (int i = 0; i < explanation_Texts.Length; i++)
         {
@@ -24,11 +33,7 @@ public class AddShopList : MonoBehaviour
         }
         //리스트 추가 함수
         ShopItemListAdd();
-        for(int i = 0; i < explanation_Texts.Length; i++)
-        {
-            TMP_Text explanation = shopObjList[i].transform.Find("Explanation").transform.Find("Explanation_Text").transform.GetComponent<TMP_Text>();
-            Debug.Log(explanation.text);
-        }
+    
         //상점 아이템 추가
         ShopItemAdd();
         
@@ -41,7 +46,6 @@ public class AddShopList : MonoBehaviour
         {
             
 
-            Debug.Log(shopObjList[i].name);
             //{설명 텍스트 추가
             TMP_Text explanation = shopObjList[i].transform.Find("Explanation").transform.Find("Explanation_Text").transform.GetComponent<TMP_Text>();   
             explanation.text = explanation_Texts[i];
