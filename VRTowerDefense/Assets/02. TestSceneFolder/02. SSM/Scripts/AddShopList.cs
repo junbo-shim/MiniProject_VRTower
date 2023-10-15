@@ -76,33 +76,36 @@ public class AddShopList : MonoBehaviour
         for (int i = 0; i < csvID_Shop.Length; i++)// 추
         {
 
+           
+                //{설명 텍스트 추가
+                TMP_Text explanation = shopObjList[i].transform.Find("Explanation").transform.Find("Explanation_Text").transform.GetComponent<TMP_Text>();
+                explanation.text = description_Shop[i];
+                //}설명 텍스트 
 
-            //{설명 텍스트 추가
-            TMP_Text explanation = shopObjList[i].transform.Find("Explanation").transform.Find("Explanation_Text").transform.GetComponent<TMP_Text>();
-            explanation.text = description_Shop[i];
-            //}설명 텍스트 
+                //{시간 텍스트 추가
+                TMP_Text Time = shopObjList[i].transform.Find("Item_Information").Find("TimeIcon").Find("TimeText").GetComponent<TMP_Text>();
+                Time.text = TotalNum[i].ToString(); // 상의 필요
+                                                    //}시간 텍스트 추가
 
-            //{시간 텍스트 추가
-            TMP_Text Time = shopObjList[i].transform.Find("Item_Information").Find("TimeIcon").Find("TimeText").GetComponent<TMP_Text>();
-            Time.text = TotalNum[i].ToString(); // 상의 필요
-            //}시간 텍스트 추가
+                //{구매 텍스트 추가 
+                TMP_Text Buy = shopObjList[i].transform.Find("Item_Information").Find("BntBuy").Find("BuyText").GetComponent<TMP_Text>();
+                Buy.text = price_Shop[i].ToString();
+                //}구매 텍스트 
 
-            //{구매 텍스트 추가 
-            TMP_Text Buy = shopObjList[i].transform.Find("Item_Information").Find("BntBuy").Find("BuyText").GetComponent<TMP_Text>();
-            Buy.text = price_Shop[i].ToString();
-            //}구매 텍스트 
+                //{구매 가능 총량 텍스트 추가
+                TMP_Text quantity = shopObjList[i].transform.Find("Explanation").transform.Find("Quantity_Text").transform.GetComponent<TMP_Text>();
+                if (!TotalNum[i].Equals(null))
+                {
+                    quantity.text = TotalNum[i].ToString() + " \\ ";
+                }
 
-            //{구매 가능 수량 텍스트 추가
-            TMP_Text quantity = shopObjList[i].transform.Find("Explanation").transform.Find("Quantity_Text").transform.GetComponent<TMP_Text>();
-            quantity.text = TotalNum[i].ToString();
-            //}구매 가능 수량 텍스트 추가
+                //}구매 가능 총량 텍스트 추가
 
-            //{이미지 추가
-            Image img = shopObjList[i].transform.Find("Item_Information").Find("TurretImg").GetComponent<Image>();
-            img.sprite = LoadSprite(unitID_Shop[i].ToString());
-            //}이미지 추가
-
-
+                //{이미지 추가
+                Image img = shopObjList[i].transform.Find("Item_Information").Find("TurretImg").GetComponent<Image>();
+                img.sprite = LoadSprite(unitID_Shop[i].ToString());
+                //}이미지 추가
+          
         }
 
     }
