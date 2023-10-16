@@ -11,6 +11,7 @@ public class ItemData
     public int UnitID;
     public int Price;
     public int TotalNum;
+    public int Time;
 }
 
 [CreateAssetMenu(fileName = "Item Data", menuName = "Shop/Item Data")]

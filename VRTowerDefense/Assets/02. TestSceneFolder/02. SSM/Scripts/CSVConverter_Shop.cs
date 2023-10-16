@@ -39,7 +39,7 @@ public class CSVConverter_Shop : MonoBehaviour
     public int[] Price { get; private set; }
     public int[] TotalNum { get; private set; }
     // } csv 파일 데이터 변수
-
+    public int[] Time { get; private set; } // 시간추가
 
     private void Awake()
     {
@@ -53,8 +53,8 @@ public class CSVConverter_Shop : MonoBehaviour
         InitArrays();
 
         SortData();
-        itemDataListCopy();
-       // Test();
+       // itemDataListCopy();
+        Test();
     }
     //ScriptableObject로 만들기
     private void itemDataListCopy()
@@ -123,6 +123,7 @@ public class CSVConverter_Shop : MonoBehaviour
         UnitID = new int[csvRowCount];
         Price = new int[csvRowCount];
         TotalNum = new int[csvRowCount];
+        Time = new int[csvRowCount];
     }
 
     private void SortData() 
@@ -135,6 +136,7 @@ public class CSVConverter_Shop : MonoBehaviour
             UnitID[i] = int.Parse(itemDataList[(csvColumnCount * (i + 1)) + 2]);
             Price[i] = int.Parse(itemDataList[(csvColumnCount * (i + 1)) + 3]);
             TotalNum[i] = int.Parse(itemDataList[(csvColumnCount * (i + 1)) + 4]);
+            Time[i] = int.Parse(itemDataList[(csvColumnCount * (i + 1)) + 5]);
         }
     }
 
@@ -147,6 +149,7 @@ public class CSVConverter_Shop : MonoBehaviour
             Debug.Log(UnitID[i]);
             Debug.Log(Price[i]);
             Debug.Log(TotalNum[i]);
+            Debug.Log(Time[i]);
         }
     }
 }
