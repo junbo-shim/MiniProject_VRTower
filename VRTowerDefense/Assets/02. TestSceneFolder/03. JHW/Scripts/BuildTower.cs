@@ -31,7 +31,6 @@ public class BuildTower : MonoBehaviour
             {
                 // 타겟 오브젝트와 부딪혔을 때 해당 위치에 프리팹을 설치
                 Instantiate(prefabToPlace, hit.point, Quaternion.identity);
-
             }
         }
         else
