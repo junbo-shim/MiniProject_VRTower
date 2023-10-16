@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
         Death,       // 사망
     }
 
+
     private IState currentState;
     private Idle idleState = new Idle();
     private Battle battleState = new Battle();

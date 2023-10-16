@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//! ObjectPoolManager 클래스는 ObjectPool                      을 활용하기 위해 제작한 클래스이다
+//! ObjectPoolManager 클래스는 ObjectPooling 패턴을 활용하기 위해 제작한 클래스이다
 public class ObjectPoolManager : MonoBehaviour
 {
-
     // 싱글톤 사용
     public static ObjectPoolManager Instance;
 
