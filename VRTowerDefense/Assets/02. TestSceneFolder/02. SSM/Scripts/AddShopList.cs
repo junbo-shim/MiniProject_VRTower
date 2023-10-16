@@ -85,7 +85,7 @@ public class AddShopList : MonoBehaviour
                 //}설명 텍스트 
 
                 //{시간 텍스트 추가
-                TMP_Text Time = shopObjList[i].transform.Find("Item_Information").Find("TimeIcon").Find("TimeText").GetComponent<TMP_Text>();
+                TMP_Text Time = shopObjList[i].transform.Find("Explanation").Find("TimeIcon").Find("TimeText").GetComponent<TMP_Text>();
                 Time.text = times[i].ToString(); // 상의 필요
                                                     //}시간 텍스트 추가
 
@@ -106,8 +106,10 @@ public class AddShopList : MonoBehaviour
                 //{이미지 추가
                 Image img = shopObjList[i].transform.Find("Item_Information").Find("TurretImg").GetComponent<Image>();
                 img.sprite = LoadSprite(unitID_Shop[i].ToString());
-                //}이미지 추가
-          
+            //}이미지 추가
+
+            shopObjList[i].name = unitID_Shop[i].ToString();
+
         }
 
     }
