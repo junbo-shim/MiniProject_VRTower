@@ -30,6 +30,7 @@ public class AddShopList : MonoBehaviour
         unitID_Shop = new int[itemDataScriptableObject.items.Count];
         price_Shop = new int[itemDataScriptableObject.items.Count];
         TotalNum = new int[itemDataScriptableObject.items.Count];
+        times = new int[itemDataScriptableObject.items.Count];
         // 배열초기화 없으면 오류
 
         int csvCount = 0;
@@ -41,8 +42,10 @@ public class AddShopList : MonoBehaviour
             unitID_Shop[csvCount] = item.UnitID;
             price_Shop[csvCount] = item.Price;
             TotalNum[csvCount] = item.TotalNum;
+            times[csvCount] = item.Time;
+
             csvCount++;
-            Debug.Log("CSVID: " + item.CSVID + ", Description: " + item.Description + ", UnitID: " + item.UnitID);
+            Debug.Log("CSVID: " + item.CSVID + ", Description: " + item.Description + ", UnitID: " + item.UnitID+", Time:" + item.Time);
         }
         //  ScriptableObject데이터 배열에 추가
 
@@ -53,8 +56,7 @@ public class AddShopList : MonoBehaviour
             shopObjList.Add(Instantiate(shopList));
         }
         //리스트 추가 함수
-        ShopItemListAdd();
-
+        ShopItemListAdd();     
         //상점 아이템 추가
         ShopItemAdd();
 
@@ -84,7 +86,7 @@ public class AddShopList : MonoBehaviour
 
                 //{시간 텍스트 추가
                 TMP_Text Time = shopObjList[i].transform.Find("Item_Information").Find("TimeIcon").Find("TimeText").GetComponent<TMP_Text>();
-                Time.text = TotalNum[i].ToString(); // 상의 필요
+                Time.text = times[i].ToString(); // 상의 필요
                                                     //}시간 텍스트 추가
 
                 //{구매 텍스트 추가 

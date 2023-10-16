@@ -53,8 +53,8 @@ public class CSVConverter_Shop : MonoBehaviour
         InitArrays();
 
         SortData();
-       // itemDataListCopy();
-        Test();
+        itemDataListCopy();
+        //Test();
     }
     //ScriptableObject로 만들기
     private void itemDataListCopy()
@@ -69,7 +69,8 @@ public class CSVConverter_Shop : MonoBehaviour
                 Description = Description[i],
                 UnitID = UnitID[i],
                 Price = Price[i],
-                TotalNum = TotalNum[i]
+                TotalNum = TotalNum[i],
+                Time = Time[i]
             };
 
             ShopItemDataList.Add(item);
