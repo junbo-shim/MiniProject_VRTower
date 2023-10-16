@@ -37,6 +37,10 @@ public class Gun : MonoBehaviour
 
         while(isAttacking)
         {
+            var bullet = ObjectPoolManager.GetObject();
+            Vector3 direction = ARAVR_Input.RHandDirection;
+            bullet.transform.position = ARAVR_Input.RHandPosition;
+            bullet.Shoot(direction);
             
             yield return new WaitForSeconds(1.0f / attackSpeed);
         }
