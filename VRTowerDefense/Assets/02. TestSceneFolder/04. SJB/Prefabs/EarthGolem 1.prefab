@@ -970,7 +970,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6620028441298783856}
-  - component: {fileID: 535049601140510390}
+  - component: {fileID: 5857194949219628582}
   m_Layer: 0
   m_Name: shin.L
   m_TagString: Untagged
@@ -995,7 +995,7 @@ Transform:
   m_Father: {fileID: 151688180068124191}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &535049601140510390
+--- !u!136 &5857194949219628582
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1005,10 +1005,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.01
-  m_Height: 1
+  m_Radius: 0.0015
+  m_Height: 0.0048
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.002, z: 0}
 --- !u!1 &2077219976569949824
 GameObject:
   m_ObjectHideFlags: 0
@@ -1145,6 +1145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1413527031730228953}
+  - component: {fileID: 1066001970097160488}
   m_Layer: 0
   m_Name: shin.R
   m_TagString: Untagged
@@ -1169,6 +1170,20 @@ Transform:
   m_Father: {fileID: 7240875855283493033}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &1066001970097160488
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2389250367253522670}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.0015
+  m_Height: 0.0048
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.002, z: 0}
 --- !u!1 &2558445167449879391
 GameObject:
   m_ObjectHideFlags: 0
@@ -2583,6 +2598,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 151688180068124191}
+  - component: {fileID: 6444425679236787003}
   m_Layer: 0
   m_Name: thigh.L
   m_TagString: Untagged
@@ -2606,6 +2622,20 @@ Transform:
   m_Father: {fileID: 1989171485470238944}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &6444425679236787003
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5352723035280501911}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.0015
+  m_Height: 0.0048
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.002, z: 0}
 --- !u!1 &5429252321029363990
 GameObject:
   m_ObjectHideFlags: 0
@@ -3579,6 +3609,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3408734476621810097}
+  - component: {fileID: 2822815927482971213}
   m_Layer: 0
   m_Name: spine.004
   m_TagString: Untagged
@@ -3602,6 +3633,20 @@ Transform:
   m_Father: {fileID: 6205163878174720451}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2822815927482971213
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316181491860187037}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.0028
+  m_Height: 0.011
+  m_Direction: 2
+  m_Center: {x: 0, y: 0.0024, z: -0.005}
 --- !u!1 &7334702761089195775
 GameObject:
   m_ObjectHideFlags: 0
@@ -3611,6 +3656,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7240875855283493033}
+  - component: {fileID: 8299090467683257429}
   m_Layer: 0
   m_Name: thigh.R
   m_TagString: Untagged
@@ -3634,6 +3680,20 @@ Transform:
   m_Father: {fileID: 1989171485470238944}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &8299090467683257429
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7334702761089195775}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.0015
+  m_Height: 0.0048
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.002, z: 0}
 --- !u!1 &7358331694704700404
 GameObject:
   m_ObjectHideFlags: 0

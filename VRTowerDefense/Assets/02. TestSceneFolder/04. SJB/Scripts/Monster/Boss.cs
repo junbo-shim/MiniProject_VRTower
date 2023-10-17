@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Boss : MonBase
 {
+    private Image hpGauge;
     private Transform[] fireHolders;
     public ProjectilePool projectilePool;
     public BaseMinionPool baseMinionPool;
@@ -13,6 +15,7 @@ public class Boss : MonBase
     private List<Vector3> spawnPoints;
     private List<int> spawnPointIdxs;
     private WaitForSecondsRealtime minionSpawnTime;
+    public WaitForSecondsRealtime weakTime;
 
     private void Awake()
     {
@@ -30,14 +33,32 @@ public class Boss : MonBase
         // 닿은 Trigger Collider 의 이름에 Area 라는 문자가 포함되어 있다면
         if (other.name.Contains("Area"))
         {
+            spawnPoints.Clear();
+            spawnPointIdxs.Clear();
             // 그 Area 의 spawnPoints 를 보스의 spawnPoints 에 담는다
             spawnPoints = other.GetComponent<MinionSpawnPoint>().spawnPoints;
 
             SpawnMinion();
             ChargeProjectile();
+
+            // 그리고 닿은 오브젝트를 끈다
+            other.gameObject.SetActive(false);
         }
-        // 그리고 닿은 오브젝트를 끈다
-        other.gameObject.SetActive(false);
+
+        // 닿은 Collider 가 총알(Bullet)면
+        if (other.GetComponent<Bullet>() == true) 
+        {
+            // 데미지 함수를 실행한다
+            GetHit(other, other.GetComponent<Bullet>().bulletAtk);
+            // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
+        }
+        // 닿은 Collider 가 총알(TurretShoot)이면
+        if (other.GetComponent<TurretShoot>() == true) 
+        {
+            // 데미지 함수를 실행한다
+            GetHit(other, (int)other.GetComponent<TurretShoot>().bulletData.damage);
+            // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
+        }
     }
 
     protected override void Init()
@@ -49,12 +70,30 @@ public class Boss : MonBase
         FindFastMinionPool();
         FindSpawnEffectPool();
 
+        hpGauge = gameObject.transform.Find("Canvas").Find("Gauge").GetComponent<Image>();
+
+        // 모든 변수는 CSV 로 읽어와야하며 배율도 수정해야함
         minionSpawnTime = new WaitForSecondsRealtime(0.5f);
+        weakTime = new WaitForSecondsRealtime(0.5f);
         spawnPoints = new List<Vector3>();
         spawnPointIdxs = new List<int>();
 
+        this.healthPoint = 500;
         this.moveSpeed = 70f;
         this.attackCooltime = 5f;
+        this.maxHealthPoint = healthPoint;
+    }
+
+    // Weak Point 에서 사용할 수 있도록 열어준 GetHit 메서드
+    public void GetHitWeakPoint(Collider other, int damage) 
+    {
+        this.GetHit(other, (int)(damage * 1.5f));
+    }
+
+    protected override void GetHit(Collider other, int damage)
+    {
+        healthPoint -= damage;
+        hpGauge.fillAmount = (float)healthPoint / (float)maxHealthPoint;
     }
 
     #region 투사체 관련 기능
@@ -120,42 +159,19 @@ public class Boss : MonBase
     {
         int randomNum = Random.Range(min, max);
 
-        //for (int i = 0; i < 5; i++) 
-        //{
-        //    #region Legacy
-        //    //if (spawnPointIddxs.Contains(randomNum)) 
-        //    //{
-        //    //    if (randomNum >= max * 0.5f) 
-        //    //    {
-        //    //        randomNum -= 1;
-        //    //        i--;
-        //    //    }
-        //    //    else if (randomNum < max * 0.5f) 
-        //    //    {
-        //    //        randomNum += 1;
-        //    //        i--;
-        //    //    }
-        //    //}
-        //    #endregion
-        //    if (spawnPointIdxs.Contains(randomNum)) 
-        //    {
-        //        randomNum = Random.Range(min, max);
-        //        i--;
-        //    }
-        //    else 
-        //    {
-        //        if (randomNum >= max * 0.5f) 
-        //        {
-        //            spawnPointIdxs.Add(randomNum);
-        //            randomNum -= 1;
-        //        }
-        //        else if (randomNum < max * 0.5f) 
-        //        {
-        //            spawnPointIdxs.Add(randomNum);
-        //            randomNum += 1;
-        //        }
-        //    }
-        //}
+        for (int i = 0; i < 5; i++)
+        {
+            if (randomNum >= max * 0.5f)
+            {
+                spawnPointIdxs.Add(randomNum);
+                randomNum -= 1;
+            }
+            else if (randomNum < max * 0.5f)
+            {
+                spawnPointIdxs.Add(randomNum);
+                randomNum += 1;
+            }
+        }
     }
     // 몬스터 스폰하는 메서드
     private void SpawnMinion() 

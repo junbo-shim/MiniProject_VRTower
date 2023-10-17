@@ -2,26 +2,28 @@ using UnityEngine;
 
 public class MonBase : MonoBehaviour
 {
-    // ¸ó½ºÅÍÀÇ Rigidbody
+    // ëª¬ìŠ¤í„°ì˜ Rigidbody
     protected Rigidbody rigid;
-    // ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡
+    // í”Œë ˆì´ì–´ì˜ ìœ„ì¹˜
     public Transform player;
-    // ¸ó½ºÅÍ°¡ ÀÌµ¿ÇÏ´Â ¼Óµµ
+    // ëª¬ìŠ¤í„°ê°€ ì´ë™í•˜ëŠ” ì†ë„
     protected float moveSpeed;
-    // ¸ó½ºÅÍÀÇ °ø°İ ÄğÅ¸ÀÓ
+    // ëª¬ìŠ¤í„°ì˜ ê³µê²© ì¿¨íƒ€ì„
     protected float attackCooltime;
-    // ¸ó½ºÅÍÀÇ Ã¼·Â
-    protected float healthPoint;
-    // ¸ó½ºÅÍÀÇ µ¥¹ÌÁö
+    // ëª¬ìŠ¤í„°ì˜ ì²´ë ¥
+    protected int healthPoint;
+    // ëª¬ìŠ¤í„°ì˜ ìµœëŒ€ì²´ë ¥
+    protected int maxHealthPoint;
+    // ëª¬ìŠ¤í„°ì˜ ë°ë¯¸ì§€
     protected float damage;
-    // ¸ó½ºÅÍÀÇ µğ¹öÇÁ ÁßÃ¸ Ã¼Å©ÇÒ int
+    // ëª¬ìŠ¤í„°ì˜ ë””ë²„í”„ ì¤‘ì²© ì²´í¬í•  int
     protected int debuffCount;
 
-    // ¸ó½ºÅÍ°¡ ÀÌµ¿ ÁßÀÎÁö Ã¼Å©ÇÏ´Â bool
+    // ëª¬ìŠ¤í„°ê°€ ì´ë™ ì¤‘ì¸ì§€ ì²´í¬í•˜ëŠ” bool
     protected bool isMoving;
-    // ¸ó½ºÅÍ°¡ °ø°İ ÁßÀÎÁö Ã¼Å©ÇÏ´Â bool
+    // ëª¬ìŠ¤í„°ê°€ ê³µê²© ì¤‘ì¸ì§€ ì²´í¬í•˜ëŠ” bool
     protected bool isAttacking;
-    // ¸ó½ºÅÍ°¡ Á×¾ú´ÂÁö Ã¼Å©ÇÏ´Â bool
+    // ëª¬ìŠ¤í„°ê°€ ì£½ì—ˆëŠ”ì§€ ì²´í¬í•˜ëŠ” bool
     protected bool isDead;
 
     protected virtual void Init() 
@@ -38,7 +40,7 @@ public class MonBase : MonoBehaviour
             new Vector3(transform.position.x, 0f, transform.position.z);
 
 
-        // Rigidbody ÀÇ velocity ¸¦ ÀÌµ¿ ¼Óµµ * ½Ã°£ * ¹Ù¶óº¸´Â ¹æÇâ À¸·Î ºÎ¿©ÇÑ´Ù
+        // Rigidbody ì˜ velocity ë¥¼ ì´ë™ ì†ë„ * ì‹œê°„ * ë°”ë¼ë³´ëŠ” ë°©í–¥ ìœ¼ë¡œ ë¶€ì—¬í•œë‹¤
         rigid.velocity = 
             moveSpeed * Time.deltaTime * (playerDirection - objectDirection).normalized;
     }
@@ -48,7 +50,7 @@ public class MonBase : MonoBehaviour
         
     }
 
-    protected virtual void GetHit() 
+    protected virtual void GetHit(Collider collider, int damage) 
     {
     
     }
