@@ -7,7 +7,7 @@ public static class ARAVR_Input
 {
     //! 다양한 기기에서 사용할 버튼의 종류를 미리 정의해둔 것이다
     #region EnumType
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
     public enum ButtonTarget
     {
         Fire1,      /**< 발사 버튼 1번이다. */
@@ -20,7 +20,7 @@ public static class ARAVR_Input
     //! 미리 정의해놓은 버튼을 기기별로 다르게 매핑해둔 것이다.
     public enum Button 
     {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // PC BUILD 를 위한 custom 전처리기, 유니티 제공 전처리기
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // PC BUILD 를 위한 custom 전처리기, 유니티 제공 전처리기
         One = ButtonTarget.Fire1,               /**< 발사 버튼 1 을 매핑 */
         Two = ButtonTarget.Jump,                /**< 점프 버튼을 매핑 */
         Thumbstick = ButtonTarget.Fire1,        /**< 발사 버튼 1을 매핑 */
@@ -38,7 +38,7 @@ public static class ARAVR_Input
     //! 기기별로 다른 컨트롤러를 미리 정의해둔 것이다
     public enum Controller 
     {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE 
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE 
         LTouch,     /**< 왼쪽 컨트롤러 */
         RTouch      /**< 오른쪽 컨트롤러 */
 #elif TARGET_DEVICE_OCULUS
@@ -51,7 +51,7 @@ public static class ARAVR_Input
 
     /**< 크로스헤어 그릴 때 기존 스케일을 캐싱하는 변수 */
     #region 변수
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE
     private static Vector3 originalScale = Vector3.one * 0.02f;
 #else
     private static Vector3 originalScale = Vector3.one * 0.005f;
@@ -73,7 +73,7 @@ public static class ARAVR_Input
     {
         get
         {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
             // 마우스 스크린 좌표 얻어오기
             Vector3 pos = Input.mousePosition;
             // z 값은 0.7 m 로 설정
@@ -102,7 +102,7 @@ public static class ARAVR_Input
     {
         get 
         {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
             Vector3 direction = RHandPosition - Camera.main.transform.position;
             RHand.forward = direction;
 #elif TARGET_DEVICE_OCULUS
@@ -127,7 +127,7 @@ public static class ARAVR_Input
     {
         get
         {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
             // 마우스 스크린 좌표 얻어오기
             Vector3 pos = Input.mousePosition;
             // z 값은 0.7 m 로 설정
@@ -156,7 +156,7 @@ public static class ARAVR_Input
     {
         get
         {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
             Vector3 direction = LHandPosition - Camera.main.transform.position;
             LHand.forward = direction;
 #elif TARGET_DEVICE_OCULUS
@@ -184,7 +184,7 @@ public static class ARAVR_Input
         {
             if (lHand == null)
             {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
                 // RHand 라는 이름으로 게임 오브젝틑를 만든다.
                 GameObject handObj = new GameObject("RHand");
                 // 만들어진 객체의 트랜스폰을 rHand 변수에 할당한다.
@@ -213,7 +213,7 @@ public static class ARAVR_Input
         {
             if(lHand == null) 
             {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
                 // LHand 라는 이름으로 게임 오브젝틑를 만든다.
                 GameObject handObj = new GameObject("LHand");
                 // 만들어진 객체의 트랜스폰을 lHand 변수에 할당한다.
@@ -239,7 +239,7 @@ public static class ARAVR_Input
     #region 컨트롤러의 특정 버튼을 누르고 있는 동안 true 를 반환
     public static bool Get(Button virtualMask, Controller hand = Controller.RTouch) 
     {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC ////|| UNITY_STANDALONE // #if 는 && || 연산 가능
         // virtualMask 에 들어온 값을 ButtonTarget 타입으로 변환해서 전달한다
         return Input.GetButton(((ButtonTarget)virtualMask).ToString());
 #elif TARGET_DEVICE_OCULUS
@@ -260,7 +260,7 @@ public static class ARAVR_Input
     #region 컨트롤러의 특정 버튼을 눌렀을 때 true 를 반환
     public static bool GetDown(Button virtualMask, Controller hand = Controller.RTouch) 
     {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
         // virtualMask 에 들어온 값을 ButtonTarget 타입으로 변환해서 전달한다
         return Input.GetButtonDown(((ButtonTarget)virtualMask).ToString());
 #elif TARGET_DEVICE_OCULUS
@@ -281,7 +281,7 @@ public static class ARAVR_Input
     #region 컨트롤러의 특정 버튼을 눌렀다 때었을 때 true 를 반환
     public static bool GetUp(Button virtualMask, Controller hand = Controller.RTouch)
     {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
         // virtualMask 에 들어온 값을 ButtonTarget 타입으로 변환해서 전달한다
         return Input.GetButtonUp(((ButtonTarget)virtualMask).ToString());
 #elif TARGET_DEVICE_OCULUS
@@ -302,7 +302,7 @@ public static class ARAVR_Input
     #region 컨트롤러의 Axis 입력을 반환
     public static float GetAxis(string axis, Controller hand = Controller.LTouch) 
     {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
         return Input.GetAxis(axis);
 #elif TARGET_DEVICE_OCULUS
         if (axis == "Horizontal") // 수평 방향으로 힘을 받을 때
@@ -363,7 +363,7 @@ public static class ARAVR_Input
         // 컨트롤러의 위치와 방향을 이용해 레이를 제작한다
         if (isHand) 
         {
-#if BUILD_PLATFORM_PC || UNITY_STANDALONE // #if 는 && || 연산 가능
+#if BUILD_PLATFORM_PC //|| UNITY_STANDALONE // #if 는 && || 연산 가능
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 #elif TARGET_DEVICE_OCULUS
             // 오른쪽 컨트롤러에서 레이를 쏘는 경우

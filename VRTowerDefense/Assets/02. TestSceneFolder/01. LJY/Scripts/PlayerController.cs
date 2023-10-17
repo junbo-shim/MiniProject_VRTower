@@ -13,15 +13,19 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private IState currentState;
-    private Idle idleState = new Idle();
-    private Battle battleState = new Battle();
+    public IState currentState;
+    public Idle idleState = new Idle();
+    public Battle battleState = new Battle();
+    public Planting plantingState = new Planting();
+    public Death deathState = new Death();
 
     public Transform Crosshair; // 가리키는 곳에 나타날 크로스헤어Obj
+
+    public float playerHp = 100f;      // 플레이어의 체력
     // Start is called before the first frame update
     void Start()
     {
-        SetState(new Idle());
+        SetState(battleState);
     }
 
     // Update is called once per frame
@@ -36,7 +40,7 @@ public class PlayerController : MonoBehaviour
     //! 바꿔줄 상태를 받아와 상태를 변경한다
     public void SetState(IState nextState)
     {
-        if (currentState != null)
+        if(currentState != null)
         {
             // 현재 상태의 OnExit함수를 호출한다.
             currentState.OnExit();
@@ -46,6 +50,12 @@ public class PlayerController : MonoBehaviour
         currentState = nextState;
         // 바꾼 상태의 OnEnter함수를 호출한다.
         nextState.OnEnter(this);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(currentState == idleState || currentState == deathState)
+        { return; }
     }
 }
 
@@ -82,19 +92,15 @@ public class Idle : IState
 public class Battle : IState
 {
     private PlayerController player;
-    private Gun gun;
+
     void IState.OnEnter(PlayerController player_)
     {
         player = player_;
-        gun = player.gameObject.GetComponent<Gun>();
     }
 
     void IState.Update()
     {
-        if(ARAVR_Input.Get(ARAVR_Input.Button.IndexTrigger))
-        {
 
-        }
     }
 
     void IState.OnExit()
@@ -102,4 +108,44 @@ public class Battle : IState
 
     }
 
+}
+
+public class Planting : IState
+{
+    private PlayerController player;
+
+    void IState.OnEnter(PlayerController player_)
+    {
+        player = player_;
+    }
+
+    void IState.Update()
+    {
+
+    }
+
+    void IState.OnExit()
+    {
+
+    }
+}
+
+public class Death : IState
+{
+    private PlayerController player;
+
+    void IState.OnEnter(PlayerController player_)
+    {
+        player = player_;
+    }
+
+    void IState.Update()
+    {
+
+    }
+
+    void IState.OnExit()
+    {
+
+    }
 }
