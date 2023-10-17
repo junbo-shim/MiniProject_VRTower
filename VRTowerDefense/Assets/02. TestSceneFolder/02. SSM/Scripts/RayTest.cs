@@ -1,3 +1,4 @@
+using Meta.WitAi;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,22 +6,52 @@ using UnityEngine.EventSystems;
 
 public class RayTest : MonoBehaviour
 {
-    public LayerMask uiLayer; // UI를 나타내는 레이어
-
+ 
+    public float raycastDistance = 100f;
+    public LayerMask uiLayer;
+    ItemCellScaleUp[] itemCellScaleUps;
+    ItemCellScaleUp itemCellScaleUp;
+    public void Start()
+    {
+        itemCellScaleUps = FindObjectsOfType<ItemCellScaleUp>();
+    }
     void Update()
     {
         // 마우스 위치로 레이 생성
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        // 레이캐스트를 시도하고 UI 레이어만 고려
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, uiLayer))
-        {
-            // UI 오브젝트에 레이가 맞았을 경우
-            Debug.Log("UI 오브젝트에 레이가 맞았습니다.");
 
-            // 이벤트 시스템을 이용하여 UI 이벤트 전달
-            ExecuteEvents.Execute(hit.collider.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+        Ray ray = new (ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
+        //Ray ray = new Ray(transform.position, transform.forward);
+
+        if (Physics.Raycast(ray, out hit, raycastDistance))
+        {
+           
+         
+            if(hit.collider.tag.Equals("Item"))
+            {
+                itemCellScaleUp = hit.collider.gameObject.GetComponent<ItemCellScaleUp>();
+               
+
+                itemCellScaleUp.onSizeUp();
+                for (int i = 0; i < itemCellScaleUps.Length; i++)
+                {
+                    if (!itemCellScaleUp.gameObject.name.Equals(itemCellScaleUps[i].gameObject.name))
+                    {
+                        itemCellScaleUps[i].onSizeDown();
+                    }
+                   
+                }
+
+            }
+
         }
+        else
+        {
+            for (int i = 0; i < itemCellScaleUps.Length; i++)
+            {
+                itemCellScaleUps[i].onSizeDown();
+            }
+        }
+
     }
 }
