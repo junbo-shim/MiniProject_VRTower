@@ -11,18 +11,31 @@ public class Gun : MonoBehaviour
     public bool isAttackable =  false;      // 공격 가능한 상태인지
     private bool isAttacking = false;       // 공격중인지 확인
 
+    private PlayerController playerController;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerController = gameObject.GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(ARAVR_Input.Get(ARAVR_Input.Button.IndexTrigger) && !isAttacking)
+        if(playerController.currentState != playerController.battleState)
         {
-            StartCoroutine(ShootBullet());
+            return;
+        }
+        attackAfter += Time.deltaTime;
+        
+        if(attackAfter > attackSpeed && ARAVR_Input.Get(ARAVR_Input.Button.IndexTrigger) /*&& !isAttacking*/)
+        {
+            attackAfter = 0f;
+            var bullet = ObjectPoolManager.GetObject();
+            Vector3 direction = ARAVR_Input.RHandDirection;
+            bullet.transform.position = ARAVR_Input.RHandPosition;
+            bullet.Shoot(direction);
+            //StartCoroutine(ShootBullet());
         }
 
         if(ARAVR_Input.GetUp(ARAVR_Input.Button.IndexTrigger))
@@ -30,19 +43,20 @@ public class Gun : MonoBehaviour
             isAttacking = false;
         }
     }
+    #region Legacy Coroutine
+    //private IEnumerator ShootBullet()
+    //{
+    //    isAttacking = true;
 
-    private IEnumerator ShootBullet()
-    {
-        isAttacking = true;
+    //    while(isAttacking)
+    //    {
+    //        var bullet = ObjectPoolManager.GetObject();
+    //        Vector3 direction = ARAVR_Input.RHandDirection;
+    //        bullet.transform.position = ARAVR_Input.RHandPosition;
+    //        bullet.Shoot(direction);
 
-        while(isAttacking)
-        {
-            var bullet = ObjectPoolManager.GetObject();
-            Vector3 direction = ARAVR_Input.RHandDirection;
-            bullet.transform.position = ARAVR_Input.RHandPosition;
-            bullet.Shoot(direction);
-            
-            yield return new WaitForSeconds(1.0f / attackSpeed);
-        }
-    }
+    //        yield return new WaitForSeconds(1.0f / attackSpeed);
+    //    }
+    //}
+    #endregion
 }
