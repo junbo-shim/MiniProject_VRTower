@@ -2,8 +2,26 @@ using UnityEngine;
 
 public class LookAtTarget : MonoBehaviour
 {
-    public string targetTag = "Finish";  // 바라볼 대상의 태그
+    public string targetTag = "Monster";  // 바라볼 대상의 태그
     public float rotationSpeed = 5.0f;   // 회전 속도
+    private Animator animalAnimator;
+    public ParticleSystem particleSystem;
+    public ParticleSystem particleSystem2;
+
+    private void Awake()
+    {
+        animalAnimator = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+
+
+        particleSystem.Play();
+        particleSystem2.Play();
+
+    }
+
 
     void Update()
     {
@@ -25,9 +43,16 @@ public class LookAtTarget : MonoBehaviour
 
                 // 부드러운 회전을 위해 회전을 보간합니다.
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+
+                animalAnimator.SetBool("Shoot", true);
+
             }
         }
+
+
     }
+
+
 
     GameObject FindClosestTarget(GameObject[] targets)
     {
@@ -48,4 +73,6 @@ public class LookAtTarget : MonoBehaviour
 
         return closestTarget;
     }
+
+
 }
