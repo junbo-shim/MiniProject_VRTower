@@ -32,8 +32,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // 가리키는 곳에 크로스헤어가 보이게한다.
-        ARAVR_Input.DrawCrosshair(Crosshair);
-
+        if(currentState != plantingState)
+        {
+            ARAVR_Input.DrawCrosshair(Crosshair);
+        }
         currentState.Update();         
     }
 
