@@ -131,9 +131,9 @@ public class AddShopList : MonoBehaviour
             // 위치값 수정
             newObjcetRT.anchoredPosition3D = new Vector3(
                 newObjcetRT.transform.position.x, newObjcetRT.transform.position.y, 0f);
+            newObjcetRT.localRotation = Quaternion.Euler(0, 0, 0);
 
-
-            newObjcetRT.localScale = new Vector3(0.8f, 0.8f, 1f);
+            newObjcetRT.localScale = new Vector3(1.5f, 1.5f, 1f);
 
         }
     }
