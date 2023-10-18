@@ -71,18 +71,18 @@ public class BuildTower : MonoBehaviour
 
 
 
-                    //if (buyCoin <= GameManager.instance.coin)
-                    //{
-                    //    GameManager.instance.MinCoin(buyCoin);
-                    //    targetName = hit.collider.gameObject.name;
-                    //    shopUi.gameObject.SetActive(false);
-                    //}
+                    if (buyCoin <= GameManager.instance.coin)
+                    {
+                        GameManager.instance.MinCoin(buyCoin);
+                        targetName = hit.collider.gameObject.name;
+                        shopUi.gameObject.SetActive(false);
+                    }
 
 
 
 
                     // 23.10.18 SSM 
-
+                   
                 }
 
 

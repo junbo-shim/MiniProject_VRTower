@@ -1122,6 +1122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34bf42bba43294b41b1915e4066cc7cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shopUi: {fileID: 0}
   lineRenderer: {fileID: 0}
   lrMaxDistance: 200
   lazerColor: {r: 1, g: 0.3293737, b: 0, a: 0.5254902}
@@ -1645,7 +1646,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3637847854202780929
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1761,7 +1762,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1608152038133695399, guid: 6da7bb61698da244b9d8b6f16105ce84, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1608152038133695399, guid: 6da7bb61698da244b9d8b6f16105ce84, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1769,15 +1770,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1608152038133695399, guid: 6da7bb61698da244b9d8b6f16105ce84, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1608152038133695399, guid: 6da7bb61698da244b9d8b6f16105ce84, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1608152038133695399, guid: 6da7bb61698da244b9d8b6f16105ce84, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1608152038133695399, guid: 6da7bb61698da244b9d8b6f16105ce84, type: 3}
       propertyPath: m_LocalPosition.x
