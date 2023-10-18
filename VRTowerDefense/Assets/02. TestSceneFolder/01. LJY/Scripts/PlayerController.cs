@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     public Transform Crosshair; // 가리키는 곳에 나타날 크로스헤어Obj
 
-    public float playerHp = 100f;      // 플레이어의 체력
+
     // Start is called before the first frame update
     void Start()
     {
