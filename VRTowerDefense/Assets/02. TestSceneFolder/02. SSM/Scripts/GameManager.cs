@@ -7,8 +7,9 @@ public class GameManager : MonoBehaviour
     public int playerHp = 90;      // 플레이어의 체력
     public static GameManager instance;
     public TMP_Text hpText;
+    public TMP_Text coinText;
     // 싱글턴으로 만들기
-    private int coin;
+    public int coin = 100;
    
     private void Awake()
     {
@@ -21,21 +22,28 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);  
         }
     }
-    public void AddCoin(int addNum)
-    {
-        coin += addNum;
-    }
+
 
     // Start is called before the first frame update
     void Start()
     {
         hpText.text = playerHp.ToString();
+        coinText.text = coin.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+    public void AddCoin(int addNum)
+    {
+        coin += addNum;
+    }
+    public void MinCoin(int minNum)
+    {
+        coin -= minNum;
+        coinText.text = coin.ToString();
     }
     public void HpMin(int dam)
     {
