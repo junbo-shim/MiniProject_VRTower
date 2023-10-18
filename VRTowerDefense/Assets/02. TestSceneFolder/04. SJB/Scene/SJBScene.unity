@@ -657,7 +657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &510231346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -770,7 +770,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &518568770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -883,7 +883,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &576421763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3904,6 +3904,9 @@ MonoBehaviour:
   baseMinionPool: {fileID: 0}
   fastMinionPool: {fileID: 0}
   spawnEffectPool: {fileID: 0}
+  slowTime: 0
+  slowAmount: 0
+  slowStack: 0
 --- !u!4 &3394423199739918186
 Transform:
   m_ObjectHideFlags: 0

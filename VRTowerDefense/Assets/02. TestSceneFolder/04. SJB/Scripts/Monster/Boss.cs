@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,8 @@ public class Boss : MonBase
     private List<int> spawnPointIdxs;
     private WaitForSecondsRealtime minionSpawnTime;
     public WaitForSecondsRealtime weakTime;
+    public List<WeakPoint> weakPointList;
+
     public float slowTime;
     public float slowAmount;
     public int slowStack = default;
@@ -74,6 +77,7 @@ public class Boss : MonBase
         FindBaseMinionPool();
         FindFastMinionPool();
         FindSpawnEffectPool();
+        FindWeakPoint();
 
         hpGauge = gameObject.transform.Find("Canvas").Find("Gauge").GetComponent<Image>();
 
@@ -98,6 +102,21 @@ public class Boss : MonBase
     {
         healthPoint -= damage;
         hpGauge.fillAmount = (float)healthPoint / (float)maxHealthPoint;
+    }
+
+    // 약점 찾아오는 메서드
+    private void FindWeakPoint() 
+    {
+        weakPointList = new List<WeakPoint>();
+        weakPointList.AddRange(FindObjectsOfType<WeakPoint>());
+    }
+
+    // 넘겨줄 약점 활성화 메서드
+    public void ActivateWeakPoint() 
+    {
+        int num = Random.Range(0, weakPointList.Count);
+
+        weakPointList[num].MakeBossWeak();
     }
 
     #region 투사체 관련 기능
