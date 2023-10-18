@@ -46,6 +46,8 @@ public class LookAtTarget : MonoBehaviour
 
                 animalAnimator.SetBool("Shoot", true);
 
+                Debug.Log(transform.localScale);
+
             }
         }
 

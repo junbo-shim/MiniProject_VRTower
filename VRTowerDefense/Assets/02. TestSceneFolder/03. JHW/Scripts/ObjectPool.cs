@@ -13,8 +13,13 @@ public class ObjectPool : MonoBehaviour
         objects = new List<GameObject>();
         for (int i = 0; i < poolSize; i++)
         {
+            // Load the prefab from the 'prefab' variable and instantiate it.
             GameObject obj = Instantiate(prefab);
-            obj.transform.rotation = Quaternion.Euler(90,0,0);
+
+            // Set the parent to this ObjectPool object.
+            obj.transform.SetParent(transform);
+
+            obj.transform.rotation = Quaternion.Euler(90, 0, 0);
             obj.SetActive(false);
             objects.Add(obj);
         }

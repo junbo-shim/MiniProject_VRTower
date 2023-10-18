@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 3298458738013618306}
   - component: {fileID: -2527927036035358231}
   m_Layer: 0
-  m_Name: 101_trl
+  m_Name: IceTowerPreview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -286,7 +286,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000013566905100}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1ff3f876e9b3f84497ff69768c9a25d, type: 3}
   m_Name: 
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000013566905100}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da07e238b033abf4c91c8457e657ffce, type: 3}
   m_Name: 

@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class BuildTower : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class BuildTower : MonoBehaviour
     ItemCellScaleUp itemCellScaleUp;
     public LayerMask uiLayer;
     public GameObject previewObject;  // 불투명한 프리팹을 표시하기 위한 오브젝트
+    public GameObject previewObject2;  // 불투명한 프리팹을 표시하기 위한 오브젝트
+
     public Canvas shopUi;
     private FillAmount fillAmountScript; // FillAmount 스크립트에 대한 참조
     [SerializeField] private string targetName = "";
@@ -18,6 +22,9 @@ public class BuildTower : MonoBehaviour
         previewObject = Instantiate(previewObject, Vector3.zero, Quaternion.identity);
         previewObject.SetActive(false);
 
+        previewObject2 = Instantiate(previewObject2, Vector3.zero, Quaternion.identity);
+        previewObject2.SetActive(false);
+
 
     }
 
@@ -26,17 +33,15 @@ public class BuildTower : MonoBehaviour
         ShopUi();
         if (!targetName.Equals(""))
         {
-      
             Build();
         }
-       
     }
 
     private void ShopUi()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        //Ray ray = new(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
+        Ray ray = new(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100f, uiLayer))
         {
@@ -53,11 +58,11 @@ public class BuildTower : MonoBehaviour
                 {
                     targetName = hit.collider.gameObject.name;
                     shopUi.gameObject.SetActive(false);
-                  
+
                 }
 
 
-                    for (int i = 0; i < itemCellScaleUps.Length; i++)
+                for (int i = 0; i < itemCellScaleUps.Length; i++)
                 {
                     if (!itemCellScaleUp.gameObject.name.Equals(itemCellScaleUps[i].gameObject.name))
                     {
@@ -80,14 +85,13 @@ public class BuildTower : MonoBehaviour
     private void Build()
     {
 
-
-        /////
-
-        if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼을 클릭했을 때
+        //if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼을 클릭했을 때
+        //{
+        if (ARAVR_Input.GetDown(ARAVR_Input.Button.Two, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(ARAVR_Input.RHandPosition);
             RaycastHit hit;
-            prefabToPlace = Resources.Load(targetName+"_trl") as GameObject;
+            prefabToPlace = Resources.Load(targetName + "_trl") as GameObject;
             if (Physics.Raycast(ray, out hit))
             {
                 if (hit.transform.CompareTag(targetTag))
@@ -104,30 +108,38 @@ public class BuildTower : MonoBehaviour
                         StartCoroutine(fillAmountScript.DecreaseFillAmountOverTime());
                     }
                 }
-
             }
-
-
-
         }
         else
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = new (ARAVR_Input.RHandPosition , ARAVR_Input.RHandDirection);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+            if (targetName == "100")
             {
-                previewObject.SetActive(true);
-                previewObject.transform.position = hit.point;
+                if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+                {
+                    previewObject.SetActive(true);
+                    previewObject.transform.position = hit.point;
+                }
+                else
+                {
+                    previewObject.SetActive(false);
+                }
+
             }
-            else
+            else if (targetName == "101")
             {
-                previewObject.SetActive(false);
+                if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+                {
+                    previewObject2.SetActive(true);
+                    previewObject2.transform.position = hit.point;
+                }
+                else
+                {
+                    previewObject2.SetActive(false);
+                }
             }
-
-
         }
-
-
     }
 }
