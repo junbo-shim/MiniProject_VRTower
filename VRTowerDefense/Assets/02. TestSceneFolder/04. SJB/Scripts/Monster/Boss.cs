@@ -31,6 +31,12 @@ public class Boss : MonBase
     private void FixedUpdate()
     {
         base.Move();
+
+        if (Input.GetKeyDown(KeyCode.A)) 
+        {
+            Debug.Log("??");
+            ActivateWeakPoint();
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -44,7 +50,7 @@ public class Boss : MonBase
             spawnPoints = other.GetComponent<MinionSpawnPoint>().spawnPoints;
 
             SpawnMinion();
-            ChargeProjectile();
+            //ChargeProjectile();
 
             // 그리고 닿은 오브젝트를 끈다
             other.gameObject.SetActive(false);
@@ -104,20 +110,22 @@ public class Boss : MonBase
         hpGauge.fillAmount = (float)healthPoint / (float)maxHealthPoint;
     }
 
+    #region 약점 관련 기능
     // 약점 찾아오는 메서드
     private void FindWeakPoint() 
     {
         weakPointList = new List<WeakPoint>();
         weakPointList.AddRange(FindObjectsOfType<WeakPoint>());
     }
-
     // 넘겨줄 약점 활성화 메서드
     public void ActivateWeakPoint() 
     {
         int num = Random.Range(0, weakPointList.Count);
-
+        Debug.LogWarning(num);
         weakPointList[num].MakeBossWeak();
+        Debug.LogWarning(weakPointList[num]);
     }
+    #endregion
 
     #region 투사체 관련 기능
     // 보스의 투사체 발사 위치 할당
@@ -129,7 +137,6 @@ public class Boss : MonBase
         for (int i = 0; i < fireHolder.childCount; i++) 
         {
             fireHolders[i] = fireHolder.GetChild(i);
-            //Debug.Log(fireHolders[i].name);
         }
     }
     // 투사체 Object Pool 가져오기
@@ -203,15 +210,33 @@ public class Boss : MonBase
 
         for (int i = 0; i < spawnPointIdxs.Count; i++) 
         {
+            // 생성 위치에서 레이 아래로 발사, spawnPoint 재설정
+            CheckSpawnHeight(spawnPointIdxs[i]);
             // 이펙트를 먼저 생성
             GameObject effect = spawnEffectPool.GetPoolObject();
             effect.transform.position = spawnPoints[spawnPointIdxs[i]];
             // 이펙트 반납 후 졸개 생성
             StartCoroutine("ReturnEffect", effect);
             // 생성 대기
-            StartCoroutine("WaitForOneSecond");
+            //StartCoroutine("WaitForOneSecond");
         }
     }
+    // 스폰 포인트에서 레이를 쏴서 높이에 맞게 spawnPoints 배열을 다시 설정하는 메서드
+    private void CheckSpawnHeight(int spawnPointIdx) 
+    {
+        RaycastHit hit = new RaycastHit();
+
+        //Physics.Raycast(spawnPoints[spawnPointIdx], Vector3.down, out hit);
+
+        if (Physics.Raycast(spawnPoints[spawnPointIdx], Vector3.down, out hit)) 
+        {
+            Debug.LogWarning(hit);
+            Debug.LogWarning(hit.transform.position);
+            spawnPoints[spawnPointIdx] = hit.transform.position + Vector3.one;
+            Debug.LogWarning(spawnPoints[spawnPointIdx]);
+        }
+    }
+
     // 1초 뒤 이펙트 반납하는 Coroutine
     private IEnumerator ReturnEffect(GameObject obj) 
     {
@@ -220,6 +245,7 @@ public class Boss : MonBase
         spawnEffectPool.ReturnPoolObject(obj);
         // 졸개 생성
         ChooseRandomMinion(obj.transform.position);
+        yield return minionSpawnTime;
         yield break;
     }
     // 몬스터 순차 생성을 위해 1초간 대기하는 Coroutine
@@ -242,10 +268,6 @@ public class Boss : MonBase
         {
             GameObject minion = fastMinionPool.GetPoolObject();
             minion.transform.position = spawnPoint;
-        }
-        else 
-        {
-            Debug.LogWarning("스폰에러");
         }
     }
     #endregion
