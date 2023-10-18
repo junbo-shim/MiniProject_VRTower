@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - Turret
   - Item
+  - PlayerBullet
   layers:
   - Default
   - TransparentFX
