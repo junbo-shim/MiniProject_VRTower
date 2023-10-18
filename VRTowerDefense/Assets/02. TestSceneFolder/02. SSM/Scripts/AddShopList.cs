@@ -133,7 +133,7 @@ public class AddShopList : MonoBehaviour
                 newObjcetRT.transform.position.x, newObjcetRT.transform.position.y, 0f);
             newObjcetRT.localRotation = Quaternion.Euler(0, 0, 0);
 
-            newObjcetRT.localScale = new Vector3(1.5f, 1.5f, 1f);
+            newObjcetRT.localScale = new Vector3(1f, 1f, 1f);
 
         }
     }
