@@ -23,7 +23,7 @@ public class Minion : MonBase
         // 추후에 name 에서 tag 또는 layer 로 변경
         if (collision.gameObject.name == "Player") 
         {
-            //Attack();
+            Attack();
             CheckReturnPool(gameObject);
         }
     }
@@ -48,18 +48,21 @@ public class Minion : MonBase
 
         if (gameObject.name == "BaseMinion" + "(Clone)") 
         {
+            this.healthPoint = 1;
+            this.damage = 20;
             this.moveSpeed = 600f;
         }
         else 
         {
+            this.healthPoint = 2;
+            this.damage = 20;
             this.moveSpeed = 1200f;
         }
     }
 
     protected override void Attack()
     {
-        base.Attack();
-
+        
     }
 
     protected override void GetHit(Collider other, int damage)

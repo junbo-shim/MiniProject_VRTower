@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +15,9 @@ public class Boss : MonBase
     private List<int> spawnPointIdxs;
     private WaitForSecondsRealtime minionSpawnTime;
     public WaitForSecondsRealtime weakTime;
+    public float slowTime;
+    public float slowAmount;
+    public int slowStack = default;
 
     private void Awake()
     {
@@ -51,6 +53,7 @@ public class Boss : MonBase
             // 데미지 함수를 실행한다
             GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
+            other.GetComponent<Bullet>().ReturnBullet();
         }
         // 닿은 Collider 가 총알(TurretShoot)이면
         if (other.GetComponent<TurretShoot>() == true) 
@@ -58,9 +61,11 @@ public class Boss : MonBase
             // 데미지 함수를 실행한다
             GetHit(other, (int)other.GetComponent<TurretShoot>().bulletData.damage);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
+            other.GetComponent<GameObject>().SetActive(false);
+            // ice bullet 일 경우 해결 해야함
         }
     }
-
+    // 초기화 메서드
     protected override void Init()
     {
         base.Init();
@@ -83,13 +88,12 @@ public class Boss : MonBase
         this.attackCooltime = 5f;
         this.maxHealthPoint = healthPoint;
     }
-
     // Weak Point 에서 사용할 수 있도록 열어준 GetHit 메서드
     public void GetHitWeakPoint(Collider other, int damage) 
     {
         this.GetHit(other, (int)(damage * 1.5f));
     }
-
+    // 데미지 차감 함수 및 체력 게이지 업데이트
     protected override void GetHit(Collider other, int damage)
     {
         healthPoint -= damage;
@@ -180,9 +184,12 @@ public class Boss : MonBase
 
         for (int i = 0; i < spawnPointIdxs.Count; i++) 
         {
+            // 이펙트를 먼저 생성
             GameObject effect = spawnEffectPool.GetPoolObject();
             effect.transform.position = spawnPoints[spawnPointIdxs[i]];
+            // 이펙트 반납 후 졸개 생성
             StartCoroutine("ReturnEffect", effect);
+            // 생성 대기
             StartCoroutine("WaitForOneSecond");
         }
     }
@@ -190,7 +197,9 @@ public class Boss : MonBase
     private IEnumerator ReturnEffect(GameObject obj) 
     {
         yield return minionSpawnTime;
+        // 이펙트 반납
         spawnEffectPool.ReturnPoolObject(obj);
+        // 졸개 생성
         ChooseRandomMinion(obj.transform.position);
         yield break;
     }
