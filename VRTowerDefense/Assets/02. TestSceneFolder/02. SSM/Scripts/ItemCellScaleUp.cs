@@ -18,13 +18,13 @@ public  class ItemCellScaleUp : MonoBehaviour
 
     public void onSizeUp()
     {
-        transform.localScale = new Vector3(1.6f, 1.6f, 1f);
+        transform.localScale = new Vector3(1.1f, 1.1f, 1f);
      
     
     }
     public void onSizeDown()
     {
-        gameObject.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
    
     }
     public void MaxItem()
