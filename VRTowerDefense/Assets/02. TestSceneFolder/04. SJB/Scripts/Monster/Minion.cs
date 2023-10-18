@@ -62,9 +62,9 @@ public class Minion : MonBase
 
     }
 
-    protected override void GetHit()
+    protected override void GetHit(Collider other, int damage)
     {
-        base.GetHit();
+        //base.GetHit();
 
     }
 
