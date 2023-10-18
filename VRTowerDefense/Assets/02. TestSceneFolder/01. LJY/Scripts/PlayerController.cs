@@ -19,10 +19,32 @@ public class PlayerController : MonoBehaviour
     public Planting plantingState = new Planting();
     public Death deathState = new Death();
 
+    // 레이저 포인트를 발사할 라인 렌더러
+    public LineRenderer lineRenderer;
+
+    // 레이저 포인터의 최대 거리
+    public float lrMaxDistance = 200f;
+
+    // 레이저 포인터의 칼라
+    public Color lazerColor;
+
+    // 총구 쪽으로 살짝 이동하기 위한 Offset
+    public float shotPointOffset = 0.15f;
+
     public Transform Crosshair; // 가리키는 곳에 나타날 크로스헤어Obj
 
     public float playerHp = 100f;      // 플레이어의 체력
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        // 라인 렌더러 셋팅
+        lineRenderer = GetComponent<LineRenderer>();
+        lazerColor.a = 0.5f;
+        lineRenderer.startColor = lazerColor;
+        lineRenderer.endColor = lazerColor;
+    }
+
     void Start()
     {
         SetState(battleState);
@@ -119,18 +141,46 @@ public class Planting : IState
     void IState.OnEnter(PlayerController player_)
     {
         player = player_;
+        player.lineRenderer.enabled = true;
     }
 
     void IState.Update()
     {
+        int layerMask = ((1 << LayerMask.NameToLayer("PlayerBullet")) | (1 << LayerMask.NameToLayer("UI")) | 1 << LayerMask.NameToLayer("DetectArea"));
+        layerMask = ~layerMask;
 
-    }
+        // 오른쪽 컨트롤러 기준으로 Ray를 만든다. (살짝 총구 쪽에서부터 시작하도록)
+        Ray ray = new Ray(ARAVR_Input.RHandPosition + ARAVR_Input.RHand.forward * player.shotPointOffset, ARAVR_Input.RHandDirection);
+        RaycastHit hitInfo;
+
+        // 충돌이 있다면?
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask))
+        {
+            // Ray가 부딪힌 지점에 라인 그리기
+            player.lineRenderer.SetPosition(0, ray.origin);
+            player.lineRenderer.SetPosition(1, hitInfo.point);
+
+            // 부딪힌 지점에 크로스 헤어 그리기
+            //player.crosshairCan.transform.position = hitInfo.point;
+        }
+
+        // 충돌이 없다면?
+        else
+        {
+            player.lineRenderer.SetPosition(0, ray.origin);
+            player.lineRenderer.SetPosition(1, ray.origin + ARAVR_Input.RHandDirection * player.lrMaxDistance);
+
+            //crosshairCan.transform.position = ray.origin + ARAVR_Input.RHandDirection * lrMaxDistance;
+        }
+    }       // else : 오른쪽 핸드 기준으로 레이저 포인터 만들기
 
     void IState.OnExit()
     {
-
+        player.lineRenderer.enabled = false;
     }
 }
+
+
 
 public class Death : IState
 {
