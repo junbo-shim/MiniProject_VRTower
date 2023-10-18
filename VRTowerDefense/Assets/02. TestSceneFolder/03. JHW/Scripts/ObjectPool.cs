@@ -38,7 +38,7 @@ public class ObjectPool : MonoBehaviour
 
     public void ReturnObjectToPool(GameObject obj)
     {
-        Debug.Log("3");
+       
         obj.SetActive(false);
     }
 }
