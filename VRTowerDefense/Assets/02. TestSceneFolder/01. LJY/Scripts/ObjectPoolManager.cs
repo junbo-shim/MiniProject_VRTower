@@ -68,6 +68,7 @@ public class ObjectPoolManager : MonoBehaviour
     {
         obj.gameObject.SetActive(false);
         obj.transform.SetParent(Instance.transform);
+        obj.transform.position = Vector3.zero;
         Instance.poolingObjectQueue.Enqueue(obj);
     }
 

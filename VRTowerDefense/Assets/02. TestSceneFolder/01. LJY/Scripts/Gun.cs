@@ -32,8 +32,9 @@ public class Gun : MonoBehaviour
         {
             attackAfter = 0f;
             var bullet = ObjectPoolManager.GetObject();
-            Vector3 direction = ARAVR_Input.RHandDirection;
-            bullet.transform.position = ARAVR_Input.RHandPosition;
+            bullet.transform.position = ARAVR_Input.RHand.position;
+            bullet.transform.rotation = ARAVR_Input.RHand.rotation;
+            Vector3 direction = ARAVR_Input.RHandDirection;           
             bullet.Shoot(direction);
             //StartCoroutine(ShootBullet());
         }
