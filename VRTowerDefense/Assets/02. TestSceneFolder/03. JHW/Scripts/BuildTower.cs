@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class BuildTower : MonoBehaviour
 {
@@ -39,10 +40,12 @@ public class BuildTower : MonoBehaviour
 
     private void ShopUi()
     {
-        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
+#if BUILD_PLATFORM_PC
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+# elif TARGET_DEVICE_OCULUS
         Ray ray = new(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
         RaycastHit hit;
+# endif
         if (Physics.Raycast(ray, out hit, 100f, uiLayer))
         {
             itemCellScaleUps = FindObjectsOfType<ItemCellScaleUp>();
@@ -54,17 +57,32 @@ public class BuildTower : MonoBehaviour
 
 
                 itemCellScaleUp.onSizeUp();
-// 23.10.18 LJY
+                // 23.10.18 LJY
 #if BUILD_PLATFORM_PC
                 if (Input.GetMouseButtonUp(0)) // 마우스 왼쪽 버튼을 클릭했을 때
                 {
 #elif TARGET_DEVICE_OCULUS
-                if(ARAVR_Input.GetUp(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch))    // 오른쪽 컨트롤러 Button One을 눌렀을 때
+                if (ARAVR_Input.GetUp(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch))    // 오른쪽 컨트롤러 Button One을 눌렀을 때
                 {
 #endif
-// 23.10.18 LJY
-                    targetName = hit.collider.gameObject.name;
-                    shopUi.gameObject.SetActive(false);
+                    // 23.10.18 LJY
+                    // 23.10.18 SSM 
+                    int buyCoin = int.Parse(hit.collider.gameObject.transform.Find("Item_Information").Find("BntBuy").Find("BuyText").GetComponent<TMP_Text>().text.ToString());
+
+
+
+                    //if (buyCoin <= GameManager.instance.coin)
+                    //{
+                    //    GameManager.instance.MinCoin(buyCoin);
+                    //    targetName = hit.collider.gameObject.name;
+                    //    shopUi.gameObject.SetActive(false);
+                    //}
+
+
+
+
+                    // 23.10.18 SSM 
+
                 }
 
 
@@ -90,13 +108,22 @@ public class BuildTower : MonoBehaviour
     }
     private void Build()
     {
-
-        //if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼을 클릭했을 때
-        //{
+#if BUILD_PLATFORM_PC
+        if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼을 클릭했을 때
+        {
+#elif TARGET_DEVICE_OCULUS
         if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
         {
-            Ray ray = Camera.main.ScreenPointToRay(ARAVR_Input.RHandPosition);
+#endif
+
+
+#if BUILD_PLATFORM_PC
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+#elif TARGET_DEVICE_OCULUS
+            Ray ray = new Ray(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
+            RaycastHit hit;
+#endif
             prefabToPlace = Resources.Load(targetName + "_trl") as GameObject;
             if (Physics.Raycast(ray, out hit))
             {
@@ -118,9 +145,13 @@ public class BuildTower : MonoBehaviour
         }
         else
         {
-            Ray ray = new (ARAVR_Input.RHandPosition , ARAVR_Input.RHandDirection);
+#if BUILD_PLATFORM_PC
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-
+#elif TARGET_DEVICE_OCULUS
+            Ray ray = new Ray(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
+            RaycastHit hit;
+#endif
             if (targetName == "100")
             {
                 if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
@@ -137,6 +168,7 @@ public class BuildTower : MonoBehaviour
             else if (targetName == "101")
             {
                 if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+
                 {
                     previewObject2.SetActive(true);
                     previewObject2.transform.position = hit.point;
