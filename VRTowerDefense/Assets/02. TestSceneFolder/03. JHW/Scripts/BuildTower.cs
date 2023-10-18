@@ -54,11 +54,17 @@ public class BuildTower : MonoBehaviour
 
 
                 itemCellScaleUp.onSizeUp();
+// 23.10.18 LJY
+#if BUILD_PLATFORM_PC
                 if (Input.GetMouseButtonUp(0)) // 마우스 왼쪽 버튼을 클릭했을 때
                 {
+#elif TARGET_DEVICE_OCULUS
+                if(ARAVR_Input.GetUp(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch))    // 오른쪽 컨트롤러 Button One을 눌렀을 때
+                {
+#endif
+// 23.10.18 LJY
                     targetName = hit.collider.gameObject.name;
                     shopUi.gameObject.SetActive(false);
-
                 }
 
 
@@ -87,7 +93,7 @@ public class BuildTower : MonoBehaviour
 
         //if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼을 클릭했을 때
         //{
-        if (ARAVR_Input.GetDown(ARAVR_Input.Button.Two, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
+        if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
         {
             Ray ray = Camera.main.ScreenPointToRay(ARAVR_Input.RHandPosition);
             RaycastHit hit;

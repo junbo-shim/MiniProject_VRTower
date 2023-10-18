@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     public Planting plantingState = new Planting();
     public Death deathState = new Death();
 
+    // 상점 UI
+    public GameObject shopUi;
+
     // 레이저 포인트를 발사할 라인 렌더러
     public LineRenderer lineRenderer;
 
@@ -124,7 +127,17 @@ public class Battle : IState
 
     void IState.Update()
     {
-
+        if(ARAVR_Input.GetUp(ARAVR_Input.Button.Two, ARAVR_Input.Controller.RTouch))
+        {
+            if(!player.shopUi.activeSelf)
+            {
+                player.shopUi.SetActive(true);
+            }
+            else
+            {
+                player.shopUi.SetActive(false);
+            }
+        }
     }
 
     void IState.OnExit()
