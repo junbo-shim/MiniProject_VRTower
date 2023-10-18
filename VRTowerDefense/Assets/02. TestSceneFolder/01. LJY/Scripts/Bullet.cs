@@ -11,11 +11,7 @@ public class Bullet : MonoBehaviour
     private float speed = 10.0f;                 // 탄속
     private float lifeTime = 5.0f;              // 라이프타임
     //} 데이터 테이블 사용할 변수
-
-    Quaternion rotation;
-
     private Vector3 direction;
-    private Rigidbody rb;
 
     private void Start()
     {       
