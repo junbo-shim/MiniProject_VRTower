@@ -49,7 +49,7 @@ public class Boss : MonBase
         if (other.GetComponent<Bullet>() == true) 
         {
             // 데미지 함수를 실행한다
-            GetHit(other, other.GetComponent<Bullet>().bulletAtk);
+            GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
         }
         // 닿은 Collider 가 총알(TurretShoot)이면

@@ -52,7 +52,7 @@ public class WeakPoint : MonoBehaviour
         {
             // 데미지 함수를 실행한다
             boss.GetComponent<Boss>().
-                GetHitWeakPoint(other, other.GetComponent<Bullet>().bulletAtk);
+                GetHitWeakPoint(other, (int)other.GetComponent<Bullet>().bulletAtk);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
         }
 
