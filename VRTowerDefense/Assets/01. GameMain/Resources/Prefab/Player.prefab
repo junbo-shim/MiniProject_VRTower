@@ -67,8 +67,6 @@ Transform:
   m_Children:
   - {fileID: 8277811145919106149}
   - {fileID: 8277811146237946328}
-  - {fileID: 8277811146833474397}
-  - {fileID: 8277811146431080671}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -181,9 +179,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basicBulletPrefab: {fileID: 0}
   isAttackable: 0
-  bulletAtk: 5
-  bulletCriticalRate: 0
-  bulletCriticalDmg: 0
 --- !u!1 &8277811145881817597
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,7 +520,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 8277811145691457606}
+    m_TransformParent: {fileID: 8277811146238024714}
     m_Modifications:
     - target: {fileID: 112276, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
       propertyPath: m_Name
@@ -537,7 +532,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 488160, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 488160, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
       propertyPath: m_LocalPosition.x
@@ -585,17 +580,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
---- !u!4 &8277811146431080671 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 488160, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
-  m_PrefabInstance: {fileID: 8277811146431158847}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8277811146833019325
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 8277811145691457606}
+    m_TransformParent: {fileID: 8277811146238027790}
     m_Modifications:
     - target: {fileID: 112276, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
       propertyPath: m_Name
@@ -655,8 +645,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
---- !u!4 &8277811146833474397 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 488160, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
-  m_PrefabInstance: {fileID: 8277811146833019325}
-  m_PrefabAsset: {fileID: 0}
