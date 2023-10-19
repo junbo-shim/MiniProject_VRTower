@@ -29,11 +29,16 @@ public  class ItemCellScaleUp : MonoBehaviour
     }
     public void MaxItem()
     {
+        infoImage = transform.Find("Item_Information").GetComponent<Image>();
+        explanImage = transform.Find("Explanation").GetComponent<Image>();
+   
         infoImage.color = new Color(0f, 0f, 0f);
         explanImage.color = new Color(0f, 0f, 0f);
     }
     public void BuyPossible()
     {
+        infoImage = transform.Find("Item_Information").GetComponent<Image>();
+        explanImage = transform.Find("Explanation").GetComponent<Image>();
         infoImage.color = org1;
         explanImage.color = org2;
     }

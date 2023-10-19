@@ -172,7 +172,12 @@ public class BuildTower : MonoBehaviour
             Ray ray = new Ray(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
             RaycastHit hit;
 #endif
+<<<<<<< HEAD
+
+            if (buildTurret == false)
+=======
             if (targetName == "102")
+>>>>>>> origin/Song
             {
                 if (targetName == "100")
                 {
@@ -202,6 +207,8 @@ public class BuildTower : MonoBehaviour
                 }
 
             }
+<<<<<<< HEAD
+=======
             else if (targetName == "103")
             {
                 if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
@@ -215,6 +222,7 @@ public class BuildTower : MonoBehaviour
                     previewObject2.SetActive(false);
                 }
             }
+>>>>>>> origin/Song
         }
     }
 }

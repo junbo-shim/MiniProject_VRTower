@@ -58,10 +58,10 @@ public class MinionSpawnPoint : MonoBehaviour
                 // 스폰 포인트 List 에 spawnPoint 들을 담아둔다
                 spawnPoints.Add(spawnPoint);
 
-                GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                obj.GetComponent<BoxCollider>().enabled = false;
-                obj.transform.position = spawnPoint;
-                obj.transform.localScale = high;
+                //GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                //obj.GetComponent<BoxCollider>().enabled = false;
+                //obj.transform.position = spawnPoint;
+                //obj.transform.localScale = high;
             }
         }
     }
