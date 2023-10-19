@@ -156,9 +156,9 @@ public class BuildTower : MonoBehaviour
                             fillAmountScript = tower.GetComponent<FillAmount>();
                             buildTurret = true;
                             targetName = "";
+                            // FillAmount 스크립트의 코루틴을 시작합니다.
+                            StartCoroutine(fillAmountScript.DecreaseFillAmountOverTime());
                         }
-                        // FillAmount 스크립트의 코루틴을 시작합니다.
-                        StartCoroutine(fillAmountScript.DecreaseFillAmountOverTime());
                     }
                 }
             }
