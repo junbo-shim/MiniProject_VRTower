@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -41,7 +42,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
 
     private void Awake()
-    {
+    {    
         // 라인 렌더러 셋팅
         lineRenderer = GetComponent<LineRenderer>();
         lazerColor.a = 0.5f;
@@ -62,8 +63,13 @@ public class PlayerController : MonoBehaviour
         {
             ARAVR_Input.DrawCrosshair(Crosshair);
         }
+
+        if(shopUi.activeSelf)
+        {
+            ShowRay();
+        }
       
-        shopUi.GetComponent<ShopTF>().ShopActiveTF();
+        //shopUi.GetComponent<ShopTF>().ShopActiveTF();
 
         currentState.Update();         
     }
@@ -83,10 +89,45 @@ public class PlayerController : MonoBehaviour
         nextState.OnEnter(this);
     }
 
+    public void ShowRay()
+    {
+        int layerMask = ((1 << LayerMask.NameToLayer("PlayerBullet")) | (1 << LayerMask.NameToLayer("UI")) | 1 << LayerMask.NameToLayer("DetectArea"));
+        layerMask = ~layerMask;
+
+        // 오른쪽 컨트롤러 기준으로 Ray를 만든다. (살짝 총구 쪽에서부터 시작하도록)
+        Ray ray = new Ray(ARAVR_Input.RHandPosition + ARAVR_Input.RHand.forward * shotPointOffset, ARAVR_Input.RHandDirection);
+        RaycastHit hitInfo;
+
+        // 충돌이 있다면?
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask))
+        {
+            // Ray가 부딪힌 지점에 라인 그리기
+            lineRenderer.SetPosition(0, ray.origin);
+            lineRenderer.SetPosition(1, hitInfo.point);
+
+            // 부딪힌 지점에 크로스 헤어 그리기
+            //player.crosshairCan.transform.position = hitInfo.point;
+        }
+
+        // 충돌이 없다면?
+        else
+        {
+            lineRenderer.SetPosition(0, ray.origin);
+            lineRenderer.SetPosition(1, ray.origin + ARAVR_Input.RHandDirection * lrMaxDistance);
+
+            //crosshairCan.transform.position = ray.origin + ARAVR_Input.RHandDirection * lrMaxDistance;
+        }   // else : 오른쪽 핸드 기준으로 레이저 포인터 만들기
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if(currentState == idleState || currentState == deathState)
         { return; }
+        if(collision.gameObject.CompareTag("Projectile"))
+        {
+            int damage = collision.gameObject.GetComponent<Projectile>().damage;
+            GameManager.instance.HpMin(damage);
+        }
     }
 }
 
@@ -109,7 +150,7 @@ public class Idle : IState
             if (Physics.Raycast(ray, out hitInfo, 200))
             {
                 // TODO: 레이가 게임 시작버튼에 충돌했을 경우 State이동
-                player.SetState(new Battle());
+                player.SetState(player.battleState);
             }
         }
     }
@@ -135,12 +176,14 @@ public class Battle : IState
         {
             if(!player.shopUi.activeSelf)
             {
+                player.lineRenderer.enabled = true;
                 player.shopUi.SetActive(true);
                 //23.10.18
                // player.shopUi.GetComponent<ShopTF>().ShopActiveTF();
             }
             else
             {
+                player.lineRenderer.enabled = false;
                 player.shopUi.SetActive(false);
             }
         }
@@ -165,33 +208,8 @@ public class Planting : IState
 
     void IState.Update()
     {
-        int layerMask = ((1 << LayerMask.NameToLayer("PlayerBullet")) | (1 << LayerMask.NameToLayer("UI")) | 1 << LayerMask.NameToLayer("DetectArea"));
-        layerMask = ~layerMask;
-
-        // 오른쪽 컨트롤러 기준으로 Ray를 만든다. (살짝 총구 쪽에서부터 시작하도록)
-        Ray ray = new Ray(ARAVR_Input.RHandPosition + ARAVR_Input.RHand.forward * player.shotPointOffset, ARAVR_Input.RHandDirection);
-        RaycastHit hitInfo;
-
-        // 충돌이 있다면?
-        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask))
-        {
-            // Ray가 부딪힌 지점에 라인 그리기
-            player.lineRenderer.SetPosition(0, ray.origin);
-            player.lineRenderer.SetPosition(1, hitInfo.point);
-
-            // 부딪힌 지점에 크로스 헤어 그리기
-            //player.crosshairCan.transform.position = hitInfo.point;
-        }
-
-        // 충돌이 없다면?
-        else
-        {
-            player.lineRenderer.SetPosition(0, ray.origin);
-            player.lineRenderer.SetPosition(1, ray.origin + ARAVR_Input.RHandDirection * player.lrMaxDistance);
-
-            //crosshairCan.transform.position = ray.origin + ARAVR_Input.RHandDirection * lrMaxDistance;
-        }
-    }       // else : 오른쪽 핸드 기준으로 레이저 포인터 만들기
+        player.ShowRay();
+    }       
 
     void IState.OnExit()
     {

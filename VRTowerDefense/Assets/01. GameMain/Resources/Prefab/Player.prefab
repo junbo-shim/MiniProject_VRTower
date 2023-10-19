@@ -1220,6 +1220,8 @@ MonoBehaviour:
   basicBulletPrefab: {fileID: 0}
   powerBulletPrefab: {fileID: 0}
   isAttackable: 0
+  isReinforced: 0
+  objectPoolManagers: []
 --- !u!120 &8277811145720485748
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1240,7 +1242,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 6e387f08c560ef44daf6ebb962bd54a9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1271,8 +1273,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
+        time: 0.005
+        value: 0.005
         inSlope: 0
         outSlope: 0
         tangentMode: 0

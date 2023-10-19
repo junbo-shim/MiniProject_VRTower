@@ -5,8 +5,6 @@ using UnityEngine;
 //! ObjectPoolManager 클래스는 ObjectPooling 패턴을 활용하기 위해 제작한 클래스이다
 public class ObjectPoolManager : MonoBehaviour
 {
-    // 싱글톤 사용
-    public static ObjectPoolManager Instance;
 
     [SerializeField]    // 오브젝트 풀에 담을 프리팹
     private GameObject poolingObjectPrefab;
@@ -16,7 +14,6 @@ public class ObjectPoolManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
         Initialize(30);
     }
 
@@ -45,18 +42,18 @@ public class ObjectPoolManager : MonoBehaviour
      * @brief 큐에 저장된 Bullet 오브젝트를 꺼내오는 함수이다.
      * @return 큐에 있는 Bullet을 반환한다.
      */
-    public static Bullet GetObject()
+    public Bullet GetObject()
     {
-        if(Instance.poolingObjectQueue.Count > 0)
+        if(this.poolingObjectQueue.Count > 0)
         {
-            var obj = Instance.poolingObjectQueue.Dequeue();
+            var obj = this.poolingObjectQueue.Dequeue();
             obj.transform.SetParent(null);
             obj.gameObject.SetActive(true);
             return obj;
         }   // if: 큐에 남은 오브젝트가 존재한다면
         else
         {
-            var newObj = Instance.CreateNewObject();
+            var newObj = this.CreateNewObject();
             newObj.gameObject.SetActive(true);
             newObj.transform.SetParent(null);
             return newObj;
@@ -64,12 +61,12 @@ public class ObjectPoolManager : MonoBehaviour
     }
 
     //! 사용이 끝난 오브젝트를 큐로 넣어주는 함수이다.
-    public static void ReturnObject(Bullet obj)
+    public void ReturnObject(Bullet obj)
     {
         obj.gameObject.SetActive(false);
-        obj.transform.SetParent(Instance.transform);
+        obj.transform.SetParent(transform);
         obj.transform.position = Vector3.zero;
-        Instance.poolingObjectQueue.Enqueue(obj);
+        poolingObjectQueue.Enqueue(obj);
     }
 
 }

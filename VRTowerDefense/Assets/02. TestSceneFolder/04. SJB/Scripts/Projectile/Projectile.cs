@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour
     private Rigidbody projectileRigid;
     private ProjectilePool projectilePool;
     private float moveSpeed = 50f;
-    private float damage = 10f;
+    public int damage = 10;
 
     private void Awake()
     {
