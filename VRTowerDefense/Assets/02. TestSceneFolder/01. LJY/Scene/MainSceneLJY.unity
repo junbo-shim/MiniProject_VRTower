@@ -1608,6 +1608,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8277811145720485748, guid: b53bdfb3c867b8b40a5d80b41726e91f, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277811145720485748, guid: b53bdfb3c867b8b40a5d80b41726e91f, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.005
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b53bdfb3c867b8b40a5d80b41726e91f, type: 3}
 --- !u!4 &1101031974 stripped
