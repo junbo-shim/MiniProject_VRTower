@@ -72,11 +72,18 @@ public class Minion : MonBase
     protected override void GetHit(Collider other, int damage)
     {
         healthPoint -= damage;
+        gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+        Invoke("MakeDefaultColor", 0.5f);
 
         if (healthPoint <= 0) 
         {
             CheckReturnPool(gameObject);
         }
+    }
+
+    private void MakeDefaultColor() 
+    {
+        gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
     }
 
     private void CheckReturnPool(GameObject obj) 

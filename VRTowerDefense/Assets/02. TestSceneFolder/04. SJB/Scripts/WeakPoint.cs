@@ -27,7 +27,7 @@ public class WeakPoint : MonoBehaviour
     public IEnumerator OnOffWeakPoint() 
     {
         transform.localScale *= 2;
-        gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+        gameObject.GetComponent<MeshRenderer>().material.color = Color.cyan;
         yield return weakTime;
         transform.localScale = normalSize;
         gameObject.GetComponent<MeshRenderer>().material.color = normalColor;

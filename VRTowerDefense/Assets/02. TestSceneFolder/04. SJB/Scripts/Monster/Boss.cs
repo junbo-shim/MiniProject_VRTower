@@ -17,6 +17,7 @@ public class Boss : MonBase
     private Vector3 spawnAdjustHeight;
 
     private WaitForSecondsRealtime minionSpawnTime;
+    private WaitForSecondsRealtime fireTime;
     public WaitForSecondsRealtime weakTime;
     public List<WeakPoint> weakPointList;
 
@@ -61,15 +62,17 @@ public class Boss : MonBase
         }
 
         // 닿은 Collider 가 총알(Bullet)면
-        if (other.GetComponent<Bullet>() == true) 
+        if (other.GetComponent<Bullet>() == true)
         {
+            // 골드 획득
+            GameManager.instance.AddCoin(100);
             // 데미지 함수를 실행한다
             GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
-            //other.GetComponent<Bullet>().ReturnBullet();
+            other.GetComponent<Bullet>().ReturnBullet();
         }
         // 닿은 Collider 가 총알(TurretShoot)이면
-        if (other.GetComponent<ShootBullet>() == true) 
+        if (other.GetComponent<ShootBullet>() == true)
         {
             // 데미지 함수를 실행한다
             GetHit(other, (int)other.GetComponent<ShootBullet>().bulletData.damage);
@@ -93,6 +96,7 @@ public class Boss : MonBase
 
         // 모든 변수는 CSV 로 읽어와야하며 배율도 수정해야함
         minionSpawnTime = new WaitForSecondsRealtime(0.5f);
+        fireTime = new WaitForSecondsRealtime(2f);
         weakTime = new WaitForSecondsRealtime(5f);
         spawnPoints = new List<Vector3>();
         spawnPointIdxs = new List<int>();
@@ -104,7 +108,7 @@ public class Boss : MonBase
         this.maxHealthPoint = healthPoint;
     }
     // Weak Point 에서 사용할 수 있도록 열어준 GetHit 메서드
-    public void GetHitWeakPoint(Collider other, int damage) 
+    public void GetHitWeakPoint(Collider other, int damage)
     {
         this.GetHit(other, (int)(damage * 1.5f));
     }
@@ -117,13 +121,13 @@ public class Boss : MonBase
 
     #region 약점 관련 기능
     // 약점 찾아오는 메서드
-    private void FindWeakPoint() 
+    private void FindWeakPoint()
     {
         weakPointList = new List<WeakPoint>();
         weakPointList.AddRange(FindObjectsOfType<WeakPoint>());
     }
     // 넘겨줄 약점 활성화 메서드
-    public void ActivateWeakPoint() 
+    public void ActivateWeakPoint()
     {
         int num = Random.Range(0, weakPointList.Count);
         weakPointList[num].StartWeakRoutine();
@@ -137,15 +141,15 @@ public class Boss : MonBase
         fireHolders = new Transform[5];
         Transform fireHolder = gameObject.transform.Find("FireHolder").transform;
 
-        for (int i = 0; i < fireHolder.childCount; i++) 
+        for (int i = 0; i < fireHolder.childCount; i++)
         {
             fireHolders[i] = fireHolder.GetChild(i);
         }
     }
     // 투사체 Object Pool 가져오기
-    private void FindProjectilePool() 
+    private void FindProjectilePool()
     {
-        projectilePool = 
+        projectilePool =
             GameObject.Find("PoolControl").
             transform.Find("Projectile Pool").
             gameObject.GetComponent<ProjectilePool>();
@@ -153,12 +157,22 @@ public class Boss : MonBase
     // 투사체 Object 대여
     private void ChargeProjectile()
     {
-        for (int i = 0; i < fireHolders.Length; i++) 
+        StartCoroutine(Shoot());
+    }
+    private IEnumerator Shoot() 
+    {
+        int num = 0;
+
+        while (num < fireHolders.Length) 
         {
             GameObject obj = projectilePool.GetPoolObject();
-            obj.transform.position = fireHolders[i].position;
+            obj.transform.position = fireHolders[num].position;
+
+            num++;
+            yield return fireTime;
         }
     }
+
     #endregion
 
     #region 졸개 관련 기능

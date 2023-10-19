@@ -88,7 +88,9 @@ public class BuildTower : MonoBehaviour
                         }
                         else if (hit.collider.gameObject.name.Equals ("101"))
                         {
-
+                            Instantiate(BuffFap, BuffUi.transform);
+                            FindObjectOfType<BuffTimeSet>().unitBuffSet(hit.collider.gameObject.name, Time);
+                            FindObjectOfType<Gun>().ReinforceGun();
                         }
                         else
                         {

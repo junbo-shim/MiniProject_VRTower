@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 public class GameManager : MonoBehaviour
 {
-    public int playerHp = 90;      // 플레이어의 체력
+    public int playerHp = 100;      // 플레이어의 체력
     public static GameManager instance;
     public TMP_Text hpText;
     public TMP_Text coinText;
@@ -47,7 +47,18 @@ public class GameManager : MonoBehaviour
     }
     public void HpMin(int dam)
     {
-        playerHp -= dam;
+        if(playerHp > 0 )
+        {
+            if(playerHp - dam < 0)
+            {
+                playerHp = 0;
+            }
+            else
+            {
+                playerHp -= dam;
+            }
+         
+        }     
         hpText.text = playerHp.ToString();
     }
 }

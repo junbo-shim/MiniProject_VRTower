@@ -28,15 +28,16 @@ public class HitFlash : MonoBehaviour
             StartCoroutine(FlashRoutine(flashDuration));
         }
     }
+    public int Alpha;
 
     // 피격 플래시가 종료됩니다.
     private void StopFlash()
     {
         isFlashing = false;
-
+        Alpha = 250;
+        gameObject.SetActive(false);
     }
-    public int Alpha;
-
+   
     // 피격 플래시 루틴
     private IEnumerator FlashRoutine(float flashDuration)
     {

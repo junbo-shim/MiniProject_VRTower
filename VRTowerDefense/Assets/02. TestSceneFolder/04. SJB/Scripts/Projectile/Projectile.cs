@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour
     public Transform target;
     private Rigidbody projectileRigid;
     private ProjectilePool projectilePool;
-    private float moveSpeed = 50f;
+    private float moveSpeed = 20f;
     public int damage = 10;
 
     private void Awake()
@@ -27,6 +27,12 @@ public class Projectile : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         if (other.name.Contains("Player")) 
+        {
+            GameManager.instance.HpMin(damage);
+            projectilePool.ReturnPoolObject(gameObject);
+        }
+
+        if (other.GetComponent<Bullet>() == true) 
         {
             projectilePool.ReturnPoolObject(gameObject);
         }

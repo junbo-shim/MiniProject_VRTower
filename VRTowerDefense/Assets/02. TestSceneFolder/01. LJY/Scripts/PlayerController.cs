@@ -1,3 +1,4 @@
+using Microsoft.Unity.VisualStudio.Editor;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
     public Planting plantingState = new Planting();
     public Death deathState = new Death();
 
+    public GameObject HitImage;
 
     // 상점 UI
     public GameObject shopUi;
@@ -122,6 +124,7 @@ public class PlayerController : MonoBehaviour
         { return; }
         if(collision.gameObject.CompareTag("Projectile"))
         {
+            HitImage.SetActive(true);
             int damage = collision.gameObject.GetComponent<Projectile>().damage;
             GameManager.instance.HpMin(damage);
         }
