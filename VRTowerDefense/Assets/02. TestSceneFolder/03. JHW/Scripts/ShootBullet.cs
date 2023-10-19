@@ -58,8 +58,9 @@ public class ShootBullet : MonoBehaviour
        ObjectPoolHelper.Instance.ReturnObjectToPool("Bullets", gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
+        Debug.Log(other.tag);
         if (other.tag.Equals("Monster"))
         {
             gameObject.SetActive(false);
