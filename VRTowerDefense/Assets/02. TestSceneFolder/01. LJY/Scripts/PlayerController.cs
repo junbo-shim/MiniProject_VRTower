@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
             ARAVR_Input.DrawCrosshair(Crosshair);
         }
       
-        shopUi.GetComponent<ShopTF>().ShopActiveTF();
+   
 
         currentState.Update();         
     }
@@ -135,9 +135,11 @@ public class Battle : IState
         {
             if(!player.shopUi.activeSelf)
             {
+          
                 player.shopUi.SetActive(true);
                 //23.10.18
-               // player.shopUi.GetComponent<ShopTF>().ShopActiveTF();
+                player.shopUi.GetComponent<ShopTF>().ShopActiveTF();
+
             }
             else
             {

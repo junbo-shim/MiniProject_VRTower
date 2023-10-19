@@ -44,6 +44,8 @@ public class ShopTF : MonoBehaviour
                 }
               
             }
+        
+          
             shopChild.transform.Find("Explanation").transform.Find("Quantity_Text").transform.GetComponent<TMP_Text>().text = input.ToString() + " / " + TurretCount.ToString();
            if (input <= TurretCount)
             {

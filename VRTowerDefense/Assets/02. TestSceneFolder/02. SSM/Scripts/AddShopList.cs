@@ -101,7 +101,7 @@ public class AddShopList : MonoBehaviour
                 TMP_Text quantity = shopObjList[i].transform.Find("Explanation").transform.Find("Quantity_Text").transform.GetComponent<TMP_Text>();
                 if (!TotalNum[i].Equals(null))
                 {
-                    quantity.text = TotalNum[i].ToString() + " / ";
+                    quantity.text = TotalNum[i].ToString() + "/0" ;
                 }
 
                 //}구매 가능 총량 텍스트 추가

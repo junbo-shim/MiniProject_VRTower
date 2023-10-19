@@ -66,7 +66,7 @@ public class Boss : MonBase
             // 데미지 함수를 실행한다
             GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
-            other.GetComponent<Bullet>().ReturnBullet();
+            //other.GetComponent<Bullet>().ReturnBullet();
         }
         // 닿은 Collider 가 총알(TurretShoot)이면
         if (other.GetComponent<ShootBullet>() == true) 
@@ -74,7 +74,7 @@ public class Boss : MonBase
             // 데미지 함수를 실행한다
             GetHit(other, (int)other.GetComponent<ShootBullet>().bulletData.damage);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
-            other.GetComponent<GameObject>().SetActive(false);
+            //other.GetComponent<GameObject>().SetActive(false);
             // ice bullet 일 경우 해결 해야함
         }
     }
