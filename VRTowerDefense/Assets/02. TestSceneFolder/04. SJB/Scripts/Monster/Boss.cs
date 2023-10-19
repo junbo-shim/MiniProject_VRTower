@@ -14,6 +14,8 @@ public class Boss : MonBase
     public SpawnEffectPool spawnEffectPool;
     private List<Vector3> spawnPoints;
     private List<int> spawnPointIdxs;
+    private Vector3 spawnAdjustHeight;
+
     private WaitForSecondsRealtime minionSpawnTime;
     public WaitForSecondsRealtime weakTime;
     public List<WeakPoint> weakPointList;
@@ -28,15 +30,17 @@ public class Boss : MonBase
         ChargeProjectile();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            ActivateWeakPoint();
+        }
+    }
+
     private void FixedUpdate()
     {
         base.Move();
-
-        if (Input.GetKeyDown(KeyCode.A)) 
-        {
-            Debug.Log("??");
-            ActivateWeakPoint();
-        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -65,10 +69,10 @@ public class Boss : MonBase
             other.GetComponent<Bullet>().ReturnBullet();
         }
         // 닿은 Collider 가 총알(TurretShoot)이면
-        if (other.GetComponent<TurretShoot>() == true) 
+        if (other.GetComponent<ShootBullet>() == true) 
         {
             // 데미지 함수를 실행한다
-            GetHit(other, (int)other.GetComponent<TurretShoot>().bulletData.damage);
+            GetHit(other, (int)other.GetComponent<ShootBullet>().bulletData.damage);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
             other.GetComponent<GameObject>().SetActive(false);
             // ice bullet 일 경우 해결 해야함
@@ -86,15 +90,18 @@ public class Boss : MonBase
         FindWeakPoint();
 
         hpGauge = gameObject.transform.Find("Canvas").Find("Gauge").GetComponent<Image>();
+        this.rigidGravity = -2200f;
 
         // 모든 변수는 CSV 로 읽어와야하며 배율도 수정해야함
         minionSpawnTime = new WaitForSecondsRealtime(0.5f);
-        weakTime = new WaitForSecondsRealtime(0.5f);
+        weakTime = new WaitForSecondsRealtime(5f);
         spawnPoints = new List<Vector3>();
         spawnPointIdxs = new List<int>();
+        spawnAdjustHeight = new Vector3(0f, 20f, 0f);
+
 
         this.healthPoint = 500;
-        this.moveSpeed = 70f;
+        this.moveSpeed = 100f;
         this.attackCooltime = 5f;
         this.maxHealthPoint = healthPoint;
     }
@@ -121,9 +128,7 @@ public class Boss : MonBase
     public void ActivateWeakPoint() 
     {
         int num = Random.Range(0, weakPointList.Count);
-        Debug.LogWarning(num);
-        weakPointList[num].MakeBossWeak();
-        Debug.LogWarning(weakPointList[num]);
+        weakPointList[num].StartWeakRoutine();
     }
     #endregion
 
@@ -232,7 +237,7 @@ public class Boss : MonBase
         {
             Debug.LogWarning(hit);
             Debug.LogWarning(hit.transform.position);
-            spawnPoints[spawnPointIdx] = hit.transform.position + Vector3.one;
+            spawnPoints[spawnPointIdx] = hit.transform.position + spawnAdjustHeight;
             Debug.LogWarning(spawnPoints[spawnPointIdx]);
         }
     }
@@ -248,12 +253,7 @@ public class Boss : MonBase
         yield return minionSpawnTime;
         yield break;
     }
-    // 몬스터 순차 생성을 위해 1초간 대기하는 Coroutine
-    private IEnumerator WaitForOneSecond() 
-    {
-        yield return minionSpawnTime;
-        yield break;
-    }
+
     // 랜덤하게 base, fast minion object 대여하기
     private void ChooseRandomMinion(Vector3 spawnPoint) 
     {

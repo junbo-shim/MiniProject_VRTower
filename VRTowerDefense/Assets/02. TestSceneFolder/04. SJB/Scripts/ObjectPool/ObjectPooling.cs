@@ -3,48 +3,49 @@ using UnityEngine;
 
 public class ObjectPooling : MonoBehaviour
 {
-    // Object Pooling ÇÒ ÇÁ¸®ÆÕ
+    // Object Pooling í•  í”„ë¦¬íŒ¹
     protected GameObject prefab;
-    // Object Pool À» º¸°üÇØµÑ º¸°üÇÔ
+    // Object Pool ì„ ë³´ê´€í•´ë‘˜ ë³´ê´€í•¨
     protected Transform poolHolder;
     // Pool Stack
     protected Stack<GameObject> poolStack;
-    // Pool Size - »ó¼Ó ¹Ş¾Æ¼­ Å©±â ÁöÁ¤, ¸î ¹ø push ¸¦ ÇØ³õÀ» °ÍÀÎ°¡
+    // Pool Size - ìƒì† ë°›ì•„ì„œ í¬ê¸° ì§€ì •, ëª‡ ë²ˆ push ë¥¼ í•´ë†“ì„ ê²ƒì¸ê°€
     protected int poolSize;
 
 
     protected virtual void MakePool()
     {
-        // Stack ÃÊ±âÈ­
+        // Stack ì´ˆê¸°í™”
         poolStack = new Stack<GameObject>();
 
-        // poolSize ¸¸Å­ ¹İº¹ÇÏ¿© 
+        // poolSize ë§Œí¼ ë°˜ë³µí•˜ì—¬ 
         for (int i = 0; i < poolSize; i++) 
         {
-            // º¸°üÇÔ ÇÏÀ§¿¡¼­ ÇÁ¸®ÆÕ »ı¼º
+            // ë³´ê´€í•¨ í•˜ìœ„ì—ì„œ í”„ë¦¬íŒ¹ ìƒì„±
             GameObject obj =
                 Instantiate(prefab, Vector3.zero, Quaternion.identity, poolHolder);
-            // »ı¼ºÇÑ ¿ÀºêÁ§Æ® ²ô±â
+            obj.transform.localScale *= 4;
+            // ìƒì„±í•œ ì˜¤ë¸Œì íŠ¸ ë„ê¸°
             obj.SetActive(false);
-            // Pool Stack ¿¡ Ãß°¡
+            // Pool Stack ì— ì¶”ê°€
             poolStack.Push(obj);
         }
     }
 
     public GameObject GetPoolObject() 
     {
-        // Pool ¿¡ Object °¡ ÀÖ´Ù¸é
+        // Pool ì— Object ê°€ ìˆë‹¤ë©´
         if (poolStack.Count > 0) 
         {
-            // Pool Stack ¿¡ ÀÖ´Â Object ²¨³»±â
+            // Pool Stack ì— ìˆëŠ” Object êº¼ë‚´ê¸°
             GameObject obj = poolStack.Pop();
             obj.SetActive(true);
             return obj;
         }
-        // Pool ¿¡ Object °¡ ¾ø´Ù¸é
+        // Pool ì— Object ê°€ ì—†ë‹¤ë©´
         else 
         {
-            // »õ·Ó°Ô Object ¸¦ »ı¼ºÇÏ¿© Stack ¿¡ Ãß°¡
+            // ìƒˆë¡­ê²Œ Object ë¥¼ ìƒì„±í•˜ì—¬ Stack ì— ì¶”ê°€
             GameObject obj =
                 Instantiate(prefab, Vector3.zero, Quaternion.identity, poolHolder);
             poolStack.Push(obj);

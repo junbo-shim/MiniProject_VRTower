@@ -46,6 +46,8 @@ public class Minion : MonBase
         baseMinionPool = boss.GetComponent<Boss>().baseMinionPool;
         fastMinionPool = boss.GetComponent<Boss>().fastMinionPool;
 
+        this.rigidGravity = -1000f;
+
         if (gameObject.name == "BaseMinion" + "(Clone)") 
         {
             this.healthPoint = 1;

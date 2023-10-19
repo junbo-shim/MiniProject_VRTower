@@ -18,44 +18,22 @@ public class WeakPoint : MonoBehaviour
         weakTime = boss.GetComponent<Boss>().weakTime;
     }
 
-    public void MakeBossWeak() 
+    public void StartWeakRoutine() 
     {
-        Debug.LogWarning("What");
-        StartCoroutine(WeakenEnemy());
+        StartCoroutine(OnOffWeakPoint());
     }
 
-    // 약점 활성화 Coroutine
-    private IEnumerator WeakenEnemy() 
+    // 약점 활성비활성화 Coroutine
+    public IEnumerator OnOffWeakPoint() 
     {
-        Debug.LogWarning("You");
-        MakeSizeBig();
-        Debug.LogWarning("Are");
-        yield return weakTime;
-        Debug.LogWarning("fucked");
-        ReturnNormal();
-        Debug.LogWarning("!!!!!!!!!!!!!");
-        yield break;
-    }
-
-    // 약점 확대
-    public void MakeSizeBig() 
-    {
-        Debug.LogWarning("Big11");
         transform.localScale *= 2;
-        Debug.LogWarning("Big22");
         gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-        Debug.LogWarning("Big33");
-    }
-    // 기본 상태로 복귀
-    public void ReturnNormal() 
-    {
-        Debug.LogWarning("Normal11");
+        yield return weakTime;
         transform.localScale = normalSize;
-        Debug.LogWarning("Normal22");
         gameObject.GetComponent<MeshRenderer>().material.color = normalColor;
-        Debug.LogWarning("Normal33");
     }
-    // 약점에 맞을 경우
+
+    // 약점에 맞을 경우a
     private void OnTriggerStay(Collider other)
     {
         // 닿은 Collider 가 총알이면

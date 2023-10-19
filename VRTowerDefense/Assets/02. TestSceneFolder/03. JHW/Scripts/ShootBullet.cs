@@ -3,7 +3,7 @@ using UnityEngine;
 public class ShootBullet : MonoBehaviour
 {
     [SerializeField]
-    private BulletData bulletData;
+    public BulletData bulletData;
     private Rigidbody rb;
     private int chk = 0;
     private void Awake()
