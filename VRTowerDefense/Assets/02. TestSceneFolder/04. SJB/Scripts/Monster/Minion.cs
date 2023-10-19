@@ -21,7 +21,7 @@ public class Minion : MonBase
     private void OnCollisionEnter(Collision collision)
     {
         // 추후에 name 에서 tag 또는 layer 로 변경
-        if (collision.gameObject.name == "Player") 
+        if (collision.gameObject.name.Contains("OVRCameraRig")) 
         {
             Attack();
             CheckReturnPool(gameObject);
@@ -33,8 +33,7 @@ public class Minion : MonBase
         // 추후에 name 에서 tag 또는 layer 로 변경
         if (other.name == "Bullet") 
         {
-            //GetHit();
-
+            this.GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
         }
     }
 
@@ -46,17 +45,17 @@ public class Minion : MonBase
         baseMinionPool = boss.GetComponent<Boss>().baseMinionPool;
         fastMinionPool = boss.GetComponent<Boss>().fastMinionPool;
 
-        this.rigidGravity = -1000f;
-
         if (gameObject.name == "BaseMinion" + "(Clone)") 
         {
-            this.healthPoint = 1;
+            // 수치 조정 필요
+            this.healthPoint = 1 * 5;
             this.damage = 20;
             this.moveSpeed = 600f;
         }
         else 
         {
-            this.healthPoint = 2;
+            // 수치 조정 필요
+            this.healthPoint = 2 * 5;
             this.damage = 20;
             this.moveSpeed = 1200f;
         }
@@ -64,13 +63,18 @@ public class Minion : MonBase
 
     protected override void Attack()
     {
-        
+        Invoke("WaitSecond", 1f);
+        GameManager.instance.HpMin(damage);
     }
 
     protected override void GetHit(Collider other, int damage)
     {
-        //base.GetHit();
+        healthPoint -= damage;
 
+        if (healthPoint <= 0) 
+        {
+            CheckReturnPool(gameObject);
+        }
     }
 
     private void CheckReturnPool(GameObject obj) 
@@ -83,5 +87,10 @@ public class Minion : MonBase
         {
             fastMinionPool.ReturnPoolObject(obj);
         }
+    }
+
+    private void WaitSecond() 
+    {
+        gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
     }
 }
