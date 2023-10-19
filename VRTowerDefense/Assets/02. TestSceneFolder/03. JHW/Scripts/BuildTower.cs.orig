@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using System;
 
 public class BuildTower : MonoBehaviour
 {
@@ -14,8 +15,9 @@ public class BuildTower : MonoBehaviour
     public GameObject previewObject;  // 불투명한 프리팹을 표시하기 위한 오브젝트
     public GameObject previewObject2;  // 불투명한 프리팹을 표시하기 위한 오브젝트
     private bool buildTurret = false;
-
+    public Canvas BuffUi;
     public Canvas shopUi;
+    public GameObject BuffFap;
     private FillAmount fillAmountScript; // FillAmount 스크립트에 대한 참조
     [SerializeField] private string targetName = "";
 
@@ -72,14 +74,17 @@ public class BuildTower : MonoBehaviour
                     int buyCoin = int.Parse(hit.collider.gameObject.transform.Find("Item_Information").Find("BntBuy").Find("BuyText").GetComponent<TMP_Text>().text.ToString());
 
 
-
+                    int Time = int.Parse(hit.collider.gameObject.transform.Find("Explanation").Find("TimeIcon").Find("TimeText").GetComponent<TMP_Text>().text.ToString());
+                    Debug.Log(Time);
                     if (buyCoin <= GameManager.instance.coin)
                     {
                         
                         GameManager.instance.MinCoin(buyCoin);
                         if (hit.collider.gameObject.name.Equals("100"))
                         {
-                            FindObjectOfType<Boss>().ActivateWeakPoint();
+                            Instantiate(BuffFap, BuffUi.transform);
+                            FindObjectOfType<BuffTimeSet>().unitBuffSet(hit.collider.gameObject.name, Time);
+                           // FindObjectOfType<Boss>().ActivateWeakPoint();
                         }
                         else if (hit.collider.gameObject.name.Equals ("101"))
                         {
@@ -152,13 +157,19 @@ public class BuildTower : MonoBehaviour
 
                         if (buildTurret == false)
                         {
+                            Debug.Log("1swaewqe");
                             GameObject tower = Instantiate(prefabToPlace, hit.point, Quaternion.identity);
                             fillAmountScript = tower.GetComponent<FillAmount>();
                             buildTurret = true;
                             targetName = "";
+                            // FillAmount 스크립트의 코루틴을 시작합니다.
+                            StartCoroutine(fillAmountScript.DecreaseFillAmountOverTime());
+<<<<<<< HEAD
+                            previewObject.SetActive(false);
+                            previewObject2.SetActive(false);
+=======
+>>>>>>> origin/Jeong
                         }
-                        // FillAmount 스크립트의 코루틴을 시작합니다.
-                        StartCoroutine(fillAmountScript.DecreaseFillAmountOverTime());
                     }
                 }
             }
@@ -172,14 +183,8 @@ public class BuildTower : MonoBehaviour
             Ray ray = new Ray(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
             RaycastHit hit;
 #endif
-<<<<<<< HEAD
 
-            if (buildTurret == false)
-=======
-            if (targetName == "102")
->>>>>>> origin/Song
-            {
-                if (targetName == "100")
+                if (targetName == "103")
                 {
                     if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
                     {
@@ -192,7 +197,7 @@ public class BuildTower : MonoBehaviour
                     }
 
                 }
-                else if (targetName == "101")
+                else if (targetName == "104")
                 {
                     if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
 
@@ -205,24 +210,22 @@ public class BuildTower : MonoBehaviour
                         previewObject2.SetActive(false);
                     }
                 }
+   
 
-            }
-<<<<<<< HEAD
-=======
-            else if (targetName == "103")
-            {
-                if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+            
+            //else if (targetName == "103")
+            //{
+            //    if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
 
-                {
-                    previewObject2.SetActive(true);
-                    previewObject2.transform.position = hit.point;
-                }
-                else
-                {
-                    previewObject2.SetActive(false);
-                }
-            }
->>>>>>> origin/Song
+            //    {
+            //        previewObject2.SetActive(true);
+            //        previewObject2.transform.position = hit.point;
+            //    }
+            //    else
+            //    {
+            //        previewObject2.SetActive(false);
+            //    }
+            //}
         }
     }
 }
