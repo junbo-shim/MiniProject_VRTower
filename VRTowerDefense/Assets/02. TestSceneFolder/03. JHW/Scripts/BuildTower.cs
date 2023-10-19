@@ -73,8 +73,20 @@ public class BuildTower : MonoBehaviour
 
                     if (buyCoin <= GameManager.instance.coin)
                     {
+                        
                         GameManager.instance.MinCoin(buyCoin);
-                        targetName = hit.collider.gameObject.name;
+                        if (hit.collider.gameObject.name.Equals("100"))
+                        {
+                            FindObjectOfType<Boss>().ActivateWeakPoint();
+                        }
+                        else if (hit.collider.gameObject.name.Equals ("101"))
+                        {
+
+                        }
+                        else
+                        {
+                            targetName = hit.collider.gameObject.name;
+                        }                 
                         shopUi.gameObject.SetActive(false);
                     }
 
@@ -152,7 +164,7 @@ public class BuildTower : MonoBehaviour
             Ray ray = new Ray(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
             RaycastHit hit;
 #endif
-            if (targetName == "100")
+            if (targetName == "102")
             {
                 if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
                 {
@@ -165,7 +177,7 @@ public class BuildTower : MonoBehaviour
                 }
 
             }
-            else if (targetName == "101")
+            else if (targetName == "103")
             {
                 if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
 

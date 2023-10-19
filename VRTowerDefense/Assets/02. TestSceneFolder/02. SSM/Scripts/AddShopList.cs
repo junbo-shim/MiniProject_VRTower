@@ -44,10 +44,11 @@ public class AddShopList : MonoBehaviour
             TotalNum[csvCount] = item.TotalNum;
             times[csvCount] = item.Time;
 
-            csvCount++;
-            Debug.Log("CSVID: " + item.CSVID + ", Description: " + item.Description + ", UnitID: " + item.UnitID+", Time:" + item.Time);
+            csvCount++;   
         }
         //  ScriptableObject데이터 배열에 추가
+
+
 
 
         shopObjList = new List<GameObject>();
@@ -61,6 +62,8 @@ public class AddShopList : MonoBehaviour
         ShopItemAdd();
 
     }
+
+   
     //이미지 가져오기
     public Sprite LoadSprite(string imagePath)
     {
@@ -98,7 +101,7 @@ public class AddShopList : MonoBehaviour
                 TMP_Text quantity = shopObjList[i].transform.Find("Explanation").transform.Find("Quantity_Text").transform.GetComponent<TMP_Text>();
                 if (!TotalNum[i].Equals(null))
                 {
-                    quantity.text = TotalNum[i].ToString() + " \\ ";
+                    quantity.text = TotalNum[i].ToString() + " / ";
                 }
 
                 //}구매 가능 총량 텍스트 추가
