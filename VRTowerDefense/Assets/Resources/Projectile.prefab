@@ -129,3 +129,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boss: {fileID: 0}
   target: {fileID: 0}
+  damage: 10

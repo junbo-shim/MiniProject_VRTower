@@ -24,7 +24,7 @@ public class ObjectPooling : MonoBehaviour
             // 보관함 하위에서 프리팹 생성
             GameObject obj =
                 Instantiate(prefab, Vector3.zero, Quaternion.identity, poolHolder);
-            obj.transform.localScale *= 4;
+
             // 생성한 오브젝트 끄기
             obj.SetActive(false);
             // Pool Stack 에 추가

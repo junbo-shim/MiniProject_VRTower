@@ -26,7 +26,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.name.Contains("OVRCameraRig")) 
+        if (other.name.Contains("Player")) 
         {
             projectilePool.ReturnPoolObject(gameObject);
         }

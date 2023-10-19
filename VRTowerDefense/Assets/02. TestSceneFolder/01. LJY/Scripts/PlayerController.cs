@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
         {
             ARAVR_Input.DrawCrosshair(Crosshair);
         }
-        shopUi.GetComponent<ShopTF>().ShopActiveTF();
+      
         currentState.Update();         
     }
 

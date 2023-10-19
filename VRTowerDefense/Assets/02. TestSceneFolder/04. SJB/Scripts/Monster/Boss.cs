@@ -227,6 +227,7 @@ public class Boss : MonBase
         spawnEffectPool.ReturnPoolObject(obj);
         // 졸개 생성
         ChooseRandomMinion(obj.transform.position);
+        
         yield return minionSpawnTime;
         yield break;
     }

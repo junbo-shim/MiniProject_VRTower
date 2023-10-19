@@ -9,6 +9,7 @@ TagManager:
   - Turret
   - Item
   - PlayerBullet
+  - Projectile
   layers:
   - Default
   - TransparentFX

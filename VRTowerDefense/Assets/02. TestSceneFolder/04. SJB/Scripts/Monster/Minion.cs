@@ -7,6 +7,7 @@ public class Minion : MonBase
     private Transform boss;
     private BaseMinionPool baseMinionPool;
     private FastMinionPool fastMinionPool;
+    private Color defaultColor;
 
     private void OnEnable()
     {
@@ -18,20 +19,20 @@ public class Minion : MonBase
         base.Move();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         // 추후에 name 에서 tag 또는 layer 로 변경
-        if (collision.gameObject.name.Contains("OVRCameraRig")) 
+        if (collision.gameObject.name.Contains("Player")) 
         {
-            Attack();
-            CheckReturnPool(gameObject);
+            gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            Invoke("Attack", 1f);
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
         // 추후에 name 에서 tag 또는 layer 로 변경
-        if (other.name == "Bullet") 
+        if (other.GetComponent<Bullet>() == true) 
         {
             this.GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
         }
@@ -41,6 +42,7 @@ public class Minion : MonBase
     {
         base.Init();
 
+        defaultColor = gameObject.GetComponent<MeshRenderer>().material.color;
         boss = GameObject.Find("EarthGolem").transform;
         baseMinionPool = boss.GetComponent<Boss>().baseMinionPool;
         fastMinionPool = boss.GetComponent<Boss>().fastMinionPool;
@@ -63,8 +65,8 @@ public class Minion : MonBase
 
     protected override void Attack()
     {
-        Invoke("WaitSecond", 1f);
         GameManager.instance.HpMin(damage);
+        CheckReturnPool(gameObject);
     }
 
     protected override void GetHit(Collider other, int damage)
@@ -81,16 +83,13 @@ public class Minion : MonBase
     {
         if (obj.name == "BaseMinion" + "(Clone)") 
         {
+            gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
             baseMinionPool.ReturnPoolObject(obj);
         }
         else 
         {
+            gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
             fastMinionPool.ReturnPoolObject(obj);
         }
-    }
-
-    private void WaitSecond() 
-    {
-        gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
     }
 }
