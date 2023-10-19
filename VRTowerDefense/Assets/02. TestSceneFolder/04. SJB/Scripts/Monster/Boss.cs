@@ -54,7 +54,7 @@ public class Boss : MonBase
             spawnPoints = other.GetComponent<MinionSpawnPoint>().spawnPoints;
 
             SpawnMinion();
-            //ChargeProjectile();
+            ChargeProjectile();
 
             // 그리고 닿은 오브젝트를 끈다
             other.gameObject.SetActive(false);
@@ -90,7 +90,6 @@ public class Boss : MonBase
         FindWeakPoint();
 
         hpGauge = gameObject.transform.Find("Canvas").Find("Gauge").GetComponent<Image>();
-        this.rigidGravity = -2200f;
 
         // 모든 변수는 CSV 로 읽어와야하며 배율도 수정해야함
         minionSpawnTime = new WaitForSecondsRealtime(0.5f);
@@ -99,8 +98,7 @@ public class Boss : MonBase
         spawnPointIdxs = new List<int>();
         spawnAdjustHeight = new Vector3(0f, 20f, 0f);
 
-
-        this.healthPoint = 500;
+        this.healthPoint = 10000;
         this.moveSpeed = 100f;
         this.attackCooltime = 5f;
         this.maxHealthPoint = healthPoint;
@@ -159,7 +157,6 @@ public class Boss : MonBase
         {
             GameObject obj = projectilePool.GetPoolObject();
             obj.transform.position = fireHolders[i].position;
-            obj.transform.SetParent(fireHolders[i], true);
         }
     }
     #endregion
@@ -215,33 +212,13 @@ public class Boss : MonBase
 
         for (int i = 0; i < spawnPointIdxs.Count; i++) 
         {
-            // 생성 위치에서 레이 아래로 발사, spawnPoint 재설정
-            CheckSpawnHeight(spawnPointIdxs[i]);
             // 이펙트를 먼저 생성
             GameObject effect = spawnEffectPool.GetPoolObject();
             effect.transform.position = spawnPoints[spawnPointIdxs[i]];
             // 이펙트 반납 후 졸개 생성
             StartCoroutine("ReturnEffect", effect);
-            // 생성 대기
-            //StartCoroutine("WaitForOneSecond");
         }
     }
-    // 스폰 포인트에서 레이를 쏴서 높이에 맞게 spawnPoints 배열을 다시 설정하는 메서드
-    private void CheckSpawnHeight(int spawnPointIdx) 
-    {
-        RaycastHit hit = new RaycastHit();
-
-        //Physics.Raycast(spawnPoints[spawnPointIdx], Vector3.down, out hit);
-
-        if (Physics.Raycast(spawnPoints[spawnPointIdx], Vector3.down, out hit)) 
-        {
-            Debug.LogWarning(hit);
-            Debug.LogWarning(hit.transform.position);
-            spawnPoints[spawnPointIdx] = hit.transform.position + spawnAdjustHeight;
-            Debug.LogWarning(spawnPoints[spawnPointIdx]);
-        }
-    }
-
     // 1초 뒤 이펙트 반납하는 Coroutine
     private IEnumerator ReturnEffect(GameObject obj) 
     {

@@ -10,13 +10,17 @@ public class MinionSpawnPoint : MonoBehaviour
     private float circleHalf;
     // 스폰 포인트를 담아둘 List
     public List<Vector3> spawnPoints;
-
+    // 위쪽 스폰을 위한 상승 벡터
+    private Vector3 verticalVec;
+    // test
     private Vector3 high;
 
     private void Awake()
     {
         spawnPoints = new List<Vector3>();
-        high = new Vector3(1, 30, 1);
+        verticalVec = new Vector3(0, 30, 0);
+        high = new Vector3(1, 3, 1);
+
         GetCircleHalf();
         FindPlayer();
         GetVectorFromAngle();
@@ -54,15 +58,27 @@ public class MinionSpawnPoint : MonoBehaviour
                     player.position.z + (Mathf.Sin(i * rad) * circleHalf));
 
                 // 레이 발사를 위해서 위쪽에서 생성
+                spawnPoint += verticalVec;
+
+                RaycastHit hit = new RaycastHit();
+                if (Physics.Raycast(spawnPoint, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("Terrain"))) 
+                {
+                    spawnPoint = hit.point;
+                }
+
+                //Test(spawnPoint);
 
                 // 스폰 포인트 List 에 spawnPoint 들을 담아둔다
                 spawnPoints.Add(spawnPoint);
-
-                //GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                //obj.GetComponent<BoxCollider>().enabled = false;
-                //obj.transform.position = spawnPoint;
-                //obj.transform.localScale = high;
             }
         }
+    }
+
+    private void Test(Vector3 point) 
+    {
+        GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        obj.GetComponent<BoxCollider>().enabled = false;
+        obj.transform.position = point;
+        obj.transform.localScale = high;
     }
 }

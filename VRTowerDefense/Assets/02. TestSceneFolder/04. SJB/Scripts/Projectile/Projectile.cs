@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour
     private Rigidbody projectileRigid;
     private ProjectilePool projectilePool;
     private float moveSpeed = 50f;
-    private float damage = 10f;
+    public int damage = 10;
 
     private void Awake()
     {
@@ -17,12 +17,19 @@ public class Projectile : MonoBehaviour
     private void OnEnable()
     {
         FindTarget();
+    }
+
+    private void FixedUpdate()
+    {
         Move();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        projectilePool.ReturnPoolObject(gameObject);
+        if (other.name.Contains("OVRCameraRig")) 
+        {
+            projectilePool.ReturnPoolObject(gameObject);
+        }
     }
 
     private void Init() 
@@ -33,15 +40,14 @@ public class Projectile : MonoBehaviour
     private void FindTarget() 
     {
         boss = GameObject.Find("EarthGolem").transform;
-        target = GameObject.Find("Player").transform.Find("AimTarget");
+        target = GameObject.Find("Player").transform.Find("OVRCameraRig");
 
         projectilePool = boss.GetComponent<Boss>().projectilePool;
-
-        transform.LookAt(target, Vector3.up);
     }
 
     private void Move()
     {
+        transform.LookAt(target, Vector3.up);
         projectileRigid.velocity = transform.forward * moveSpeed;
     }
 }

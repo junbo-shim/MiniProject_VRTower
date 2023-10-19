@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MonBase : MonoBehaviour
 {
+    protected NavMeshAgent agent;
     // 몬스터의 Rigidbody
     protected Rigidbody rigid;
     // 몬스터의 속도
@@ -19,7 +21,7 @@ public class MonBase : MonoBehaviour
     // 몬스터의 최대체력
     protected int maxHealthPoint;
     // 몬스터의 데미지
-    protected float damage;
+    protected int damage;
     // 몬스터의 디버프 중첩 체크할 int
     protected int debuffCount;
 
@@ -32,27 +34,14 @@ public class MonBase : MonoBehaviour
 
     protected virtual void Init() 
     {
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("Player").transform.Find("OVRCameraRig");
+        agent = gameObject.GetComponent<NavMeshAgent>();
         rigid = gameObject.GetComponent<Rigidbody>();
     }
 
     protected virtual void Move() 
     {
-        Vector3 playerDirection = 
-            new Vector3(player.position.x, 0f, player.position.z);
-        Vector3 objectDirection = 
-            new Vector3(transform.position.x, 0f, transform.position.z);
-
-        rigidVelocity = 
-            new Vector3((player.position.x - transform.position.x),
-            (player.position.y - transform.position.y), 
-            (player.position.z - transform.position.z));
-
-        rigidVelocity.y += rigidGravity * Time.deltaTime;
-
-        // Rigidbody 의 velocity 를 이동 속도 * 시간 * 바라보는 방향 으로 부여한다
-        rigid.velocity = 
-            moveSpeed * Time.deltaTime * rigidVelocity.normalized;
+        agent.SetDestination(player.position);
     }
 
     protected virtual void Attack() 
