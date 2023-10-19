@@ -48,8 +48,8 @@ public class BuildTower : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 # elif TARGET_DEVICE_OCULUS
         Ray ray = new(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
-        RaycastHit hit;
 # endif
+        RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100f, uiLayer))
         {
             itemCellScaleUps = FindObjectsOfType<ItemCellScaleUp>();
