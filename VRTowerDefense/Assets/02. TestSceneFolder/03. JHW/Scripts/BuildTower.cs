@@ -13,6 +13,7 @@ public class BuildTower : MonoBehaviour
     public LayerMask uiLayer;
     public GameObject previewObject;  // 불투명한 프리팹을 표시하기 위한 오브젝트
     public GameObject previewObject2;  // 불투명한 프리팹을 표시하기 위한 오브젝트
+    private bool buildTurret = false;
 
     public Canvas shopUi;
     private FillAmount fillAmountScript; // FillAmount 스크립트에 대한 참조
@@ -35,6 +36,7 @@ public class BuildTower : MonoBehaviour
         if (!targetName.Equals(""))
         {
             Build();
+            buildTurret = false;
         }
     }
 
@@ -82,7 +84,7 @@ public class BuildTower : MonoBehaviour
 
 
                     // 23.10.18 SSM 
-                   
+
                 }
 
 
@@ -135,8 +137,14 @@ public class BuildTower : MonoBehaviour
                     {
 
                         // 콜라이더가 활성화되어 있으면 설치
-                        GameObject tower = Instantiate(prefabToPlace, hit.point, Quaternion.identity);
-                        fillAmountScript = tower.GetComponent<FillAmount>();
+
+                        if (buildTurret == false)
+                        {
+                            GameObject tower = Instantiate(prefabToPlace, hit.point, Quaternion.identity);
+                            fillAmountScript = tower.GetComponent<FillAmount>();
+                            buildTurret = true;
+                            targetName = "";
+                        }
                         // FillAmount 스크립트의 코루틴을 시작합니다.
                         StartCoroutine(fillAmountScript.DecreaseFillAmountOverTime());
                     }
@@ -152,31 +160,36 @@ public class BuildTower : MonoBehaviour
             Ray ray = new Ray(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
             RaycastHit hit;
 #endif
-            if (targetName == "100")
+
+            if (buildTurret == false)
             {
-                if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+                if (targetName == "100")
                 {
-                    previewObject.SetActive(true);
-                    previewObject.transform.position = hit.point;
+                    if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+                    {
+                        previewObject.SetActive(true);
+                        previewObject.transform.position = hit.point;
+                    }
+                    else
+                    {
+                        previewObject.SetActive(false);
+                    }
+
                 }
-                else
+                else if (targetName == "101")
                 {
-                    previewObject.SetActive(false);
+                    if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+
+                    {
+                        previewObject2.SetActive(true);
+                        previewObject2.transform.position = hit.point;
+                    }
+                    else
+                    {
+                        previewObject2.SetActive(false);
+                    }
                 }
 
-            }
-            else if (targetName == "101")
-            {
-                if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
-
-                {
-                    previewObject2.SetActive(true);
-                    previewObject2.transform.position = hit.point;
-                }
-                else
-                {
-                    previewObject2.SetActive(false);
-                }
             }
         }
     }
