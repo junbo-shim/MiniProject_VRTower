@@ -84,7 +84,7 @@ public class BuildTower : MonoBehaviour
                         {
                             Instantiate(BuffFap, BuffUi.transform);
                             FindObjectOfType<BuffTimeSet>().unitBuffSet(hit.collider.gameObject.name, Time);
-                           // FindObjectOfType<Boss>().ActivateWeakPoint();
+                            FindObjectOfType<Boss>().ActivateWeakPoint();
                         }
                         else if (hit.collider.gameObject.name.Equals ("101"))
                         {
