@@ -8,6 +8,7 @@ public class Minion : MonBase
     private BaseMinionPool baseMinionPool;
     private FastMinionPool fastMinionPool;
     private Color defaultColor;
+    private bool isAttack = false;
 
     private void OnEnable()
     {
@@ -19,20 +20,20 @@ public class Minion : MonBase
         base.Move();
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider other)
     {
         // 추후에 name 에서 tag 또는 layer 로 변경
-        if (collision.gameObject.name.Contains("Player")) 
+        if (other.gameObject.name.Contains("Player")) 
         {
             gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
             Invoke("Attack", 1f);
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         // 추후에 name 에서 tag 또는 layer 로 변경
-        if (other.GetComponent<Bullet>() == true) 
+        if (other.GetComponent<Bullet>() != null) 
         {
             this.GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
         }
@@ -65,6 +66,8 @@ public class Minion : MonBase
 
     protected override void Attack()
     {
+        GameObject gameObject = new GameObject();
+
         GameManager.instance.HpMin(damage);
         CheckReturnPool(gameObject);
     }

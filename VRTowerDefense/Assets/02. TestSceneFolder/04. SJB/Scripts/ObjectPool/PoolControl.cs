@@ -4,7 +4,6 @@ public class PoolControl : MonoBehaviour
 {
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
         CreateProjectilePool();
         CreateBaseMinionPool();
         CreateFastMinionPool();

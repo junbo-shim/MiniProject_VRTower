@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public TMP_Text hpText;
     public TMP_Text coinText;
     public GameObject reMain;
+    public GameObject golem;
+    public Material emptyMaterial;
     // 싱글턴으로 만들기
     public int coin = 100;
    
@@ -65,8 +67,10 @@ public class GameManager : MonoBehaviour
             }
          
         }   
-       if(playerHp < 0)
+       if(playerHp <= 0)
         {
+            //golem.transform.position = new Vector3(0, -300, 0);
+            golem.GetComponent<SkinnedMeshRenderer>().material = emptyMaterial;
             reMain.SetActive(true);
         }
            

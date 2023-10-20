@@ -15,8 +15,7 @@ public class HitFlash : MonoBehaviour
     void Start()
     {
         image = GetComponent<Image>();
-   
-        StartFlash(0.1f);
+  
     }
 
     // 피격 플래시를 시작합니다.
@@ -34,24 +33,26 @@ public class HitFlash : MonoBehaviour
     private void StopFlash()
     {
         isFlashing = false;
-        Alpha = 250;
-        gameObject.SetActive(false);
+   
+   
     }
    
     // 피격 플래시 루틴
     private IEnumerator FlashRoutine(float flashDuration)
     {
-        Alpha = 250;
-  
-        image.color = new Color(image.color.r, image.color.g, image.color.b, Alpha/255);
-        while (Alpha >= 0)
-        {
-           
-            image.color = new Color(image.color.r, image.color.g, image.color.b, Alpha/255.0f);
-            Alpha -= 25;
-            yield return new WaitForSeconds(flashDuration);
-        }
-     
+      
+            Alpha += 10;
+
+            image.color = new Color(image.color.r, image.color.g, image.color.b, Alpha / 255);
+            while (Alpha >= 0)
+            {
+
+                image.color = new Color(image.color.r, image.color.g, image.color.b, Alpha / 255.0f);
+                Alpha -= 5;
+                yield return new WaitForSeconds(flashDuration);
+            }
         StopFlash();
+
+
     }
 }

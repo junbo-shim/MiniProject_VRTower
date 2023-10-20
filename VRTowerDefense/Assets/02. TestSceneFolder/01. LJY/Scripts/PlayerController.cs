@@ -118,15 +118,16 @@ public class PlayerController : MonoBehaviour
         }   // else : 오른쪽 핸드 기준으로 레이저 포인터 만들기
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         if(currentState == idleState || currentState == deathState)
         { return; }
         if(collision.gameObject.CompareTag("Projectile"))
         {
-            HitImage.SetActive(true);
-            int damage = collision.gameObject.GetComponent<Projectile>().damage;
-            GameManager.instance.HpMin(damage);
+            FindAnyObjectByType<HitFlash>().StartFlash(0.3f);
+     
+            //int damage = collision.gameObject.GetComponent<Projectile>().damage;
+            //.instance.HpMin(damage);
         }
     }
 }

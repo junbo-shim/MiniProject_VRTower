@@ -9,13 +9,13 @@ public class Bullet : MonoBehaviour
     public float bulletCriticalRate = default;  // 총알의 치명타 확률
     public float bulletCriticalDmg = default;   // 총알의 치명타 데미지
     private float speed = 30.0f;                 // 탄속
-    private float lifeTime = 5.0f;              // 라이프타임
+    private float lifeTime = 10f;              // 라이프타임
     //} 데이터 테이블 사용할 변수
     public ObjectPoolManager objectPoolManager;
     private Vector3 direction;
 
     private void Start()
-    {       
+    {
         //transform.localRotation = ARAVR_Input.RHandDirection;
     }
 
@@ -23,12 +23,14 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        //transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 
     public void Shoot(Vector3 direction_)
     {
         direction = direction_;
+        transform.forward = direction;
+        GetComponent<Rigidbody>().velocity = transform.forward * speed;
         //rotation = Quaternion.LookRotation(direction);
         //transform.rotation = rotation;
         Invoke("ReturnBullet", lifeTime);
@@ -38,5 +40,6 @@ public class Bullet : MonoBehaviour
     {
         objectPoolManager.ReturnObject(this);
     }
+
 
 }
