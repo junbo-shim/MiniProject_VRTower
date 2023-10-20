@@ -20,6 +20,7 @@ public class BuildTower : MonoBehaviour
     public GameObject BuffFap;
     private FillAmount fillAmountScript; // FillAmount 스크립트에 대한 참조
     [SerializeField] private string targetName = "";
+    private bool isPlatingState = false;    // 플레이어 상태가 설치 상태인지 확인
 
     void Start()
     {
@@ -150,6 +151,7 @@ public class BuildTower : MonoBehaviour
             {
                 if (hit.transform.CompareTag(targetTag))
                 {
+               
                     // 타겟 오브젝트와 부딪혔을 때 해당 위치에 프리팹을 설치
                     Collider targetCollider = hit.transform.GetComponent<Collider>();
                     if (targetCollider != null && targetCollider.enabled)
@@ -159,6 +161,8 @@ public class BuildTower : MonoBehaviour
 
                         if (buildTurret == false)
                         {
+                            isPlatingState = false;
+                            GameManager.instance.SetPlayerBattleState();
                             Debug.Log("1swaewqe");
                             GameObject tower = Instantiate(prefabToPlace, hit.point, Quaternion.identity);
                             fillAmountScript = tower.GetComponent<FillAmount>();
@@ -175,6 +179,11 @@ public class BuildTower : MonoBehaviour
         }
         else
         {
+            if(!isPlatingState)
+            {
+                isPlatingState = true;
+                GameManager.instance.SetPlayerPlantingState();
+            }
 #if BUILD_PLATFORM_PC
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;

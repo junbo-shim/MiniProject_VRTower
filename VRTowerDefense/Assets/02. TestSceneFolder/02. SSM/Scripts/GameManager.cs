@@ -5,9 +5,11 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public int playerHp = 100;      // 플레이어의 체력
+    public PlayerController playerController;
     public static GameManager instance;
     public TMP_Text hpText;
     public TMP_Text coinText;
+    public GameObject reMain;
     // 싱글턴으로 만들기
     public int coin = 100;
    
@@ -38,7 +40,10 @@ public class GameManager : MonoBehaviour
     }
     public void AddCoin(int addNum)
     {
+
+     
         coin += addNum;
+        coinText.text = coin.ToString();
     }
     public void MinCoin(int minNum)
     {
@@ -51,6 +56,7 @@ public class GameManager : MonoBehaviour
         {
             if(playerHp - dam < 0)
             {
+                reMain.SetActive(true);
                 playerHp = 0;
             }
             else
@@ -61,4 +67,15 @@ public class GameManager : MonoBehaviour
         }     
         hpText.text = playerHp.ToString();
     }
+
+    public void SetPlayerPlantingState()
+    {
+        playerController.SetState(playerController.plantingState);
+    }
+
+    public void SetPlayerBattleState()
+    {
+        playerController.SetState(playerController.battleState);
+    }
 }
+
