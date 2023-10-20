@@ -31,13 +31,36 @@ public class BntScripts : MonoBehaviour
     }
     void Update()
     {
+        Ray ray = new Ray(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
+        RaycastHit hit;
+        Debug.DrawRay(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection * 300, Color.red);
 
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.name.Equals("StartBnt"))
+            {
+                Debug.Log("1");
+                if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
+                {
+                    Debug.Log("2");
+                    StartBnt();
+                }
+            }
+            if (hit.collider.name.Equals("ExitBnt"))
+            {
+                if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
+                {
+                    ExitBnt();
+                }
+            }
+
+        }
     }
     //시작
     public void StartBnt()
     {
 
-         SceneManager.LoadScene("MainScene");
+         SceneManager.LoadScene("MainScene_ssm");
     }
     //종료
     public void ExitBnt()

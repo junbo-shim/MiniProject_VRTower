@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
         {
             if(playerHp - dam < 0)
             {
-                reMain.SetActive(true);
+               
                 playerHp = 0;
             }
             else
@@ -64,7 +64,13 @@ public class GameManager : MonoBehaviour
                 playerHp -= dam;
             }
          
-        }     
+        }   
+       if(playerHp < 0)
+        {
+            reMain.SetActive(true);
+        }
+           
+        
         hpText.text = playerHp.ToString();
     }
 
