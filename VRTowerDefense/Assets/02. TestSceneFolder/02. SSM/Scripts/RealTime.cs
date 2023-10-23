@@ -19,6 +19,6 @@ public class RealTime : MonoBehaviour
     // Update is called once per frame
     void playerDieTime()
     {
-        TimeTxt.text = (Time.time - GameManager.instance.startTime).ToString();
+        TimeTxt.text = (Time.time - GameManager.instance.startTime).ToString("F"+2);
     }
 }

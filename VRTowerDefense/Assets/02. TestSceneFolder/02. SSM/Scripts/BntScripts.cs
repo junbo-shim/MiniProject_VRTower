@@ -42,19 +42,21 @@ public class BntScripts : MonoBehaviour
             
             if (hit.collider.name.Equals("StartBnt")|| hit.collider.name.Equals("ReStartBnt"))
             {
-                audioSource.PlayOneShot(audio_Start);
+              
                 Debug.Log("1");
                 if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
                 {
+                    audioSource.PlayOneShot(audio_Start);
                     Debug.Log("2");
                     StartBnt();
                 }
             }
             if (hit.collider.name.Equals("ExitBnt"))
             {
-                audioSource.PlayOneShot(audio_Exit);
+             
                 if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
                 {
+                    audioSource.PlayOneShot(audio_Exit);
                     ExitBnt();
                 }
             }
