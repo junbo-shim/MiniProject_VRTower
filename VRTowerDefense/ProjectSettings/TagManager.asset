@@ -10,6 +10,7 @@ TagManager:
   - Item
   - PlayerBullet
   - Projectile
+  - NoBuildZone
   layers:
   - Default
   - TransparentFX
