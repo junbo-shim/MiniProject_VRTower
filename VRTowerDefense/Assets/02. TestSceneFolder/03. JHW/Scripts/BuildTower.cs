@@ -22,6 +22,15 @@ public class BuildTower : MonoBehaviour
     [SerializeField] private string targetName = "";
     private bool isPlatingState = false;    // 플레이어 상태가 설치 상태인지 확인
 
+
+    // 특정 하위 오브젝트의 경로를 인스펙터에서 설정합니다.
+    public string specificChildPath; 
+    public string specificChildPath2;
+    // 특정 하위 오브젝트를 인스펙터에서 설정합니다.
+    private GameObject specificChild; 
+    private GameObject specificChild2; 
+
+
     void Start()
     {
         previewObject = Instantiate(previewObject, Vector3.zero, Quaternion.identity);
@@ -30,6 +39,13 @@ public class BuildTower : MonoBehaviour
         previewObject2 = Instantiate(previewObject2, Vector3.zero, Quaternion.identity);
         previewObject2.SetActive(false);
 
+        // 경로를 사용하여 특정 하위 오브젝트를 찾고 변수에 할당
+        specificChild = previewObject.transform.Find(specificChildPath).gameObject;
+        specificChild2 = previewObject2.transform.Find(specificChildPath2).gameObject;
+
+
+        // 초기 상태에서 특정 하위 오브젝트를 비활성화
+        specificChild.SetActive(false);
 
     }
 
@@ -79,7 +95,7 @@ public class BuildTower : MonoBehaviour
                     Debug.Log(Time);
                     if (buyCoin <= GameManager.instance.coin)
                     {
-                        
+
                         GameManager.instance.MinCoin(buyCoin);
                         if (hit.collider.gameObject.name.Equals("100"))
                         {
@@ -87,7 +103,7 @@ public class BuildTower : MonoBehaviour
                             FindObjectOfType<BuffTimeSet>().unitBuffSet(hit.collider.gameObject.name, Time);
                             FindObjectOfType<Boss>().ActivateWeakPoint();
                         }
-                        else if (hit.collider.gameObject.name.Equals ("101"))
+                        else if (hit.collider.gameObject.name.Equals("101"))
                         {
                             Instantiate(BuffFap, BuffUi.transform);
                             FindObjectOfType<BuffTimeSet>().unitBuffSet(hit.collider.gameObject.name, Time);
@@ -96,7 +112,7 @@ public class BuildTower : MonoBehaviour
                         else
                         {
                             targetName = hit.collider.gameObject.name;
-                        }                 
+                        }
                         shopUi.gameObject.SetActive(false);
                     }
 
@@ -151,7 +167,7 @@ public class BuildTower : MonoBehaviour
             {
                 if (hit.transform.CompareTag(targetTag))
                 {
-               
+
                     // 타겟 오브젝트와 부딪혔을 때 해당 위치에 프리팹을 설치
                     Collider targetCollider = hit.transform.GetComponent<Collider>();
                     if (targetCollider != null && targetCollider.enabled)
@@ -163,7 +179,6 @@ public class BuildTower : MonoBehaviour
                         {
                             isPlatingState = false;
                             GameManager.instance.SetPlayerState("battle");
-                            Debug.Log("1swaewqe");
                             GameObject tower = Instantiate(prefabToPlace, hit.point, Quaternion.identity);
                             fillAmountScript = tower.GetComponent<FillAmount>();
                             buildTurret = true;
@@ -179,7 +194,7 @@ public class BuildTower : MonoBehaviour
         }
         else
         {
-            if(!isPlatingState)
+            if (!isPlatingState)
             {
                 isPlatingState = true;
                 GameManager.instance.SetPlayerState("planting");
@@ -192,35 +207,48 @@ public class BuildTower : MonoBehaviour
             RaycastHit hit;
 #endif
 
-                if (targetName == "103")
+            if (targetName == "103")
+            {
+                if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
                 {
-                    if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
-                    {
-                        previewObject.SetActive(true);
-                        previewObject.transform.position = hit.point;
-                    }
-                    else
-                    {
-                        previewObject.SetActive(false);
-                    }
-
+                    previewObject.SetActive(true);
+                    specificChild.SetActive(false);
+                    previewObject.transform.position = hit.point;
                 }
-                else if (targetName == "104")
+                else if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag("NoBuildZone"))
                 {
-                    if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
-
-                    {
-                        previewObject2.SetActive(true);
-                        previewObject2.transform.position = hit.point;
-                    }
-                    else
-                    {
-                        previewObject2.SetActive(false);
-                    }
+                    // 초기 상태에서 특정 하위 오브젝트를 비활성화
+                    specificChild.SetActive(true);
                 }
-   
+                else
+                {
+                    previewObject.SetActive(false);
+                }
 
-            
+            }
+            else if (targetName == "104")
+            {
+                if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+
+                {
+                    previewObject2.SetActive(true);
+                    specificChild2.SetActive(false);
+                    previewObject2.transform.position = hit.point;
+                }
+                else if(Physics.Raycast(ray, out hit) && hit.transform.CompareTag("NoBuildZone"))
+
+                {
+                    // 초기 상태에서 특정 하위 오브젝트를 비활성화
+                    specificChild2.SetActive(true); 
+                }
+                else
+                {
+                    previewObject2.SetActive(false);
+                }
+            }
+
+
+
             //else if (targetName == "103")
             //{
             //    if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
