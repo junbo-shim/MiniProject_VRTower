@@ -19,6 +19,7 @@ public class Boss : MonBase
     private WaitForSecondsRealtime minionSpawnTime;
     private WaitForSecondsRealtime fireTime;
     public WaitForSecondsRealtime weakTime;
+    public WaitForSecondsRealtime inactiveTime;
     public List<WeakPoint> weakPointList;
 
     public float slowTime;
@@ -97,7 +98,8 @@ public class Boss : MonBase
         // 모든 변수는 CSV 로 읽어와야하며 배율도 수정해야함
         minionSpawnTime = new WaitForSecondsRealtime(0.5f);
         fireTime = new WaitForSecondsRealtime(2f);
-        weakTime = new WaitForSecondsRealtime(5f);
+        weakTime = new WaitForSecondsRealtime(10f);
+        inactiveTime = new WaitForSecondsRealtime(5f);
         spawnPoints = new List<Vector3>();
         spawnPointIdxs = new List<int>();
         spawnAdjustHeight = new Vector3(0f, 20f, 0f);
