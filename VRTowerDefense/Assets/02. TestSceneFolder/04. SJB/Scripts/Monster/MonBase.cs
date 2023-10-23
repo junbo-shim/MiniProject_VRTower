@@ -3,6 +3,9 @@ using UnityEngine.AI;
 
 public class MonBase : MonoBehaviour
 {
+    //SSM 23 10 23 
+    public Canvas dieUi;
+    //SSM 20 10 23
     protected NavMeshAgent agent;
     // 몬스터의 Rigidbody
     protected Rigidbody rigid;
@@ -56,7 +59,9 @@ public class MonBase : MonoBehaviour
 
     protected virtual void Die() 
     {
-    
+      //SSM.23.10.23
+      // dieUi.gameObject.SetActive(true);
+      //SSM.23.1023
     }
 
 }

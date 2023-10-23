@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         hpText.text = "100 / "+playerHp.ToString();
         coinText.text = coin.ToString();
     }
-
+    
   
     public void AddCoin(int addNum)
     {
