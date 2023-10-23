@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 0990bf8a85ebd48439409878feaf0a90
+<<<<<<<< HEAD:VRTowerDefense/Assets/02. TestSceneFolder/03. JHW/Scene/JHWMain.unity.meta
+guid: ef8dbb6987ff6b5489c22bf3251373a1
+========
+guid: d8baf3604f9c3cc468807323656dd18e
+>>>>>>>> origin/Song:VRTowerDefense/Assets/02. TestSceneFolder/02. SSM/Scene/MainScene_ssm.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
