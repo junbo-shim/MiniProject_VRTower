@@ -7,18 +7,18 @@ using UnityEngine;
 public class RealTime : MonoBehaviour
 {
     public TMP_Text TimeTxt;
-    float startTime;
+ 
 
     // Start is called before the first frame update
     void Start()
     {
-        startTime = Time.time;
+    
         playerDieTime();
     }
 
     // Update is called once per frame
     void playerDieTime()
     {
-        TimeTxt.text = (Time.time - startTime).ToString();
+        TimeTxt.text = (Time.time - GameManager.instance.startTime).ToString();
     }
 }
