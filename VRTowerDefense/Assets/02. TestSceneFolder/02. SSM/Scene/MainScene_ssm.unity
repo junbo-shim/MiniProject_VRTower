@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0020587384, g: 0.0019495602, b: 0.0021148664, a: 1}
+  m_IndirectSpecularColor: {r: 0.002063206, g: 0.0019480612, b: 0.0021180937, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -331,6 +331,8 @@ MonoBehaviour:
   shopUi: {fileID: 1101031975}
   BuffFap: {fileID: 1747636104150887373, guid: 0e0c0ca31a0aa7b4785811c40daddb58, type: 3}
   targetName: 
+  specificChildPath: NoBuildEffect
+  specificChildPath2: NoBuildEffect
 --- !u!114 &172140485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3148,6 +3150,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1388020189
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1388020191}
+  - component: {fileID: 1388020190}
+  m_Layer: 0
+  m_Name: NoBuildZone
+  m_TagString: NoBuildZone
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1388020190
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388020189}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 17, y: 1, z: 150}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1388020191
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388020189}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.2, y: 9, z: -2.81}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1402649550
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3761,7 +3808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ad017335261c3479b44e019b447832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8567237944013003096, guid: 5c721658bf1047843bd1dc348e762122, type: 3}
+  prefab: {fileID: 122648, guid: 11530f2b0a0cd2442949827ecbb622f2, type: 3}
   poolSize: 200
   objects: []
 --- !u!4 &1962736270
