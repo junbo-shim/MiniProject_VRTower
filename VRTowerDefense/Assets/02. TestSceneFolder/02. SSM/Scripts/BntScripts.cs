@@ -7,10 +7,13 @@ public class BntScripts : MonoBehaviour
     Button _startBnt; // 버튼 
     Button _exitBnt;
     public TextMeshPro TimeTxt;
-    float startTime;
+    public AudioClip audio_Start;
+    public AudioClip audio_Exit;
+    public AudioSource audioSource;
     void Start()
     {
-        startTime = Time.time;
+        audioSource = GetComponent<AudioSource>();
+    
         if (gameObject.name.Equals("StartBnt"))
         {
             //버튼 찾아서 연결해주기
@@ -36,9 +39,10 @@ public class BntScripts : MonoBehaviour
    
         if (Physics.Raycast(ray, out hit, 300, LayerMask.GetMask("UI")))
         {
-            Debug.Log(hit.collider.name);
+            
             if (hit.collider.name.Equals("StartBnt")|| hit.collider.name.Equals("ReStartBnt"))
             {
+                audioSource.PlayOneShot(audio_Start);
                 Debug.Log("1");
                 if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
                 {
@@ -48,6 +52,7 @@ public class BntScripts : MonoBehaviour
             }
             if (hit.collider.name.Equals("ExitBnt"))
             {
+                audioSource.PlayOneShot(audio_Exit);
                 if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
                 {
                     ExitBnt();

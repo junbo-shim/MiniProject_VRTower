@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using System.Net.NetworkInformation;
+
 public class GameManager : MonoBehaviour
 {
     public int playerHp = 100;      // 플레이어의 체력
@@ -12,12 +15,15 @@ public class GameManager : MonoBehaviour
     public GameObject reMain;
     public GameObject golem;
     public Material emptyMaterial;
+    public Image hpImg;
     // 싱글턴으로 만들기
     public int coin = 100;
+    public float startTime;
    
     private void Awake()
     {
-        if(instance == null)
+        startTime = Time.time;
+        if (instance == null)
         {
             instance = this;
         }
@@ -31,15 +37,11 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        hpText.text = playerHp.ToString();
+        hpText.text = "100 / "+playerHp.ToString();
         coinText.text = coin.ToString();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  
     public void AddCoin(int addNum)
     {
 
@@ -73,29 +75,26 @@ public class GameManager : MonoBehaviour
             golem.GetComponent<SkinnedMeshRenderer>().material = emptyMaterial;
             reMain.SetActive(true);
         }
-           
-        
-        hpText.text = playerHp.ToString();
+
+        hpImg.fillAmount = Normalization(playerHp);
+        hpText.text = "100 / " + playerHp.ToString();
+    }
+    public float Normalization(int hp)
+    {
+        float fillHp = hp;
+
+        fillHp = (fillHp - 0) / (100 - 0);
+        Debug.Log(fillHp);
+        return fillHp;
+    }
+    public void SetPlayerPlantingState()
+    {
+        playerController.SetState(playerController.plantingState);
     }
 
-    public void SetPlayerState(string state)
+    public void SetPlayerBattleState()
     {
-        if(state == "idle")
-        {
-            playerController.SetState(playerController.idleState);
-        }
-        else if (state == "battle")
-        {
-            playerController.SetState(playerController.battleState);
-        }
-        else if (state == "planting")
-        {
-            playerController.SetState(playerController.plantingState);
-        }
-        else if (state == "death")
-        {
-            playerController.SetState(playerController.deathState);
-        }
+        playerController.SetState(playerController.battleState);
     }
 }
 
