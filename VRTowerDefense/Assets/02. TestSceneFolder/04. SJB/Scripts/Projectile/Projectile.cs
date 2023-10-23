@@ -5,7 +5,7 @@ public class Projectile : MonoBehaviour
     public Transform boss;
     public Transform target;
     private Rigidbody projectileRigid;
-    private ProjectilePool projectilePool;
+    public ProjectilePool projectilePool;
     private float moveSpeed = 12f;
     public int damage = 10;
 
@@ -25,21 +25,16 @@ public class Projectile : MonoBehaviour
         Move();
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        //Debug.LogError(other.name + " " + gameObject.name);
-
-        if (other.GetComponent<Bullet>() == true)
-        {
-            projectilePool.ReturnPoolObject(gameObject);
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.name.Contains("Player")) 
         {
             GameManager.instance.HpMin(damage);
+            projectilePool.ReturnPoolObject(gameObject);
+        }
+
+        if (other.GetComponent<Bullet>()) 
+        {
             projectilePool.ReturnPoolObject(gameObject);
         }
     }
@@ -54,7 +49,9 @@ public class Projectile : MonoBehaviour
         boss = GameObject.Find("EarthGolem").transform;
         target = GameObject.Find("Player").transform.Find("OVRCameraRig");
 
-        projectilePool = boss.GetComponent<Boss>().projectilePool;
+        projectilePool = GameObject.Find("PoolControl").
+            transform.Find("Projectile Pool").
+            gameObject.GetComponent<ProjectilePool>();
     }
 
     private void Move()

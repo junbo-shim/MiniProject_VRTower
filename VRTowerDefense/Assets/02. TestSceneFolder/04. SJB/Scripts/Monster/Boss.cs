@@ -102,7 +102,7 @@ public class Boss : MonBase
         spawnPointIdxs = new List<int>();
         spawnAdjustHeight = new Vector3(0f, 20f, 0f);
 
-        this.healthPoint = 10000;
+        this.healthPoint = 200;
         this.moveSpeed = 100f;
         this.attackCooltime = 5f;
         this.maxHealthPoint = healthPoint;

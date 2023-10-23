@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     public float bulletCriticalRate = default;  // 총알의 치명타 확률
     public float bulletCriticalDmg = default;   // 총알의 치명타 데미지
     private float speed = 30.0f;                 // 탄속
-    private float lifeTime = 10f;              // 라이프타임
+    private float lifeTime = 16f;              // 라이프타임
     //} 데이터 테이블 사용할 변수
     public ObjectPoolManager objectPoolManager;
     private Vector3 direction;
@@ -25,6 +25,21 @@ public class Bullet : MonoBehaviour
     {
         //transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<Projectile>() == true) 
+        {
+            ReturnBullet();
+        }
+
+        if (other.GetComponent<Minion>() == true) 
+        {
+            ReturnBullet();
+        }
+    }
+
 
     public void Shoot(Vector3 direction_)
     {
