@@ -68,14 +68,24 @@ public class GameManager : MonoBehaviour
         hpText.text = playerHp.ToString();
     }
 
-    public void SetPlayerPlantingState()
+    public void SetPlayerState(string state)
     {
-        playerController.SetState(playerController.plantingState);
-    }
-
-    public void SetPlayerBattleState()
-    {
-        playerController.SetState(playerController.battleState);
+        if(state == "idle")
+        {
+            playerController.SetState(playerController.idleState);
+        }
+        else if (state == "battle")
+        {
+            playerController.SetState(playerController.battleState);
+        }
+        else if (state == "planting")
+        {
+            playerController.SetState(playerController.plantingState);
+        }
+        else if (state == "death")
+        {
+            playerController.SetState(playerController.deathState);
+        }
     }
 }
 

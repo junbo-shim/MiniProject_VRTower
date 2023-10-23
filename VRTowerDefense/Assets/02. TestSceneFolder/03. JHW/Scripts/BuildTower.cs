@@ -162,7 +162,7 @@ public class BuildTower : MonoBehaviour
                         if (buildTurret == false)
                         {
                             isPlatingState = false;
-                            GameManager.instance.SetPlayerBattleState();
+                            GameManager.instance.SetPlayerState("battle");
                             Debug.Log("1swaewqe");
                             GameObject tower = Instantiate(prefabToPlace, hit.point, Quaternion.identity);
                             fillAmountScript = tower.GetComponent<FillAmount>();
@@ -182,7 +182,7 @@ public class BuildTower : MonoBehaviour
             if(!isPlatingState)
             {
                 isPlatingState = true;
-                GameManager.instance.SetPlayerPlantingState();
+                GameManager.instance.SetPlayerState("planting");
             }
 #if BUILD_PLATFORM_PC
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
