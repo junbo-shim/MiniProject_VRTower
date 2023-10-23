@@ -331,8 +331,6 @@ MonoBehaviour:
   shopUi: {fileID: 1101031975}
   BuffFap: {fileID: 1747636104150887373, guid: 0e0c0ca31a0aa7b4785811c40daddb58, type: 3}
   targetName: 
-  specificChildPath: NoBuildEffect
-  specificChildPath2: NoBuildEffect
 --- !u!114 &172140485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1767,7 +1765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ad017335261c3479b44e019b447832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8567237944013003096, guid: 1dd043af3b69cc244bfb4a992ab07627, type: 3}
+  prefab: {fileID: 122648, guid: 72fb8f744bfc6e54b802bcfe27152827, type: 3}
   poolSize: 20
   objects: []
 --- !u!4 &778424306

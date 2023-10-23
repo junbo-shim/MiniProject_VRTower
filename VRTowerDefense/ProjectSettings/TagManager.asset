@@ -11,6 +11,7 @@ TagManager:
   - PlayerBullet
   - Projectile
   - NoBuildZone
+  - BuildCheck
   layers:
   - Default
   - TransparentFX

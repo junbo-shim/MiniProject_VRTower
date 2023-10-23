@@ -23,12 +23,12 @@ public class BuildTower : MonoBehaviour
     private bool isPlatingState = false;    // 플레이어 상태가 설치 상태인지 확인
 
 
-    // 특정 하위 오브젝트의 경로를 인스펙터에서 설정합니다.
-    public string specificChildPath; 
-    public string specificChildPath2;
-    // 특정 하위 오브젝트를 인스펙터에서 설정합니다.
-    private GameObject specificChild; 
-    private GameObject specificChild2; 
+    //// 특정 하위 오브젝트의 경로를 인스펙터에서 설정합니다.
+    //public string specificChildPath; 
+    //public string specificChildPath2;
+    //// 특정 하위 오브젝트를 인스펙터에서 설정합니다.
+    //private GameObject specificChild; 
+    //private GameObject specificChild2; 
 
 
     void Start()
@@ -39,13 +39,13 @@ public class BuildTower : MonoBehaviour
         previewObject2 = Instantiate(previewObject2, Vector3.zero, Quaternion.identity);
         previewObject2.SetActive(false);
 
-        // 경로를 사용하여 특정 하위 오브젝트를 찾고 변수에 할당
-        specificChild = previewObject.transform.Find(specificChildPath).gameObject;
-        specificChild2 = previewObject2.transform.Find(specificChildPath2).gameObject;
+        //// 경로를 사용하여 특정 하위 오브젝트를 찾고 변수에 할당
+        //specificChild = previewObject.transform.Find(specificChildPath).gameObject;
+        //specificChild2 = previewObject2.transform.Find(specificChildPath2).gameObject;
 
 
-        // 초기 상태에서 특정 하위 오브젝트를 비활성화
-        specificChild.SetActive(false);
+        //// 초기 상태에서 특정 하위 오브젝트를 비활성화
+        //specificChild.SetActive(false);
 
     }
 
@@ -150,7 +150,7 @@ public class BuildTower : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼을 클릭했을 때
         {
 #elif TARGET_DEVICE_OCULUS
-        if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 b버튼을 눌렀을 때
+        if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 a버튼을 눌렀을 때
         {
 #endif
 
@@ -212,14 +212,15 @@ public class BuildTower : MonoBehaviour
                 if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
                 {
                     previewObject.SetActive(true);
-                    specificChild.SetActive(false);
+                    //specificChild.SetActive(false);
                     previewObject.transform.position = hit.point;
                 }
-                else if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag("NoBuildZone"))
-                {
-                    // 초기 상태에서 특정 하위 오브젝트를 비활성화
-                    specificChild.SetActive(true);
-                }
+                //else if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag("NoBuildZone"))
+                //{
+                //    previewObject.SetActive(true);
+                //    // 초기 상태에서 특정 하위 오브젝트를 비활성화
+                //    specificChild.SetActive(true);
+                //}
                 else
                 {
                     previewObject.SetActive(false);
@@ -232,15 +233,16 @@ public class BuildTower : MonoBehaviour
 
                 {
                     previewObject2.SetActive(true);
-                    specificChild2.SetActive(false);
+                    //specificChild2.SetActive(false);
                     previewObject2.transform.position = hit.point;
                 }
-                else if(Physics.Raycast(ray, out hit) && hit.transform.CompareTag("NoBuildZone"))
+                //else if(Physics.Raycast(ray, out hit) && hit.transform.CompareTag("NoBuildZone"))
 
-                {
-                    // 초기 상태에서 특정 하위 오브젝트를 비활성화
-                    specificChild2.SetActive(true); 
-                }
+                //{
+                //    previewObject.SetActive(true);
+                //    // 초기 상태에서 특정 하위 오브젝트를 비활성화
+                //    specificChild2.SetActive(true); 
+                //}
                 else
                 {
                     previewObject2.SetActive(false);

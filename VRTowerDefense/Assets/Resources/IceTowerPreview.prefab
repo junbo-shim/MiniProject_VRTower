@@ -10228,7 +10228,7 @@ GameObject:
   - component: {fileID: 338823889541340670}
   m_Layer: 0
   m_Name: NoBuildEffect
-  m_TagString: Untagged
+  m_TagString: BuildCheck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4156236201812028150}
   - component: {fileID: -9182520115669422650}
   m_Layer: 0
-  m_Name: Bullet2
+  m_Name: IceBullet2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,5 +151,5 @@ MonoBehaviour:
   bulletData:
     damage: 5
     speed: 65
-    slow: 0
+    slow: 10
     additionalData: 
