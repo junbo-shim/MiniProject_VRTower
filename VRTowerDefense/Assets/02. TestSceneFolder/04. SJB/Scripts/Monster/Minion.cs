@@ -45,8 +45,14 @@ public class Minion : MonBase
 
         defaultColor = gameObject.GetComponent<MeshRenderer>().material.color;
         boss = GameObject.Find("EarthGolem").transform;
-        baseMinionPool = boss.GetComponent<Boss>().baseMinionPool;
-        fastMinionPool = boss.GetComponent<Boss>().fastMinionPool;
+
+        baseMinionPool = GameObject.Find("PoolControl").
+            transform.Find("BaseMinion Pool").
+            gameObject.GetComponent<BaseMinionPool>();
+
+        fastMinionPool = GameObject.Find("PoolControl").
+            transform.Find("FastMinion Pool").
+            gameObject.GetComponent<FastMinionPool>();
 
         if (gameObject.name == "BaseMinion" + "(Clone)") 
         {
