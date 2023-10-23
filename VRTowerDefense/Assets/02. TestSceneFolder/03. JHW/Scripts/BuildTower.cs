@@ -204,6 +204,7 @@ public class BuildTower : MonoBehaviour
             RaycastHit hit;
 #elif TARGET_DEVICE_OCULUS
             Ray ray = new Ray(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
+            
             RaycastHit hit;
 #endif
 
@@ -217,8 +218,12 @@ public class BuildTower : MonoBehaviour
                 }
                 else if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag("NoBuildZone"))
                 {
+                    previewObject.SetActive(true);
+
                     // 초기 상태에서 특정 하위 오브젝트를 비활성화
                     specificChild.SetActive(true);
+                    previewObject.transform.position = hit.point;
+
                 }
                 else
                 {
@@ -235,11 +240,15 @@ public class BuildTower : MonoBehaviour
                     specificChild2.SetActive(false);
                     previewObject2.transform.position = hit.point;
                 }
-                else if(Physics.Raycast(ray, out hit) && hit.transform.CompareTag("NoBuildZone"))
+                else if(Physics.Raycast(ray , out hit) && hit.transform.CompareTag("NoBuildZone"))
 
                 {
+                    previewObject2.SetActive(true);
+
                     // 초기 상태에서 특정 하위 오브젝트를 비활성화
-                    specificChild2.SetActive(true); 
+                    specificChild2.SetActive(true);
+                    previewObject2.transform.position = hit.point;
+
                 }
                 else
                 {
