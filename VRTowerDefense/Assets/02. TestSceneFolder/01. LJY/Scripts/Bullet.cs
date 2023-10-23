@@ -29,12 +29,17 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Projectile>() == true) 
+        if (other.GetComponent<Projectile>()) 
         {
             ReturnBullet();
         }
 
-        if (other.GetComponent<Minion>() == true) 
+        if (other.GetComponent<Minion>()) 
+        {
+            ReturnBullet();
+        }
+
+        if (other.GetComponent<WeakPoint>()) 
         {
             ReturnBullet();
         }
