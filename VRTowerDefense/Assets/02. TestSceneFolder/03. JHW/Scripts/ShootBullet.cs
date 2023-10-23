@@ -32,7 +32,7 @@ public class ShootBullet : MonoBehaviour
     private void OnEnable()
     {
        
-        Debug.Log("a");
+        //Debug.Log("a");
         Invoke("ReturnBullet", chk);
         
       

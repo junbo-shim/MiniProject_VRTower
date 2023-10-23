@@ -21,6 +21,7 @@ public class BuildTower : MonoBehaviour
     private FillAmount fillAmountScript; // FillAmount 스크립트에 대한 참조
     [SerializeField] private string targetName = "";
     private bool isPlatingState = false;    // 플레이어 상태가 설치 상태인지 확인
+    public LayerMask targetLayer;
 
 
     //// 특정 하위 오브젝트의 경로를 인스펙터에서 설정합니다.
@@ -165,7 +166,7 @@ public class BuildTower : MonoBehaviour
             prefabToPlace = Resources.Load(targetName + "_trl") as GameObject;
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.transform.CompareTag(targetTag))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, targetLayer))
                 {
 
                     // 타겟 오브젝트와 부딪혔을 때 해당 위치에 프리팹을 설치
@@ -206,10 +207,10 @@ public class BuildTower : MonoBehaviour
             Ray ray = new Ray(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
             RaycastHit hit;
 #endif
-
+            
             if (targetName == "103")
             {
-                if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity,targetLayer) && hit.transform.CompareTag(targetTag))
                 {
                     previewObject.SetActive(true);
                     //specificChild.SetActive(false);
@@ -229,7 +230,7 @@ public class BuildTower : MonoBehaviour
             }
             else if (targetName == "104")
             {
-                if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag(targetTag))
+                if (Physics.Raycast(ray, out hit,Mathf.Infinity, targetLayer) && hit.transform.CompareTag(targetTag))
 
                 {
                     previewObject2.SetActive(true);

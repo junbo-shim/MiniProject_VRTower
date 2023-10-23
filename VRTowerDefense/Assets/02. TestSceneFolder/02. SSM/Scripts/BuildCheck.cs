@@ -9,10 +9,11 @@ using System;
 public class BuildCheck : MonoBehaviour
 {
     public Material spriteDiffuseMaterial; // 오브젝트의 Material을 여기에 연결합니다.
-
+    public bool isBuildCheck = true;
 
     // 색상을 바꿀 때 사용할 새로운 색상을 정의합니다.
-    Color newColor = new Color(225f, 0f, 21f , 47f); // 빨간색 예시
+    Color newColor = new Color(1f, 0f, 0f, 0.5f); // 빨간색 예시
+    Color originColor = new Color(0f,0f,1f,0.5f);
 
     // Start is called before the first frame update
     void Start()
@@ -23,20 +24,42 @@ public class BuildCheck : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (gameObject.transform.CompareTag("NoBuildZone"))
-        {
-            // Material의 속성을 변경하여 색상을 적용합니다.
-            spriteDiffuseMaterial.color = newColor;
-        }
-        else
-        {
-            Color currentColor = spriteDiffuseMaterial.color;
-            spriteDiffuseMaterial.color = currentColor;
 
+        //if (gameObject.transform.CompareTag("NoBuildZone"))
+        //{
+        //    // Material의 속성을 변경하여 색상을 적용합니다.
+        //    spriteDiffuseMaterial.color = newColor;
+        //}
+        //else
+        //{
+        //    Color currentColor = spriteDiffuseMaterial.color;
+        //    spriteDiffuseMaterial.color = currentColor;
+
+        //}
+
+    }
+
+
+    private void OnTriggerStay(Collider other)
+    {
+        Debug.Log("준영아 여기에 들어가지도 못한거같아 ... 11111");
+        if (other.gameObject.CompareTag("NoBuildZone"))
+        {
+            Debug.Log("준영아 여기에 들어가지도 못한거같아 ... ");
+            //Material의 속성을 변경하여 색상을 적용합니다.
+            spriteDiffuseMaterial.color = newColor;
         }
 
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("NoBuildZone"))
+        {
+            
+            //Debug.LogError(spriteDiffuseMaterial.name);
+            spriteDiffuseMaterial.color = originColor;
+        }
+    }
 
 }

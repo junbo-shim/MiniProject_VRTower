@@ -10226,6 +10226,7 @@ GameObject:
   - component: {fileID: 7338073739946887738}
   - component: {fileID: 4613453845516347422}
   - component: {fileID: 338823889541340670}
+  - component: {fileID: 5994776755605749616}
   m_Layer: 0
   m_Name: NoBuildEffect
   m_TagString: BuildCheck
@@ -10306,12 +10307,25 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8484828254074244003}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &5994776755605749616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8484828254074244003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1079cf6dbd0819d4ebf0bcef966e5f39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteDiffuseMaterial: {fileID: 2100000, guid: f7486938e0c200448b90c6436b0da82c, type: 2}
 --- !u!1001 &5226531485818395156
 PrefabInstance:
   m_ObjectHideFlags: 0
