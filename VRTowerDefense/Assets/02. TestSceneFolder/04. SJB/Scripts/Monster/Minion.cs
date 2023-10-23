@@ -5,8 +5,10 @@ using UnityEngine;
 public class Minion : MonBase
 {
     private Transform boss;
+    private MeshRenderer mesh;
     private BaseMinionPool baseMinionPool;
     private FastMinionPool fastMinionPool;
+    private WaitForSecondsRealtime flickerTime;
     private Color defaultColor;
     private bool isAttack = false;
 
@@ -17,25 +19,22 @@ public class Minion : MonBase
 
     private void FixedUpdate()
     {
-        base.Move();
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        // 추후에 name 에서 tag 또는 layer 로 변경
-        if (other.gameObject.name.Contains("Player")) 
-        {
-            gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            Invoke("Attack", 1f);
-        }
+        Move();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         // 추후에 name 에서 tag 또는 layer 로 변경
-        if (other.GetComponent<Bullet>() != null) 
+        if (other.GetComponent<Bullet>()) 
         {
+            StartCoroutine(ChangeColor(5));
             this.GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
+        }
+
+        // 추후에 name 에서 tag 또는 layer 로 변경
+        if (other.gameObject.name.Contains("Player"))
+        {
+            
         }
     }
 
@@ -43,7 +42,9 @@ public class Minion : MonBase
     {
         base.Init();
 
-        defaultColor = gameObject.GetComponent<MeshRenderer>().material.color;
+        mesh = transform.Find("Ani").GetComponent<MeshRenderer>();
+        defaultColor = mesh.material.color;
+        flickerTime = new WaitForSecondsRealtime(0.2f);
         boss = GameObject.Find("EarthGolem").transform;
 
         baseMinionPool = GameObject.Find("PoolControl").
@@ -70,10 +71,21 @@ public class Minion : MonBase
         }
     }
 
+    protected override void Move()
+    {
+        if (this.agent.isStopped == false) 
+        {
+            base.Move();
+            transform.Find("Ani").transform.Rotate(transform.forward);
+        }
+        else if (this.agent.isStopped == true)
+        {
+            /* Do Nothing */
+        }
+    }
+
     protected override void Attack()
     {
-        GameObject gameObject = new GameObject();
-
         GameManager.instance.HpMin(damage);
         CheckReturnPool(gameObject);
     }
@@ -81,8 +93,7 @@ public class Minion : MonBase
     protected override void GetHit(Collider other, int damage)
     {
         healthPoint -= damage;
-        gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-        Invoke("MakeDefaultColor", 0.5f);
+
 
         if (healthPoint <= 0) 
         {
@@ -90,9 +101,18 @@ public class Minion : MonBase
         }
     }
 
-    private void MakeDefaultColor() 
+    private IEnumerator ChangeColor(int num) 
     {
-        gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
+        int time = default;
+
+        while (time < num) 
+        {
+            mesh.material.color = Color.red;
+            yield return flickerTime;
+            mesh.material.color = defaultColor;
+            yield return flickerTime;
+            time += 1;
+        }
     }
 
     private void CheckReturnPool(GameObject obj) 
