@@ -1,0 +1,3 @@
+﻿ID,설명 ,타입 ,지속시간,발사간격,인식범위
+103,전투형 배치 유닛,FightInstall,10,0.5,Infinity
+104,상태 이상형 배치 유닛,DebuffInstall,10,3,Infinity
