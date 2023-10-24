@@ -37,8 +37,8 @@ public class LookAtTarget : MonoBehaviour
             GameObject closestTarget = FindClosestTarget(targets);
             if (closestTarget != null)
             {
-                float distance = Vector3.Distance(transform.position, closestTarget.transform.position);
-                Vector3 newPos = new Vector3(closestTarget.transform.position.x, closestTarget.transform.position.y - Normalization(distance), closestTarget.transform.position.z);
+               
+                Vector3 newPos = new Vector3(closestTarget.transform.position.x, closestTarget.transform.position.y, closestTarget.transform.position.z);
 
                 // 대상을 향한 방향을 계산합니다.
                 Vector3 direction = newPos - transform.position;
@@ -54,14 +54,7 @@ public class LookAtTarget : MonoBehaviour
         }
     }
 
-    public float Normalization(float value)
-    {
-        float dasd = 0;
-        dasd =-((value - 0) / (332 - 0))*6;
-        dasd = dasd + 3;
 
-        return dasd;
-    }
 
     GameObject FindClosestTarget(GameObject[] targets)
     {

@@ -6,6 +6,7 @@ public class ShootBullet : MonoBehaviour
     public BulletData bulletData;
     private Rigidbody rb;
     private int chk = 0;
+    
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -40,7 +41,7 @@ public class ShootBullet : MonoBehaviour
     {
       
       
-        rb.velocity = transform.forward * bulletData.speed;
+        rb.velocity = transform.up * bulletData.speed;
 
      
 

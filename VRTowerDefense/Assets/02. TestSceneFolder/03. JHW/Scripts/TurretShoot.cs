@@ -7,7 +7,7 @@ public class TurretShoot : MonoBehaviour
     public Transform firePoint;
     public float fireRate = 0.5f;
     public BulletData bulletData;
-
+                                            // 
     private float nextFireTime = 0f;
 
  
@@ -28,6 +28,8 @@ public class TurretShoot : MonoBehaviour
 
     private void Shoot()
     {
+
+
         GameObject bullet = ObjectPoolHelper.Instance.GetObjectFromPool(
             bulletPoolName, firePoint.position, firePoint.rotation
         );
