@@ -56,7 +56,8 @@ public class BuildTower : MonoBehaviour
         if (!targetName.Equals(""))
         {
             Build();
-            buildTurret = false;
+            Debug.Log(buildTurret);
+            //buildTurret = false;
         }
     }
 
@@ -151,6 +152,8 @@ public class BuildTower : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼을 클릭했을 때
         {
 #elif TARGET_DEVICE_OCULUS
+        //if (buildTurret == true) { return; }
+        
         if (ARAVR_Input.GetDown(ARAVR_Input.Button.One, ARAVR_Input.Controller.RTouch)) // 오큘러스 a버튼을 눌렀을 때
         {
 #endif
@@ -188,6 +191,7 @@ public class BuildTower : MonoBehaviour
                             StartCoroutine(fillAmountScript.DecreaseFillAmountOverTime());
                             previewObject.SetActive(false);
                             previewObject2.SetActive(false);
+                            buildTurret = false;
                         }
                     }
                 }
