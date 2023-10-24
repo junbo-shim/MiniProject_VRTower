@@ -6,7 +6,9 @@ using UnityEngine.UI;
 
 public class Boss : MonBase
 {
+    private Vector3 startPos;
     private Image hpGauge;
+
     private Transform[] fireHolders;
     public ProjectilePool projectilePool;
     public BaseMinionPool baseMinionPool;
@@ -16,20 +18,29 @@ public class Boss : MonBase
     private List<int> spawnPointIdxs;
     private Vector3 spawnAdjustHeight;
 
+    public AudioSource bossAudioSource;
+    public AudioClip bossMoveClip;
+    public AudioClip bossAttackClip;
+
     private WaitForSecondsRealtime minionSpawnTime;
     private WaitForSecondsRealtime fireTime;
     public WaitForSecondsRealtime weakTime;
     public WaitForSecondsRealtime inactiveTime;
+    public WaitForSecondsRealtime animationWaitTime;
     public List<WeakPoint> weakPointList;
 
-    public float slowTime;
-    public float slowAmount;
     public int slowStack = default;
+
+    public bool IsStart = false;
+    public bool IsAreaTouched = false;
+    public bool IsDie = false;
+
 
     private void Awake()
     {
         Init();
         ChargeProjectile();
+        IsStart = true;
     }
 
     private void Update()
@@ -42,10 +53,10 @@ public class Boss : MonBase
 
     private void FixedUpdate()
     {
-        base.Move();
+        Move();
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         // 닿은 Trigger Collider 의 이름에 Area 라는 문자가 포함되어 있다면
         if (other.name.Contains("Area"))
@@ -55,15 +66,14 @@ public class Boss : MonBase
             // 그 Area 의 spawnPoints 를 보스의 spawnPoints 에 담는다
             spawnPoints = other.GetComponent<MinionSpawnPoint>().spawnPoints;
 
-            SpawnMinion();
-            ChargeProjectile();
+            StartCoroutine(AttackCoroutine());
 
             // 그리고 닿은 오브젝트를 끈다
             other.gameObject.SetActive(false);
         }
 
         // 닿은 Collider 가 총알(Bullet)면
-        if (other.GetComponent<Bullet>() == true)
+        if (other.GetComponent<Bullet>())
         {
             // 골드 획득
             GameManager.instance.AddCoin(100);
@@ -72,14 +82,23 @@ public class Boss : MonBase
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
             other.GetComponent<Bullet>().ReturnBullet();
         }
+
         // 닿은 Collider 가 총알(TurretShoot)이면
-        if (other.GetComponent<ShootBullet>() == true)
+        if (other.GetComponent<ShootBullet>() && other.name.Contains("Ice"))
         {
             // 데미지 함수를 실행한다
             GetHit(other, (int)other.GetComponent<ShootBullet>().bulletData.damage);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
-            //other.GetComponent<GameObject>().SetActive(false);
+            other.GetComponent<GameObject>().SetActive(false);
             // ice bullet 일 경우 해결 해야함
+            //StartCoroutine(SlowCoroutine());
+        }
+        else if (other.GetComponent<ShootBullet>()) 
+        {
+            // 데미지 함수를 실행한다
+            GetHit(other, (int)other.GetComponent<ShootBullet>().bulletData.damage);
+            // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
+            other.GetComponent<GameObject>().SetActive(false);
         }
     }
     // 초기화 메서드
@@ -93,6 +112,10 @@ public class Boss : MonBase
         FindSpawnEffectPool();
         FindWeakPoint();
 
+        startPos = new Vector3(12.2f, 2.9f, 291.5f);
+        gameObject.transform.position = startPos;
+
+        bossAudioSource = gameObject.GetComponent<AudioSource>();
         hpGauge = gameObject.transform.Find("Canvas").Find("Gauge").GetComponent<Image>();
 
         // 모든 변수는 CSV 로 읽어와야하며 배율도 수정해야함
@@ -100,6 +123,7 @@ public class Boss : MonBase
         fireTime = new WaitForSecondsRealtime(2f);
         weakTime = new WaitForSecondsRealtime(10f);
         inactiveTime = new WaitForSecondsRealtime(5f);
+        animationWaitTime = new WaitForSecondsRealtime(6f);
         spawnPoints = new List<Vector3>();
         spawnPointIdxs = new List<int>();
         spawnAdjustHeight = new Vector3(0f, 20f, 0f);
@@ -119,7 +143,25 @@ public class Boss : MonBase
     {
         healthPoint -= damage;
         hpGauge.fillAmount = (float)healthPoint / (float)maxHealthPoint;
+
+        if (healthPoint > 0) 
+        {
+            /* Do Nothing */
+        }
+        else if (healthPoint <= 0) 
+        {
+            Die();
+        }
     }
+
+    // 보스 움직임과 소리
+    protected override void Move()
+    {
+        base.Move();
+
+        bossAudioSource.PlayOneShot(bossMoveClip);
+    }
+
 
     #region 약점 관련 기능
     // 약점 찾아오는 메서드
@@ -265,4 +307,38 @@ public class Boss : MonBase
         }
     }
     #endregion
+
+    // 슬로우 코루틴
+    private IEnumerator SlowCoroutine(float slowtime, float slowMulti) 
+    {
+        slowtime += 1;
+        agent.speed -= slowMulti;
+
+        yield return new WaitForSecondsRealtime(slowtime);
+
+        slowtime -= 1;
+        agent.speed += slowMulti; 
+    }
+
+    // 보스 공격 코루틴
+    private IEnumerator AttackCoroutine()
+    {
+        bossAudioSource.Stop();
+        bossAudioSource.PlayOneShot(bossAttackClip);
+        agent.isStopped = true;
+        IsAreaTouched = true;
+        SpawnMinion();
+        ChargeProjectile();
+        yield return animationWaitTime;
+        agent.isStopped = false;
+        IsAreaTouched = false;
+    }
+
+    // 보스 죽음
+    protected override void Die()
+    {
+        base.Die();
+        IsDie = true;
+        agent.isStopped = true;
+    }
 }
