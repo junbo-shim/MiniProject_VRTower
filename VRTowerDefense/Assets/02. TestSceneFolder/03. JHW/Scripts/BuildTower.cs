@@ -56,7 +56,7 @@ public class BuildTower : MonoBehaviour
         if (!targetName.Equals(""))
         {
             Build();
-            Debug.Log(buildTurret);
+            //Debug.Log(buildTurret);
             //buildTurret = false;
         }
     }
@@ -114,6 +114,7 @@ public class BuildTower : MonoBehaviour
                         else
                         {
                             targetName = hit.collider.gameObject.name;
+                         
                         }
                         shopUi.gameObject.SetActive(false);
                     }
@@ -139,7 +140,7 @@ public class BuildTower : MonoBehaviour
         }
         else
         {
-            itemCellScaleUps = FindObjectsOfType<ItemCellScaleUp>();
+            itemCellScaleUps = FindObjectsOfType<ItemCellScaleUp>(); 
             for (int i = 0; i < itemCellScaleUps.Length; i++)
             {
                 itemCellScaleUps[i].onSizeDown();
@@ -211,11 +212,13 @@ public class BuildTower : MonoBehaviour
             Ray ray = new Ray(ARAVR_Input.RHandPosition, ARAVR_Input.RHandDirection);
             RaycastHit hit;
 #endif
-            
+
+            Debug.Log(targetName);
             if (targetName == "103")
             {
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity,targetLayer) && hit.transform.CompareTag(targetTag))
                 {
+                    Debug.Log("ddddddddddddddddddddddd");
                     previewObject.SetActive(true);
                     //specificChild.SetActive(false);
                     previewObject.transform.position = hit.point;

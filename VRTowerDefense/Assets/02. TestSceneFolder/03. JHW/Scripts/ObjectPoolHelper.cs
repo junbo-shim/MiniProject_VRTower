@@ -38,10 +38,11 @@ public class ObjectPoolHelper : MonoBehaviour
 
     public void ReturnObjectToPool(string poolName, GameObject obj)
     {
-        ObjectPool pool = objectPools.Find(p => p.name == poolName);
+        ObjectPool pool = objectPools.Find(p =>  p.name == poolName && !p.gameObject.activeSelf);
         if (pool != null)
         {
-            pool.ReturnObjectToPool(obj);
+          
+             pool.ReturnObjectToPool(obj);        
         }
         else
         {
