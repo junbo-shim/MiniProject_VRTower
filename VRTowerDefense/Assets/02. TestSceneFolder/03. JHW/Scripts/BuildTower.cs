@@ -14,7 +14,7 @@ public class BuildTower : MonoBehaviour
     public LayerMask uiLayer;
     public GameObject previewObject;  // 불투명한 프리팹을 표시하기 위한 오브젝트
     public GameObject previewObject2;  // 불투명한 프리팹을 표시하기 위한 오브젝트
-    private bool buildTurret = false;
+    public bool buildTurret = false;
     public Canvas BuffUi;
     public Canvas shopUi;
     public GameObject BuffFap;
