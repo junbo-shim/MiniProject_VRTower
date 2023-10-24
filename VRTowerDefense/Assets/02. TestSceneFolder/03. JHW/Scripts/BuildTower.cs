@@ -108,7 +108,7 @@ public class BuildTower : MonoBehaviour
                         {
                             Instantiate(BuffFap, BuffUi.transform);
                             FindObjectOfType<BuffTimeSet>().unitBuffSet(hit.collider.gameObject.name, Time);
-                            FindObjectOfType<Gun>().ReinforceGun();
+                            FindObjectOfType<Gun>().ReinforceGun(Time);
                         }
                         else
                         {

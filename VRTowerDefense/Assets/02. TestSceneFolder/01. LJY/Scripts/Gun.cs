@@ -78,9 +78,10 @@ public class Gun : MonoBehaviour
         EndReinforce();
     }
 
-    public void ReinforceGun()
+    public void ReinforceGun(float time)
     {
         isReinforced = true;
+        reinforceTime = time;
         StartCoroutine(ReinforceTimer());
     }
 

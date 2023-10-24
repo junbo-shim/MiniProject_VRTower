@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
         {
             //golem.transform.position = new Vector3(0, -300, 0);
             golem.GetComponent<SkinnedMeshRenderer>().material = emptyMaterial;
+            SetPlayerState("death");
             reMain.SetActive(true);
         }
 
