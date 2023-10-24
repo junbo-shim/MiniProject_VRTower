@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8988761963458801726}
   m_Layer: 0
   m_Name: MachineGunTowerPreview
-  m_TagString: Turret
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20144,6 +20144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteDiffuseMaterial: {fileID: 2100000, guid: f7486938e0c200448b90c6436b0da82c, type: 2}
+  isBuildCheck: 1
 --- !u!1001 &1506790748166343576
 PrefabInstance:
   m_ObjectHideFlags: 0

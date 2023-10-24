@@ -46,7 +46,7 @@ public class BuildCheck : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         Debug.Log("준영아 여기에 들어가지도 못한거같아 ... 11111");
-        if (other.gameObject.CompareTag("NoBuildZone"))
+        if (other.gameObject.CompareTag("NoBuildZone") || other.gameObject.CompareTag("Turret"))
         {
 
             Debug.Log("준영아 여기에 들어가지도 못한거같아 ... ");
@@ -59,7 +59,7 @@ public class BuildCheck : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("NoBuildZone"))
+        if (other.gameObject.CompareTag("NoBuildZone") || other.gameObject.CompareTag("Turret"))
         {
             
             //Debug.LogError(spriteDiffuseMaterial.name);
