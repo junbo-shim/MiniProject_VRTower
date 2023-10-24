@@ -5,18 +5,29 @@ using UnityEngine;
 public class WeakPoint : MonoBehaviour
 {
     private Transform boss;
+    public ParticleSystem hitEffect;
+    public AudioSource weakAudioSource;
+
+    public Material defaultMaterial;
+    public Material weakTimeMaterial;
+    public Material inactiveMatarial;
+
     private Vector3 normalSize;
-    private Color normalColor;
     private WaitForSecondsRealtime weakTime;
     private WaitForSecondsRealtime inactiveTime;
+    private WaitForSecondsRealtime feverHitTime;
+
     private bool isWeakOn = false;
 
     private void Awake()
     {
         boss = GameObject.Find("EarthGolem").transform;
+        weakAudioSource = transform.GetComponent<AudioSource>();
+        feverHitTime = new WaitForSecondsRealtime(1f);
+
         // 기본 사이즈와 컬러를 캐싱
         normalSize = transform.localScale;
-        normalColor = gameObject.GetComponent<MeshRenderer>().material.color;
+        defaultMaterial = gameObject.GetComponent<MeshRenderer>().material;
         weakTime = boss.GetComponent<Boss>().weakTime;
         inactiveTime = boss.GetComponent<Boss>().inactiveTime;
     }
@@ -31,11 +42,11 @@ public class WeakPoint : MonoBehaviour
     {
         isWeakOn = true;
         transform.localScale *= 2;
-        gameObject.GetComponent<MeshRenderer>().material.color = Color.cyan;
+        gameObject.GetComponent<MeshRenderer>().material = weakTimeMaterial;
         yield return weakTime;
         isWeakOn = false;
         transform.localScale = normalSize;
-        gameObject.GetComponent<MeshRenderer>().material.color = normalColor;
+        gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 
     // 약점에 맞을 경우
@@ -54,7 +65,7 @@ public class WeakPoint : MonoBehaviour
             }
             else if (isWeakOn == true) 
             {
-                /* Do Nothing */
+                StartCoroutine(FeverTime());
             }
         }
     }
@@ -62,8 +73,23 @@ public class WeakPoint : MonoBehaviour
     // 약점 히트 시 offon 기능
     private IEnumerator InactiveForSecond() 
     {
-        gameObject.SetActive(false);
+        hitEffect.Play();
+        weakAudioSource.PlayOneShot(weakAudioSource.clip);
+        gameObject.GetComponent<MeshRenderer>().material = inactiveMatarial;
+        gameObject.GetComponent<MeshCollider>().enabled = false;
+
         yield return inactiveTime;
-        gameObject.SetActive(true);
+
+        hitEffect.Stop();
+        gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
+        gameObject.GetComponent<MeshCollider>().enabled = true;
+    }
+
+    private IEnumerator FeverTime() 
+    {
+        hitEffect.Play();
+        weakAudioSource.PlayOneShot(weakAudioSource.clip);
+        yield return feverHitTime;
+        hitEffect.Stop();
     }
 }

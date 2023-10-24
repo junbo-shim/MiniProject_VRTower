@@ -28,12 +28,6 @@ public class MonBase : MonoBehaviour
     // 몬스터의 디버프 중첩 체크할 int
     protected int debuffCount;
 
-    // 몬스터가 이동 중인지 체크하는 bool
-    protected bool isMoving;
-    // 몬스터가 공격 중인지 체크하는 bool
-    protected bool isAttacking;
-    // 몬스터가 죽었는지 체크하는 bool
-    protected bool isDead;
 
     protected virtual void Init() 
     {
@@ -60,7 +54,7 @@ public class MonBase : MonoBehaviour
     protected virtual void Die() 
     {
       //SSM.23.10.23
-      // dieUi.gameObject.SetActive(true);
+       dieUi.gameObject.SetActive(true);
       //SSM.23.1023
     }
 

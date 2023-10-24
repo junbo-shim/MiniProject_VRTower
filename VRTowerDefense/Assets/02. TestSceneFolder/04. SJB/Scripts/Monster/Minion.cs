@@ -10,15 +10,17 @@ public class Minion : MonBase
     private BaseMinionPool baseMinionPool;
     private FastMinionPool fastMinionPool;
 
+    private AudioSource minionAudioSource;
+
     public ParticleSystem particleExplosion;
     public Material defaultMaterial;
     public Material transparent;
-    private WaitForSecondsRealtime flickerTime;
     private Color defaultColor;
 
     private int distanceOfPlayer;
     private int attackRange = 5;
     private int explosionRange = 10;
+    private bool isAttack = false;
 
 
     private void OnEnable()
@@ -46,8 +48,8 @@ public class Minion : MonBase
     {
         base.Init();
 
+        minionAudioSource = transform.GetComponent<AudioSource>();
         particleExplosion = transform.Find("SmallExplosion").GetComponent<ParticleSystem>();
-        flickerTime = new WaitForSecondsRealtime(0.2f);
 
         baseMinionPool = transform.parent.GetComponent<BaseMinionPool>();
         fastMinionPool = transform.parent.GetComponent<FastMinionPool>();
@@ -99,12 +101,21 @@ public class Minion : MonBase
         }
         else if (this.agent.isStopped == true)
         {
-            StartCoroutine(Explosion(gameObject));
+            if (isAttack == true) 
+            {
+                /* Do Nothing */
+            }
+            else if (isAttack == false)
+            {
+                isAttack = true;
+                StartCoroutine(Explosion(gameObject));
+            }
         }
     }
 
     protected override void Attack()
     {
+        Debug.LogWarning("폭탄 딜 : " + damage);
         GameManager.instance.HpMin(damage);
     }
 
@@ -160,10 +171,12 @@ public class Minion : MonBase
     {
         mesh.material = transparent;
         particleExplosion.Play();
+        minionAudioSource.PlayOneShot(minionAudioSource.clip);
         Attack();
         yield return new WaitForSecondsRealtime(1.2f);
         particleExplosion.Stop();
         mesh.material = defaultMaterial;
+        isAttack = false;
         CheckReturnPool(obj);
     }
 }
