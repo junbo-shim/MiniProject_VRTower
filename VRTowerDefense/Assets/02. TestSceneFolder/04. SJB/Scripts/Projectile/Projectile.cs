@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public Transform boss;
     public Transform target;
     private Rigidbody projectileRigid;
     public ProjectilePool projectilePool;
@@ -46,12 +45,9 @@ public class Projectile : MonoBehaviour
 
     private void FindTarget() 
     {
-        boss = GameObject.Find("EarthGolem").transform;
         target = GameObject.Find("Player").transform.Find("OVRCameraRig");
 
-        projectilePool = GameObject.Find("PoolControl").
-            transform.Find("Projectile Pool").
-            gameObject.GetComponent<ProjectilePool>();
+        projectilePool = transform.parent.GetComponent<ProjectilePool>();
     }
 
     private void Move()
