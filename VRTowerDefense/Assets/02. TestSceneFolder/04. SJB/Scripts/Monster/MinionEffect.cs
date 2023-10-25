@@ -8,13 +8,13 @@ public class MinionEffect : MonoBehaviour
     private WaitForSecondsRealtime effectDuration;
     private MinionEffectPool effectPool;
     private AudioSource audioSource;
-
+    public AudioClip ExAudio;
     private void Awake()
     {
         effect = gameObject.GetComponent<ParticleSystem>();
         effectDuration = new WaitForSecondsRealtime(1f);
-        effectPool = transform.parent.GetComponent<MinionEffectPool>();
         audioSource = gameObject.GetComponent<AudioSource>();
+        effectPool = transform.parent.GetComponent<MinionEffectPool>();
     }
 
     private void OnEnable()
@@ -25,9 +25,12 @@ public class MinionEffect : MonoBehaviour
     private IEnumerator EffectSequence()
     {
         effect.Play();
-        audioSource.PlayOneShot(audioSource.clip);
+        audioSource.PlayOneShot(ExAudio);
+       
         yield return effectDuration;
+
         effect.Stop();
+        Debug.Log(effectPool);
         effectPool.ReturnPoolObject(gameObject);
     }
 }
