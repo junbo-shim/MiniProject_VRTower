@@ -22,7 +22,7 @@ public class BuildTower : MonoBehaviour
     [SerializeField] private string targetName = "";
     private bool isPlatingState = false;    // 플레이어 상태가 설치 상태인지 확인
     public LayerMask targetLayer;
-
+   
 
     //// 특정 하위 오브젝트의 경로를 인스펙터에서 설정합니다.
     //public string specificChildPath; 
@@ -64,6 +64,10 @@ public class BuildTower : MonoBehaviour
 
     private void ShopUi()
     {
+        if (shopUi.gameObject.activeSelf)
+        {
+            shopUi.GetComponent<ShopTF>().ShopActiveTF();
+        }
 #if BUILD_PLATFORM_PC
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 # elif TARGET_DEVICE_OCULUS
@@ -95,20 +99,31 @@ public class BuildTower : MonoBehaviour
 
 
                     int Time = int.Parse(hit.collider.gameObject.transform.Find("Explanation").Find("TimeIcon").Find("TimeText").GetComponent<TMP_Text>().text.ToString());
-                    Debug.Log(Time);
+                  
                     if (buyCoin <= GameManager.instance.coin)
                     {
 
                         GameManager.instance.MinCoin(buyCoin);
                         if (hit.collider.gameObject.name.Equals("100"))
                         {
-                            Instantiate(BuffFap, BuffUi.transform);
+                            Debug.Log("1111111"+ BuffUi);
+                            if (BuffUi.transform.Find("100"))
+                            {
+                                Destroy(BuffUi.transform.Find("100").gameObject);
+                            }
+                            GameObject buffFap = Instantiate(BuffFap, BuffUi.transform);
+                            buffFap.name = "100";
                             FindObjectOfType<BuffTimeSet>().unitBuffSet(hit.collider.gameObject.name, Time);
                             FindObjectOfType<Boss>().ActivateWeakPoint();
                         }
                         else if (hit.collider.gameObject.name.Equals("101"))
                         {
-                            Instantiate(BuffFap, BuffUi.transform);
+                            if (BuffUi.transform.Find("101"))
+                            {
+                                Destroy(BuffUi.transform.Find("101").gameObject);
+                            }
+                            GameObject buffFap = Instantiate(BuffFap, BuffUi.transform);
+                            buffFap.name = "101";
                             FindObjectOfType<BuffTimeSet>().unitBuffSet(hit.collider.gameObject.name, Time);
                             FindObjectOfType<Gun>().ReinforceGun(Time);
                         }

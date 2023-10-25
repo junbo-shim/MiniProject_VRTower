@@ -42,6 +42,7 @@ public class Gun : MonoBehaviour
         if(ARAVR_Input.Get(ARAVR_Input.Button.IndexTrigger) && attackAfter > attackSpeed && !isReinforced)
         {
             ARAVR_Input.PlayVibration(ARAVR_Input.Controller.RTouch);
+            gunAudio.PlayOneShot(gunAudio.clip);
             ShootBasicBullet();
         }
         else if(ARAVR_Input.Get(ARAVR_Input.Button.IndexTrigger) && attackAfter > attackReinforceSpeed && isReinforced)
@@ -58,7 +59,6 @@ public class Gun : MonoBehaviour
 
     public void ShootBasicBullet()
     {
-        gunAudio.Play();
         attackAfter = 0f;
         var bullet = objectPoolManagers[0].GetObject();
         bullet.objectPoolManager = objectPoolManagers[0];
@@ -89,6 +89,10 @@ public class Gun : MonoBehaviour
 
     public void ReinforceGun(float time)
     {
+        if(isReinforced)
+        {
+            StopCoroutine(ReinforceTimer());
+        }
         isReinforced = true;
         reinforceTime = time;
         gunAudio.clip = gunSounds[1];
