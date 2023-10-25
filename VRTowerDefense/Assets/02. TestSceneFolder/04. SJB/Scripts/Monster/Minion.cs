@@ -39,7 +39,7 @@ public class Minion : MonBase
         {
             this.GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
             GameObject effect = minionEffectPool.GetPoolObject();
-            effect.transform.position = transform.position;
+            effect.transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
             CheckReturnPool(gameObject);
         }
 
@@ -48,7 +48,7 @@ public class Minion : MonBase
             this.agent.isStopped = true;
             Attack();
             GameObject effect = minionEffectPool.GetPoolObject();
-            effect.transform.position = transform.position;
+            effect.transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
             CheckReturnPool(gameObject);
         }
     }
