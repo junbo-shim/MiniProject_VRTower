@@ -45,11 +45,9 @@ public class BuildCheck : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("준영아 여기에 들어가지도 못한거같아 ... 11111");
         if (other.gameObject.CompareTag("NoBuildZone") || other.gameObject.CompareTag("Turret"))
         {
 
-            Debug.Log("준영아 여기에 들어가지도 못한거같아 ... ");
             //Material의 속성을 변경하여 색상을 적용합니다.
             spriteDiffuseMaterial.color = newColor;
             buildTower.buildTurret = true;

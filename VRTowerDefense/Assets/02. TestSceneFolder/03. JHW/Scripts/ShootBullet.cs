@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ShootBullet : MonoBehaviour
@@ -6,7 +8,9 @@ public class ShootBullet : MonoBehaviour
     public BulletData bulletData;
     private Rigidbody rb;
     private int chk = 0;
-    
+
+    //public TowerDataScriptableObject projectileData;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -20,6 +24,11 @@ public class ShootBullet : MonoBehaviour
 
     private void Start()
     {
+        //// CSVReader로부터 읽어온 스크립터블 오브젝트 데이터 
+        //foreach (var data in projectileData.items)
+        //{
+        //    Debug.Log("CSVID: " + data.CSVID + ", Description: " + data.Description + ", Model: " + data.Model + "Atk: " + data.Atk);
+        //}
     }
 
     private void OnDisable()

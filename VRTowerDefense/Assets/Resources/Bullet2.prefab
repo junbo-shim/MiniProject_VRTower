@@ -153,3 +153,4 @@ MonoBehaviour:
     speed: 65
     slow: 0
     additionalData: 
+  projectileData: {fileID: 11400000, guid: 1d67d8488acc62f418ad0fed91377e23, type: 2}

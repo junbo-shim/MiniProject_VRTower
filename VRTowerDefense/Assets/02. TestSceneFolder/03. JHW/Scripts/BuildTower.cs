@@ -48,6 +48,7 @@ public class BuildTower : MonoBehaviour
         //// 초기 상태에서 특정 하위 오브젝트를 비활성화
         //specificChild.SetActive(false);
 
+
     }
 
     void Update()
@@ -218,7 +219,6 @@ public class BuildTower : MonoBehaviour
             {
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity,targetLayer) && hit.transform.CompareTag(targetTag))
                 {
-                    Debug.Log("ddddddddddddddddddddddd");
                     previewObject.SetActive(true);
                     //specificChild.SetActive(false);
                     previewObject.transform.position = hit.point;
