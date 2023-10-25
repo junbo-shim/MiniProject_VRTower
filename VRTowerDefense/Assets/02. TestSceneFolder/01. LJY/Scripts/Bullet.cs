@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public PlayerProjectileDataScriptableObject data;
+
     //{ 데이터 테이블 사용할 변수
     public float bulletAtk = 5f;                   // 총알의 공격력
     public float bulletCriticalRate = default;  // 총알의 치명타 확률
@@ -13,6 +15,12 @@ public class Bullet : MonoBehaviour
     //} 데이터 테이블 사용할 변수
     public ObjectPoolManager objectPoolManager;
     private Vector3 direction;
+
+    private void Awake()
+    {
+        bulletAtk = data.items[0].Atk;
+        bulletCriticalRate = data.items[0].Critical_Rate;
+    }
 
     private void Start()
     {
@@ -58,6 +66,12 @@ public class Bullet : MonoBehaviour
 
     public void ReturnBullet()
     {
+        objectPoolManager.ReturnObject(this);
+    }
+
+    private IEnumerator OnEffectBullet()
+    {
+        yield return new WaitForSeconds(2.0f);
         objectPoolManager.ReturnObject(this);
     }
 
