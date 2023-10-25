@@ -19,10 +19,15 @@ public class Gun : MonoBehaviour
     private PlayerController playerController;
     public ObjectPoolManager[] objectPoolManagers;
 
+    public AudioClip[] gunSounds;
+    private AudioSource gunAudio;
+
     // Start is called before the first frame update
     void Start()
     {
         playerController = gameObject.GetComponent<PlayerController>();
+        gunAudio = gameObject.GetComponent<AudioSource>();
+        gunAudio.clip = gunSounds[0];
     }
 
     // Update is called once per frame
@@ -53,6 +58,7 @@ public class Gun : MonoBehaviour
 
     public void ShootBasicBullet()
     {
+        gunAudio.Play();
         attackAfter = 0f;
         var bullet = objectPoolManagers[0].GetObject();
         bullet.objectPoolManager = objectPoolManagers[0];
@@ -65,6 +71,7 @@ public class Gun : MonoBehaviour
 
     public void ShootReinforceBullet()
     {
+        gunAudio.Play();
         attackAfter = 0f;
         var bullet = objectPoolManagers[1].GetObject();
         bullet.objectPoolManager = objectPoolManagers[1];
@@ -84,11 +91,13 @@ public class Gun : MonoBehaviour
     {
         isReinforced = true;
         reinforceTime = time;
+        gunAudio.clip = gunSounds[1];
         StartCoroutine(ReinforceTimer());
     }
 
     public void EndReinforce()
     {
+        gunAudio.clip = gunSounds[0];
         isReinforced = false;
     }
     #region Legacy Coroutine
