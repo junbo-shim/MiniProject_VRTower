@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -5,6 +6,8 @@ public class Projectile : MonoBehaviour
     public Transform target;
     private Rigidbody projectileRigid;
     public ProjectilePool projectilePool;
+    public ProjectileEffectPool projectileEffectPool;
+
     private float moveSpeed = 12f;
     public int damage = 10;
 
@@ -19,6 +22,11 @@ public class Projectile : MonoBehaviour
         FindTarget();
     }
 
+    private void Start()
+    {
+        projectileEffectPool = transform.parent.parent.Find("ProjectileEffect Pool").GetComponent<ProjectileEffectPool>();
+    }
+
     private void FixedUpdate()
     {
         Move();
@@ -29,11 +37,15 @@ public class Projectile : MonoBehaviour
         if (other.name.Contains("Player")) 
         {
             GameManager.instance.HpMin(damage);
+            //GameObject effect = projectileEffectPool.GetPoolObject();
+            //effect.transform.position = transform.position;
             projectilePool.ReturnPoolObject(gameObject);
         }
 
         if (other.GetComponent<Bullet>()) 
         {
+            GameObject effect = projectileEffectPool.GetPoolObject();
+            effect.transform.position = transform.position;
             projectilePool.ReturnPoolObject(gameObject);
         }
     }
@@ -46,12 +58,12 @@ public class Projectile : MonoBehaviour
     private void FindTarget() 
     {
         target = GameObject.Find("Player").transform.Find("OVRCameraRig");
-
         projectilePool = transform.parent.GetComponent<ProjectilePool>();
     }
 
     private void Move()
     {
+        transform.Find("Ani").Rotate(transform.forward * 5f, Space.World);
         transform.LookAt(target, Vector3.up);
         projectileRigid.velocity = transform.forward * moveSpeed;
     }

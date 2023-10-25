@@ -1,46 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Boss : MonBase
 {
-    private Vector3 startPos;
-    private Image hpGauge;
+    #region 괴수 변수
 
+    // 괴수 Scriptable
+    private ScriptableObj_Boss bossData;
+    // 투사체 Scriptable
+    private ScriptableObj_Projectile projectileData;
+    // 기본졸개 Scriptable
+    private ScriptableObj_Minion baseMinionData;
+    // 빠른졸개 Scriptable
+    private ScriptableObj_Minion fastMinionData;
+
+    // 괴수 시작 지점
+    private Vector3 startPos;
+    // 괴수 HP 게이지    
+    private Image hpGauge;
+    // 오브젝트 풀링 관련 변수
     private Transform[] fireHolders;
-    public ProjectilePool projectilePool;
-    public BaseMinionPool baseMinionPool;
-    public FastMinionPool fastMinionPool;
-    public SpawnEffectPool spawnEffectPool;
+    private ProjectilePool projectilePool;
+    private BaseMinionPool baseMinionPool;
+    private FastMinionPool fastMinionPool;
+    private SpawnEffectPool spawnEffectPool;
+    // 졸개 스폰포인트 관련 변수
     private List<Vector3> spawnPoints;
     private List<int> spawnPointIdxs;
     private Vector3 spawnAdjustHeight;
-
+    // 괴수 애니메이터 및 사운드
+    public Animator bossAnimator;
     public AudioSource bossAudioSource;
     public AudioClip bossMoveClip;
     public AudioClip bossAttackClip;
-
+    public AudioClip bossDieClip;
+    // 코루틴 캐싱 변수
     private WaitForSecondsRealtime minionSpawnTime;
     private WaitForSecondsRealtime fireTime;
     public WaitForSecondsRealtime weakTime;
     public WaitForSecondsRealtime inactiveTime;
     public WaitForSecondsRealtime animationWaitTime;
+    // 괴수 약점 오브젝트 리스트
     public List<WeakPoint> weakPointList;
-
+    // 괴수 약점 bool 변수
+    public bool isWeakTrigger;
+    // 괴수 슬로우 스택
     public int slowStack = default;
 
-    public bool IsStart = false;
-    public bool IsAreaTouched = false;
-    public bool IsDie = false;
-
+    #endregion
 
     private void Awake()
     {
         Init();
-        ChargeProjectile();
-        IsStart = true;
+        //ChargeProjectile();
+        StartCoroutine(GetUpSequence());
     }
 
     private void Update()
@@ -48,6 +63,11 @@ public class Boss : MonBase
         if (Input.GetKeyDown(KeyCode.A))
         {
             ActivateWeakPoint();
+        }
+
+        if (Input.GetKeyDown(KeyCode.S)) 
+        {
+            Die();
         }
     }
 
@@ -58,6 +78,7 @@ public class Boss : MonBase
 
     private void OnTriggerEnter(Collider other)
     {
+        #region AREA
         // 닿은 Trigger Collider 의 이름에 Area 라는 문자가 포함되어 있다면
         if (other.name.Contains("Area"))
         {
@@ -66,12 +87,15 @@ public class Boss : MonBase
             // 그 Area 의 spawnPoints 를 보스의 spawnPoints 에 담는다
             spawnPoints = other.GetComponent<MinionSpawnPoint>().spawnPoints;
 
+            // 공격 시작 (애니메이션, 소리 및 오브젝트 소환)
             StartCoroutine(AttackCoroutine());
 
             // 그리고 닿은 오브젝트를 끈다
             other.gameObject.SetActive(false);
         }
+        #endregion
 
+        #region PC Bullet
         // 닿은 Collider 가 총알(Bullet)면
         if (other.GetComponent<Bullet>())
         {
@@ -82,7 +106,9 @@ public class Boss : MonBase
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
             other.GetComponent<Bullet>().ReturnBullet();
         }
+        #endregion
 
+        #region Turret Bullet
         // 닿은 Collider 가 총알(TurretShoot)이면
         if (other.GetComponent<ShootBullet>() && other.name.Contains("Ice"))
         {
@@ -100,22 +126,70 @@ public class Boss : MonBase
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
             other.GetComponent<GameObject>().SetActive(false);
         }
+        #endregion
     }
+
+    #region 애니메이션 및 사운드
+    // 일어나는 애니메이션 코루틴
+    private IEnumerator GetUpSequence() 
+    {
+        yield return new WaitForSecondsRealtime(5f);
+        // 걷기 시작 및 agent 움직임 on
+        bossAnimator.SetBool("IsStart", true);
+        agent.isStopped = false;
+    }
+    // 보스 움직임과 소리
+    protected override void Move()
+    {
+        base.Move();
+        bossAudioSource.clip = bossMoveClip;
+        bossAudioSource.PlayOneShot(bossAudioSource.clip);
+    }
+    // 슬로우 코루틴
+    private IEnumerator SlowCoroutine(float slowtime, float slowMulti)
+    {
+        bossAnimator.speed *= 0.5f;
+        slowtime += 1;
+        agent.speed -= slowMulti;
+
+        yield return new WaitForSecondsRealtime(slowtime);
+
+        bossAnimator.speed *= 2f;
+        slowtime -= 1;
+        agent.speed += slowMulti;
+    }
+    #endregion
+
     // 초기화 메서드
     protected override void Init()
     {
         base.Init();
+        // 오브젝트 풀링 찾기
         FindFireHolder();
         FindProjectilePool();
         FindBaseMinionPool();
         FindFastMinionPool();
         FindSpawnEffectPool();
+        // 약점 찾기
         FindWeakPoint();
 
-        startPos = new Vector3(12.2f, 2.9f, 291.5f);
-        gameObject.transform.position = startPos;
+        // Scriptable 할당
+        bossData = (ScriptableObj_Boss)CSVConverter_SJB.Instance.ScriptableObjDictionary[1001];
+        projectileData = (ScriptableObj_Projectile)CSVConverter_SJB.Instance.ScriptableObjDictionary[2001];
+        baseMinionData = (ScriptableObj_Minion)CSVConverter_SJB.Instance.ScriptableObjDictionary[3001];
+        fastMinionData = (ScriptableObj_Minion)CSVConverter_SJB.Instance.ScriptableObjDictionary[3002];
 
+        // startPos 할당 및 괴수 초기위치 설정
+        startPos = new Vector3(3f, 0.27f, 287.5f);
+        gameObject.transform.position = startPos;
+        // Init 시에는 agent 움직임 멈춤
+        agent.isStopped = true;
+
+        // 괴수 애니메이터 및 사운드 할당
+        bossAnimator = gameObject.GetComponent<Animator>();
         bossAudioSource = gameObject.GetComponent<AudioSource>();
+
+        // HP 게이지 할당
         hpGauge = gameObject.transform.Find("Canvas").Find("Gauge").GetComponent<Image>();
 
         // 모든 변수는 CSV 로 읽어와야하며 배율도 수정해야함
@@ -133,11 +207,9 @@ public class Boss : MonBase
         this.attackCooltime = 5f;
         this.maxHealthPoint = healthPoint;
     }
-    // Weak Point 에서 사용할 수 있도록 열어준 GetHit 메서드
-    public void GetHitWeakPoint(Collider other, int damage)
-    {
-        this.GetHit(other, (int)(damage * 1.5f));
-    }
+
+
+    #region 데미지 처리
     // 데미지 차감 함수 및 체력 게이지 업데이트
     protected override void GetHit(Collider other, int damage)
     {
@@ -153,14 +225,12 @@ public class Boss : MonBase
             Die();
         }
     }
-
-    // 보스 움직임과 소리
-    protected override void Move()
+    // Weak Point 에서 사용할 수 있도록 열어준 GetHit 메서드
+    public void GetHitWeakPoint(Collider other, int damage)
     {
-        base.Move();
-
-        bossAudioSource.PlayOneShot(bossMoveClip);
+        this.GetHit(other, (int)(damage * 1.5f));
     }
+    #endregion
 
 
     #region 약점 관련 기능
@@ -216,7 +286,6 @@ public class Boss : MonBase
             yield return fireTime;
         }
     }
-
     #endregion
 
     #region 졸개 관련 기능
@@ -289,7 +358,6 @@ public class Boss : MonBase
         yield return minionSpawnTime;
         yield break;
     }
-
     // 랜덤하게 base, fast minion object 대여하기
     private void ChooseRandomMinion(Vector3 spawnPoint) 
     {
@@ -308,37 +376,38 @@ public class Boss : MonBase
     }
     #endregion
 
-    // 슬로우 코루틴
-    private IEnumerator SlowCoroutine(float slowtime, float slowMulti) 
-    {
-        slowtime += 1;
-        agent.speed -= slowMulti;
-
-        yield return new WaitForSecondsRealtime(slowtime);
-
-        slowtime -= 1;
-        agent.speed += slowMulti; 
-    }
 
     // 보스 공격 코루틴
     private IEnumerator AttackCoroutine()
     {
+        // 애니메이터의 IsAreaTouched 값 변경
+        bossAnimator.SetBool("IsAreaTouched", true);
+        // 현재 걷고 있는 오디오 정지
         bossAudioSource.Stop();
-        bossAudioSource.PlayOneShot(bossAttackClip);
+        bossAudioSource.clip = bossAttackClip;
+        // 사운드 변경 - 괴수 공격 사운드
+        bossAudioSource.PlayOneShot(bossAudioSource.clip);
         agent.isStopped = true;
-        IsAreaTouched = true;
+        yield return animationWaitTime;
         SpawnMinion();
         ChargeProjectile();
-        yield return animationWaitTime;
         agent.isStopped = false;
-        IsAreaTouched = false;
+        bossAnimator.SetBool("IsAreaTouched", false);
     }
+
 
     // 보스 죽음
     protected override void Die()
     {
-        base.Die();
-        IsDie = true;
+        //base.Die();
+        // 현재 재생 중 오디오 정지
+        bossAudioSource.Stop();
+        bossAudioSource.clip = bossDieClip;
+        bossAudioSource.PlayOneShot(bossAudioSource.clip);
+        // 애니메이션 트리거 on
+        bossAnimator.SetBool("IsStart", false);
+        bossAnimator.SetBool("IsAreaTouched", false);
+        bossAnimator.SetBool("IsDie", true);
         agent.isStopped = true;
     }
 }
