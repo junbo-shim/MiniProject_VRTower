@@ -8,6 +8,8 @@ public class PoolControl : MonoBehaviour
         CreateBaseMinionPool();
         CreateFastMinionPool();
         CreateMinionSpawnPool();
+        CreateMinionEffectPool();
+        CreateProjectileEffectPool();
     }
 
     private void CreateProjectilePool()
@@ -35,6 +37,20 @@ public class PoolControl : MonoBehaviour
     {
         GameObject obj = new GameObject("SpawnEffect Pool");
         obj.AddComponent<SpawnEffectPool>();
+        obj.transform.SetParent(gameObject.transform, true);
+    }
+
+    private void CreateMinionEffectPool()
+    {
+        GameObject obj = new GameObject("MinionEffect Pool");
+        obj.AddComponent<MinionEffectPool>();
+        obj.transform.SetParent(gameObject.transform, true);
+    }
+
+    private void CreateProjectileEffectPool()
+    {
+        GameObject obj = new GameObject("ProjectileEffect Pool");
+        obj.AddComponent<ProjectileEffectPool>();
         obj.transform.SetParent(gameObject.transform, true);
     }
 }

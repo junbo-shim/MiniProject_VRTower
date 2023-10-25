@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 5894481321809285729}
   - component: {fileID: 3938912105973332087}
   - component: {fileID: 4157536449566970750}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FastMinion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,9 +164,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieUi: {fileID: 0}
   player: {fileID: 0}
-  particleExplosion: {fileID: 0}
-  defaultMaterial: {fileID: 0}
-  transparent: {fileID: 2100000, guid: 8c14b3ba4499d3342a8bff2729d259e4, type: 2}
 --- !u!195 &3938912105973332087
 NavMeshAgent:
   m_ObjectHideFlags: 0

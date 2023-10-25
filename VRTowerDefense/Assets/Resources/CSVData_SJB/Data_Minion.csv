@@ -1,0 +1,3 @@
+﻿ID_int,설명_string,모델이름_string,졸개종류_string,체력_int,데미지_int,이동속도_float,인식범위_int,폭발범위_int
+3001,보통졸개,TX_Minion_Normal,1,1,20,1,1,10
+3002,빠른졸개,TX_Minion_Fast,2,2,20,2,1,10

@@ -1294,18 +1294,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieUi: {fileID: 0}
   player: {fileID: 0}
-  projectilePool: {fileID: 0}
-  baseMinionPool: {fileID: 0}
-  fastMinionPool: {fileID: 0}
-  spawnEffectPool: {fileID: 0}
+  bossAnimator: {fileID: 0}
   bossAudioSource: {fileID: 0}
   bossMoveClip: {fileID: 8300000, guid: b3adc7d5438ba3f43910fe42de61174f, type: 3}
   bossAttackClip: {fileID: 8300000, guid: 795bde61f9790764bbaa95332a872bc1, type: 3}
+  bossDieClip: {fileID: 8300000, guid: 7d1c8d25d7ef12d47b0bc79b863fe597, type: 3}
   weakPointList: []
+  isWeakTrigger: 0
   slowStack: 0
-  IsStart: 0
-  IsAreaTouched: 0
-  IsDie: 0
 --- !u!82 &219117678204547117
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2474,14 +2470,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4108832218527978230}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6398529507201504659}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}

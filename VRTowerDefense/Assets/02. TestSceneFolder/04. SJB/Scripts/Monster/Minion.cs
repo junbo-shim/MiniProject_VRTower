@@ -1,32 +1,31 @@
-using OculusSampleFramework;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+
 using UnityEngine;
 
 public class Minion : MonBase
 {
-    private MeshRenderer mesh;
     private BaseMinionPool baseMinionPool;
     private FastMinionPool fastMinionPool;
+    private MinionEffectPool minionEffectPool;
 
-    private AudioSource minionAudioSource;
-
-    public ParticleSystem particleExplosion;
-    public Material defaultMaterial;
-    public Material transparent;
-    private Color defaultColor;
 
     private int distanceOfPlayer;
     private int attackRange = 5;
     private int explosionRange = 10;
-    private bool isAttack = false;
 
+
+    private void Awake()
+    {
+        Init();
+    }
 
     private void OnEnable()
     {
-        Init();
-        InitSecond();
+        agent.isStopped = false;
+    }
+
+    private void Start()
+    {
+        minionEffectPool = transform.parent.parent.Find("MinionEffect Pool").GetComponent<MinionEffectPool>();
     }
 
     private void FixedUpdate()
@@ -36,11 +35,21 @@ public class Minion : MonBase
 
     private void OnTriggerEnter(Collider other)
     {
-        // 추후에 name 에서 tag 또는 layer 로 변경
         if (other.GetComponent<Bullet>()) 
         {
-            ChangeColor();
             this.GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
+            GameObject effect = minionEffectPool.GetPoolObject();
+            effect.transform.position = transform.position;
+            CheckReturnPool(gameObject);
+        }
+
+        if (other.name == "Player") 
+        {
+            this.agent.isStopped = true;
+            Attack();
+            GameObject effect = minionEffectPool.GetPoolObject();
+            effect.transform.position = transform.position;
+            CheckReturnPool(gameObject);
         }
     }
 
@@ -48,11 +57,8 @@ public class Minion : MonBase
     {
         base.Init();
 
-        minionAudioSource = transform.GetComponent<AudioSource>();
-        particleExplosion = transform.Find("SmallExplosion").GetComponent<ParticleSystem>();
-
         baseMinionPool = transform.parent.GetComponent<BaseMinionPool>();
-        fastMinionPool = transform.parent.GetComponent<FastMinionPool>();
+        fastMinionPool = transform.parent.GetComponent<FastMinionPool>();  
 
         if (gameObject.name == "BaseMinion" + "(Clone)") 
         {
@@ -68,13 +74,6 @@ public class Minion : MonBase
         }
     }
 
-    private void InitSecond() 
-    {
-        mesh = transform.Find("Ani").GetComponent<MeshRenderer>();
-        defaultMaterial = mesh.material;
-        defaultColor = mesh.material.color;
-    }
-
     protected override void Move()
     {
         distanceOfPlayer = (int)Vector3.Distance(transform.position, player.position);
@@ -83,8 +82,8 @@ public class Minion : MonBase
         {
             base.Move();
 
-            if (distanceOfPlayer > attackRange)
-            {
+            //if (distanceOfPlayer > attackRange)
+            //{
                 if (gameObject.name.Contains("Base")) 
                 {
                     transform.Find("Ani").transform.Rotate(transform.right * 5f, Space.World);
@@ -93,23 +92,11 @@ public class Minion : MonBase
                 {
                     transform.Find("Ani").transform.Rotate(transform.right * 10f, Space.World);
                 }
-            }
-            else if (distanceOfPlayer <= attackRange)
-            {
-                this.agent.isStopped = true;
-            }
-        }
-        else if (this.agent.isStopped == true)
-        {
-            if (isAttack == true) 
-            {
-                /* Do Nothing */
-            }
-            else if (isAttack == false)
-            {
-                isAttack = true;
-                StartCoroutine(Explosion(gameObject));
-            }
+            //}
+            //else if (distanceOfPlayer <= attackRange)
+            //{
+            //    this.agent.isStopped = true;
+            //}
         }
     }
 
@@ -125,8 +112,6 @@ public class Minion : MonBase
 
         if (healthPoint <= 0) 
         {
-            StartCoroutine(Explosion(gameObject));
-
             if (distanceOfPlayer <= explosionRange)
             {
                 GameManager.instance.HpMin(damage);
@@ -138,25 +123,8 @@ public class Minion : MonBase
         }
     }
 
-
-    private void ChangeColor() 
-    {
-        ChangeRed();
-        Invoke("ChangeDefault", 0.5f);
-    }
-    private void ChangeRed() 
-    {
-        mesh.material.color = Color.red;
-    }
-    private void ChangeDefault() 
-    {
-        mesh.material.color = defaultColor;
-    }
-
-
     private void CheckReturnPool(GameObject obj) 
     {
-
         if (obj.name == "BaseMinion" + "(Clone)") 
         {
             baseMinionPool.ReturnPoolObject(obj);
@@ -165,18 +133,5 @@ public class Minion : MonBase
         {
             fastMinionPool.ReturnPoolObject(obj);
         }
-    }
-
-    private IEnumerator Explosion(GameObject obj) 
-    {
-        mesh.material = transparent;
-        particleExplosion.Play();
-        minionAudioSource.PlayOneShot(minionAudioSource.clip);
-        Attack();
-        yield return new WaitForSecondsRealtime(1.2f);
-        particleExplosion.Stop();
-        mesh.material = defaultMaterial;
-        isAttack = false;
-        CheckReturnPool(obj);
     }
 }

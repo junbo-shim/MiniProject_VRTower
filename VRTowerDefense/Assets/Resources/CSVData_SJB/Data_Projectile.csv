@@ -1,0 +1,2 @@
+﻿ID_int,설명_string,모델이름_string,체력_int,최소속도_float,최대속도_float,데미지_int,대기시간_float,대기개수_int
+2001,괴수투사체,TX_Projectile_Boss,2,5.5,10.5,10,2,5
