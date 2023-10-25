@@ -36,10 +36,12 @@ public class Gun : MonoBehaviour
         
         if(ARAVR_Input.Get(ARAVR_Input.Button.IndexTrigger) && attackAfter > attackSpeed && !isReinforced)
         {
+            ARAVR_Input.PlayVibration(ARAVR_Input.Controller.RTouch);
             ShootBasicBullet();
         }
         else if(ARAVR_Input.Get(ARAVR_Input.Button.IndexTrigger) && attackAfter > attackReinforceSpeed && isReinforced)
         {
+            ARAVR_Input.PlayVibration(ARAVR_Input.Controller.RTouch);
             ShootReinforceBullet();
         }
 
