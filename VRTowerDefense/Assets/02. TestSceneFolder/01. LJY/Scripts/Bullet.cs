@@ -18,8 +18,8 @@ public class Bullet : MonoBehaviour
 
     private void Awake()
     {
-        bulletAtk = data.items[0].Atk;
-        bulletCriticalRate = data.items[0].Critical_Rate;
+        //bulletAtk = data.items[0].Atk;
+        //bulletCriticalRate = data.items[0].Critical_Rate;
     }
 
     private void Start()

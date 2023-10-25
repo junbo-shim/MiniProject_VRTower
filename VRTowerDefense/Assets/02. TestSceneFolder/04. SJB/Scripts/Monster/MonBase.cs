@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class MonBase : MonoBehaviour
 {
     //SSM 23 10 23 
-    public Canvas dieUi;
+    public Image dieUi;
     //SSM 20 10 23
     protected NavMeshAgent agent;
     // 몬스터의 Rigidbody
