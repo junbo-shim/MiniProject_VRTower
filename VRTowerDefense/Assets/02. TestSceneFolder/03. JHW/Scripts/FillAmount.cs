@@ -13,7 +13,7 @@ public class FillAmount : MonoBehaviour
         // CSVReader로부터 읽어온 스크립터블 오브젝트 데이터 
         foreach (var data in unitDataScriptableObject.items)
         {
-            elapsedTime = data.Duration;
+            duration = data.Duration;
 
         }
     }

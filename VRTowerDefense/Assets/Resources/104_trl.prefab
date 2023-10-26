@@ -300,6 +300,8 @@ MonoBehaviour:
     speed: 0
     slow: 0
     additionalData: 
+    debuffDuration: 0
+  unitDataScriptableObject: {fileID: 11400000, guid: d0d1117b12004c748bc55460a37919fc, type: 2}
 --- !u!114 &3298458738013618306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,6 +316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fillImage: {fileID: 4321436415411885404}
   duration: 10
+  unitDataScriptableObject: {fileID: 11400000, guid: d0d1117b12004c748bc55460a37919fc, type: 2}
 --- !u!114 &-2527927036035358231
 MonoBehaviour:
   m_ObjectHideFlags: 0

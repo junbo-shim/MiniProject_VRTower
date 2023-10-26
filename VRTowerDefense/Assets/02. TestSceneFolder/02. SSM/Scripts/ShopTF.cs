@@ -20,10 +20,12 @@ public class ShopTF : MonoBehaviour
             string shopChildName = addShop.transform.GetChild(i).gameObject.name;
             int gold = int.Parse(shopChild.transform.Find("Item_Information").Find("BntBuy").Find("BuyText").GetComponent<TMP_Text>().text.ToString());
             string toTal = shopChild.transform.Find("Explanation").transform.Find("Quantity_Text").transform.GetComponent<TMP_Text>().text.ToString();
-            toTal = toTal.Substring(0, 2);
 
-       
-            int input = int.Parse(toTal.Replace("/",""));
+            string[] a =  toTal.Split("/");
+            toTal = a[1].ToString();
+           
+            Debug.Log(toTal);
+            int input = int.Parse(toTal);
            
 
 
@@ -46,7 +48,7 @@ public class ShopTF : MonoBehaviour
             }
         
           
-            shopChild.transform.Find("Explanation").transform.Find("Quantity_Text").transform.GetComponent<TMP_Text>().text = input.ToString() + " / " + TurretCount.ToString();
+            shopChild.transform.Find("Explanation").transform.Find("Quantity_Text").transform.GetComponent<TMP_Text>().text =  TurretCount.ToString() + " / " + input.ToString() ;
            if (input <= TurretCount)
             {
                 shopChild.GetComponent<ItemCellScaleUp>().MaxItem();

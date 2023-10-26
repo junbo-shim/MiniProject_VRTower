@@ -16,7 +16,6 @@ public class ShootBullet : MonoBehaviour
         // CSVReader로부터 읽어온 스크립터블 오브젝트 데이터 
         foreach (var data in projectileData.items)
         {
-            Debug.Log("CSVID: " + data.CSVID + ", Description: " + data.Description + ", Model: " + data.Model + "Atk: " + data.Atk);
             bulletData.damage = data.Atk;
             bulletData.speed = data.projectile_Speed;
             bulletData.slow = data.Movement_Speed;

@@ -52,6 +52,10 @@ public class WeakPoint : MonoBehaviour
         isFeverOn = false;
         transform.localScale = normalSize;
         gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
+
+        // 보스의 활성화 약점 변수 감소
+        boss.GetComponent<Boss>().activatedWeakPoint -= 1;
+        Debug.LogError(boss.GetComponent<Boss>().activatedWeakPoint);
     }
 
     // 약점에 맞을 경우

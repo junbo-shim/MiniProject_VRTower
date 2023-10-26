@@ -57,7 +57,6 @@ public class ObjectPool : MonoBehaviour
     }
     public void ReturnObjectToPool(GameObject obj)
     {
-       
         obj.SetActive(false);
     }
 }

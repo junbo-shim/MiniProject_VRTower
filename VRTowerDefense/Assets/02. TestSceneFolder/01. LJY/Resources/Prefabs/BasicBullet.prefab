@@ -5012,7 +5012,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7324e7c9f6f3c442a8b799995603857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletAtk: 5
+  data: {fileID: 0}
+  bulletAtk: 40
   bulletCriticalRate: 0
   bulletCriticalDmg: 0
   objectPoolManager: {fileID: 0}

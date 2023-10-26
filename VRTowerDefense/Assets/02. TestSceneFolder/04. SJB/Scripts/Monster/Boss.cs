@@ -26,6 +26,9 @@ public class Boss : MonBase
     private BaseMinionPool baseMinionPool;
     private FastMinionPool fastMinionPool;
     private SpawnEffectPool spawnEffectPool;
+
+    private ObjectPool bulletPool;
+    private ObjectPool iceBulletPool;
     // 졸개 스폰포인트 관련 변수
     private List<Vector3> spawnPoints;
     private List<int> spawnPointIdxs;
@@ -36,6 +39,8 @@ public class Boss : MonBase
     public AudioClip bossMoveClip;
     public AudioClip bossAttackClip;
     public AudioClip bossDieClip;
+
+    private Color debuffColor;
     // 코루틴 캐싱 변수
     private WaitForSecondsRealtime minionSpawnTime;
     private WaitForSecondsRealtime fireTime;
@@ -44,8 +49,8 @@ public class Boss : MonBase
     public WaitForSecondsRealtime attackWaitTime;
     // 괴수 약점 오브젝트 리스트
     public List<WeakPoint> weakPointList;
-    // 괴수 약점 bool 변수
-    public bool isWeakTrigger;
+    // 괴수 약점 활성화 갯수 확인 변수
+    public int activatedWeakPoint = default;
     // 괴수 슬로우 스택
     public int slowStack = default;
 
@@ -67,7 +72,14 @@ public class Boss : MonBase
 
     private void FixedUpdate()
     {
-        Move();
+        if (healthPoint > 0) 
+        {
+            Move();
+        }
+        else if (healthPoint <= 0) 
+        {
+        
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -109,16 +121,21 @@ public class Boss : MonBase
             // 데미지 함수를 실행한다
             GetHit(other, (int)other.GetComponent<ShootBullet>().bulletData.damage);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
-            other.GetComponent<GameObject>().SetActive(false);
             // ice bullet 일 경우 해결 해야함
-            //StartCoroutine(SlowCoroutine());
+            if (slowStack < 5) 
+            {
+                StartCoroutine(
+                    SlowCoroutine(other.GetComponent<ShootBullet>().bulletData.debuffDuration,
+                    other.GetComponent<ShootBullet>().bulletData.slow));
+            }
+            iceBulletPool.ReturnObjectToPool(other.gameObject);
         }
         else if (other.GetComponent<ShootBullet>()) 
         {
             // 데미지 함수를 실행한다
             GetHit(other, (int)other.GetComponent<ShootBullet>().bulletData.damage);
             // 실행 후에 오브젝트 풀로 돌아가게 만들어야함
-            other.GetComponent<GameObject>().SetActive(false);
+            bulletPool.ReturnObjectToPool(other.gameObject);
         }
         #endregion
 
@@ -134,11 +151,11 @@ public class Boss : MonBase
         #endregion
     }
 
-    #region 애니메이션 및 사운드sssss
+    #region 애니메이션 및 사운드
     // 일어나는 애니메이션 코루틴
     private IEnumerator GetUpSequence() 
     {
-        yield return new WaitForSecondsRealtime(5.4f);
+        yield return new WaitForSecondsRealtime(5f);
         // 걷기 시작 및 agent 움직임 on
         bossAnimator.SetBool("IsStart", true);
         this.agent.speed = bossData.moveSpeed;
@@ -161,17 +178,34 @@ public class Boss : MonBase
         bossAudioSource.PlayOneShot(bossDieClip);
     }
     // 슬로우 코루틴
-    private IEnumerator SlowCoroutine(float slowtime, float slowMulti)
+    private IEnumerator SlowCoroutine(int slowtime, float slowMulti)
     {
-        bossAnimator.speed *= 0.5f;
-        slowtime += 1;
-        agent.speed -= slowMulti;
+        bossAnimator.speed *= slowMulti;
+        slowStack += 1;
+        agent.speed *= slowMulti;
 
-        yield return new WaitForSecondsRealtime(slowtime);
+        Color debuffColor = new Color
+        (
+            transform.Find("mo").GetComponent<SkinnedMeshRenderer>().materials[0].color.r - 0.2f,
+            transform.Find("mo").GetComponent<SkinnedMeshRenderer>().materials[0].color.g - 0.1f,
+            transform.Find("mo").GetComponent<SkinnedMeshRenderer>().materials[0].color.b,
+            transform.Find("mo").GetComponent<SkinnedMeshRenderer>().materials[0].color.a
+        );
 
-        bossAnimator.speed *= 2f;
-        slowtime -= 1;
-        agent.speed += slowMulti;
+        transform.Find("mo").GetComponent<SkinnedMeshRenderer>().materials[0].color
+            -= debuffColor;
+        transform.Find("mo").GetComponent<SkinnedMeshRenderer>().materials[1].color
+            -= debuffColor;
+
+        yield return new WaitForSecondsRealtime((float)slowtime);
+
+        bossAnimator.speed /= slowMulti;
+        slowStack -= 1;
+        agent.speed /= slowMulti;
+        transform.Find("mo").GetComponent<SkinnedMeshRenderer>().materials[0].color
+            += debuffColor;
+        transform.Find("mo").GetComponent<SkinnedMeshRenderer>().materials[1].color
+            += debuffColor;
     }
     #endregion
 
@@ -185,6 +219,10 @@ public class Boss : MonBase
         FindBaseMinionPool();
         FindFastMinionPool();
         FindSpawnEffectPool();
+        bulletPool = GameObject.Find("Bullets").gameObject.GetComponent<ObjectPool>();
+        iceBulletPool = GameObject.Find("IceBullets").gameObject.GetComponent<ObjectPool>();
+
+        debuffColor = transform.Find("mo").GetComponent<SkinnedMeshRenderer>().materials[0].color;
         // 약점 찾기
         FindWeakPoint();
 
@@ -225,7 +263,7 @@ public class Boss : MonBase
         // 괴수 이동속도
         this.agent.speed = 0f;
         // 괴수 체력
-        this.healthPoint = 50;
+        this.healthPoint = bossData.hp;
         // 괴수 공격 쿨타임
         this.attackCooltime = bossData.atkCoolTime;
         // 괴수 최대 체력
@@ -281,18 +319,23 @@ public class Boss : MonBase
     {
         int num = Random.Range(0, weakPointList.Count);
         bool isPointFound = false;
-        Debug.LogWarning(num);
 
-        while (isPointFound == false || ) 
+        while (isPointFound == false) 
         {
+            if (activatedWeakPoint == weakPointList.Count) 
+            {
+                break;
+            }
+
             if (weakPointList[num].isFeverOn == true)
             {
                 num = Random.Range(0, weakPointList.Count);
-                Debug.LogWarning(num);
             }
             else if (weakPointList[num].isFeverOn == false)
             {
                 weakPointList[num].StartWeakRoutine();
+                activatedWeakPoint += 1;
+                //Debug.LogError(activatedWeakPoint);
                 isPointFound = true;
             }
         }

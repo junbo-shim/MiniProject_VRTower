@@ -17,7 +17,14 @@ public class TurretShoot : MonoBehaviour
         // CSVReader로부터 읽어온 스크립터블 오브젝트 데이터 
         foreach (var data in unitDataScriptableObject.items)
         {
-            fireRate = data.Firing_Interval;
+            if(data.CSVID.Equals("103"))
+            {
+                fireRate = data.Firing_Interval;
+            }
+            else if (data.CSVID.Equals("104"))
+            {
+                fireRate = data.Firing_Interval;
+            }
 
         }
     }

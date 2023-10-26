@@ -99,8 +99,13 @@ public class BuildTower : MonoBehaviour
 
 
                     int Time = int.Parse(hit.collider.gameObject.transform.Find("Explanation").Find("TimeIcon").Find("TimeText").GetComponent<TMP_Text>().text.ToString());
-                  
-                    if (buyCoin <= GameManager.instance.coin)
+                    string toTal = hit.collider.transform.Find("Explanation").transform.Find("Quantity_Text").transform.GetComponent<TMP_Text>().text.ToString();
+
+                    string[] pullCount = toTal.Split("/");
+                    toTal = pullCount[1].ToString();
+                    TurretShoot[] TurretShootList = FindObjectsOfType<TurretShoot>();
+
+                    if (buyCoin <= GameManager.instance.coin || int.Parse(toTal) < TurretShootList.Length)
                     {
 
                         GameManager.instance.MinCoin(buyCoin);
@@ -188,7 +193,6 @@ public class BuildTower : MonoBehaviour
             {
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, targetLayer))
                 {
-
                     // 타겟 오브젝트와 부딪혔을 때 해당 위치에 프리팹을 설치
                     Collider targetCollider = hit.transform.GetComponent<Collider>();
                     if (targetCollider != null && targetCollider.enabled)
@@ -198,6 +202,7 @@ public class BuildTower : MonoBehaviour
 
                         if (buildTurret == false)
                         {
+                    Debug.Log("aoooajsdjasd");
                             isPlatingState = false;
                             GameManager.instance.SetPlayerState("battle");
                             GameObject tower = Instantiate(prefabToPlace, hit.point, Quaternion.identity);
