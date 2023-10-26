@@ -46,7 +46,7 @@ public class ObjectPoolHelper : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Object pool with name '" + poolName + "' not found.");
+            //Debug.LogError("Object pool with name '" + poolName + "' not found.");
         }
     }
 }

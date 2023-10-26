@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WeakPoint : MonoBehaviour
@@ -17,9 +16,9 @@ public class WeakPoint : MonoBehaviour
     private WaitForSecondsRealtime inactiveTime;
     private WaitForSecondsRealtime feverHitTime;
 
-    private bool isWeakOn = false;
+    public bool isFeverOn = false;
 
-    private void Awake()
+    private void Start()
     {
         boss = GameObject.Find("EarthGolem").transform;
         weakAudioSource = transform.GetComponent<AudioSource>();
@@ -32,6 +31,7 @@ public class WeakPoint : MonoBehaviour
         inactiveTime = boss.GetComponent<Boss>().inactiveTime;
     }
 
+    // 상점 기능용 public 메서드
     public void StartWeakRoutine() 
     {
         StartCoroutine(OnOffWeakPoint());
@@ -40,11 +40,16 @@ public class WeakPoint : MonoBehaviour
     // 약점 활성비활성화 Coroutine
     public IEnumerator OnOffWeakPoint() 
     {
-        isWeakOn = true;
+        // bool 값을 true 로 하여 Boss 스크립트에서 구문 제어, 스케일 2배, 머티리얼 변화
+        isFeverOn = true;
         transform.localScale *= 2;
         gameObject.GetComponent<MeshRenderer>().material = weakTimeMaterial;
+
+        // 8초 이후
         yield return weakTime;
-        isWeakOn = false;
+
+        // bool = false, 스케일 복구, 머티리얼 복구
+        isFeverOn = false;
         transform.localScale = normalSize;
         gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
     }
@@ -59,11 +64,11 @@ public class WeakPoint : MonoBehaviour
             boss.GetComponent<Boss>().
                 GetHitWeakPoint(other, (int)other.GetComponent<Bullet>().bulletAtk);
 
-            if (isWeakOn == false) 
+            if (isFeverOn == false) 
             {
                 StartCoroutine(InactiveForSecond());
             }
-            else if (isWeakOn == true) 
+            else if (isFeverOn == true) 
             {
                 StartCoroutine(FeverTime());
             }

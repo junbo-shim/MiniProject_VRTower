@@ -1,16 +1,18 @@
-
 using UnityEngine;
 
 public class Minion : MonBase
 {
+    // Scriptable 
+    private ScriptableObj_Minion baseMinionData;
+    private ScriptableObj_Minion fastMinionData;
+    // 오브젝트 풀
     private BaseMinionPool baseMinionPool;
     private FastMinionPool fastMinionPool;
     private MinionEffectPool minionEffectPool;
-
-
+    // 졸개 속성
     private int distanceOfPlayer;
-    private int attackRange = 5;
-    private int explosionRange = 10;
+    private int agroRange;
+    private int explosionRange;
 
 
     private void Awake()
@@ -20,11 +22,23 @@ public class Minion : MonBase
 
     private void OnEnable()
     {
-        agent.isStopped = false;
+        if (this.agent.isStopped == true) 
+        {
+            if (gameObject.name == "BaseMinion" + "(Clone)")
+            {
+                this.agent.speed = baseMinionData.moveSpeed;
+            }
+            else 
+            {
+                this.agent.speed = fastMinionData.moveSpeed;
+            }
+        }
     }
 
     private void Start()
     {
+        baseMinionPool = transform.parent.GetComponent<BaseMinionPool>();
+        fastMinionPool = transform.parent.GetComponent<FastMinionPool>();
         minionEffectPool = transform.parent.parent.Find("MinionEffect Pool").GetComponent<MinionEffectPool>();
     }
 
@@ -37,41 +51,48 @@ public class Minion : MonBase
     {
         if (other.GetComponent<Bullet>()) 
         {
-            Debug.LogWarning("들어옴?");
             this.GetHit(other, (int)other.GetComponent<Bullet>().bulletAtk);
             GameObject effect = minionEffectPool.GetPoolObject();
-            effect.transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
+            effect.transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
             CheckReturnPool(gameObject);
         }
 
         if (other.name == "Player") 
         {
-            this.agent.isStopped = true;
+            this.agent.speed = 0f;
             Attack();
             GameObject effect = minionEffectPool.GetPoolObject();
-            effect.transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
+            effect.transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
             CheckReturnPool(gameObject);
         }
     }
 
+    // 초기화
     protected override void Init()
     {
         base.Init();
 
-        baseMinionPool = transform.parent.GetComponent<BaseMinionPool>();
-        fastMinionPool = transform.parent.GetComponent<FastMinionPool>();  
+        // Scriptable 할당
+        baseMinionData = (ScriptableObj_Minion)CSVConverter_SJB.Instance.ScriptableObjDictionary[3001];
+        fastMinionData = (ScriptableObj_Minion)CSVConverter_SJB.Instance.ScriptableObjDictionary[3002];
 
+        // 만약 기본 졸개면
         if (gameObject.name == "BaseMinion" + "(Clone)") 
         {
-            // 수치 조정 필요
-            this.healthPoint = 1 * 5;
-            this.damage = 20;
+            this.healthPoint = baseMinionData.hp;
+            this.damage = baseMinionData.damage;
+            agroRange = baseMinionData.agroArea;
+            explosionRange = baseMinionData.explosionArea;
+            this.agent.speed = baseMinionData.moveSpeed;
         }
+        // 만약 빠른 졸개면
         else 
         {
-            // 수치 조정 필요
-            this.healthPoint = 2 * 5;
-            this.damage = 20;
+            this.healthPoint = fastMinionData.hp;
+            this.damage = fastMinionData.damage;
+            agroRange = fastMinionData.agroArea;
+            explosionRange = fastMinionData.explosionArea;
+            this.agent.speed = fastMinionData.moveSpeed;
         }
     }
 
@@ -83,27 +104,35 @@ public class Minion : MonBase
         {
             base.Move();
 
-            //if (distanceOfPlayer > attackRange)
-            //{
-                if (gameObject.name.Contains("Base")) 
-                {
-                    transform.Find("Ani").transform.Rotate(transform.right * 5f, Space.World);
-                }
-                else if (gameObject.name.Contains("Fast")) 
-                {
-                    transform.Find("Ani").transform.Rotate(transform.right * 10f, Space.World);
-                }
-            //}
-            //else if (distanceOfPlayer <= attackRange)
-            //{
-            //    this.agent.isStopped = true;
-            //}
+            // 플레이어와의 거리가 인식범위보다 크면
+            if (distanceOfPlayer > agroRange)
+            {
+                // 졸개 타입에 따라 구른다
+                transform.Find("Ani").transform.Rotate(transform.right * agent.speed * 5f, Space.World);
+
+                #region Legacy
+                //if (gameObject.name.Contains("Base")) 
+                //{
+                //    transform.Find("Ani").transform.Rotate(transform.right * agent.speed * 5f, Space.World);
+                //}
+                //else if (gameObject.name.Contains("Fast")) 
+                //{
+                //    transform.Find("Ani").transform.Rotate(transform.right * agent.speed * 5f, Space.World);
+                //}
+                #endregion
+            }
+            // 플레이어와의 거리가 인식범위보다 작으면
+            else if (distanceOfPlayer <= agroRange)
+            {
+                // 멈춘다
+                this.agent.speed = 0f;
+                Debug.LogWarning(agent.isStopped);
+            }
         }
     }
 
     protected override void Attack()
     {
-        Debug.LogWarning("폭탄 딜 : " + damage);
         GameManager.instance.HpMin(damage);
     }
 
@@ -113,6 +142,7 @@ public class Minion : MonBase
 
         if (healthPoint <= 0) 
         {
+            // 거리 내에 플레이어 존재 시 데미지 가함
             if (distanceOfPlayer <= explosionRange)
             {
                 GameManager.instance.HpMin(damage);

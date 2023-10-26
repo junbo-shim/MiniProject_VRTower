@@ -12,8 +12,6 @@ public class MonBase : MonoBehaviour
     protected Rigidbody rigid;
     // 몬스터의 속도
     protected Vector3 rigidVelocity;
-    // 몬스터의 중력
-    protected float rigidGravity;
     // 플레이어의 위치
     public Transform player;
     // 몬스터가 이동하는 속도

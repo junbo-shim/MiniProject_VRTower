@@ -9,6 +9,7 @@ public class MinionEffect : MonoBehaviour
     private MinionEffectPool effectPool;
     private AudioSource audioSource;
     public AudioClip ExAudio;
+
     private void Awake()
     {
         effect = gameObject.GetComponent<ParticleSystem>();
@@ -30,7 +31,6 @@ public class MinionEffect : MonoBehaviour
         yield return effectDuration;
 
         effect.Stop();
-        Debug.Log(effectPool);
         effectPool.ReturnPoolObject(gameObject);
     }
 }

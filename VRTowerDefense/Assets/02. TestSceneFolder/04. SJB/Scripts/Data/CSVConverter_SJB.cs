@@ -92,8 +92,8 @@ public class CSVConverter_SJB : MonoBehaviour
         dataTrimNull = itemDataFile.text.TrimEnd();
         splitdata = dataTrimNull.Split(new char[] { '\n', ',' });
         // } ID 값만 얻어오기
-        Debug.LogWarning(dataTrimNull);
-        Debug.LogWarning(splitdata);
+
+        //Debug.LogWarning(dataTrimNull);
 
         // { ID 값을 Dictionary 에 저장하기
         for (int i = CSVColumnCount; i < splitdata.Length; i += CSVColumnCount)

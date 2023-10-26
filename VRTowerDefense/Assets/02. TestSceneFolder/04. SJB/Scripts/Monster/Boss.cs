@@ -41,9 +41,10 @@ public class Boss : MonBase
     private WaitForSecondsRealtime fireTime;
     public WaitForSecondsRealtime weakTime;
     public WaitForSecondsRealtime inactiveTime;
-    public WaitForSecondsRealtime animationWaitTime;
+    public WaitForSecondsRealtime attackWaitTime;
     // 괴수 약점 오브젝트 리스트
     public List<WeakPoint> weakPointList;
+    private List<WeakPoint> tempList;
     // 괴수 약점 bool 변수
     public bool isWeakTrigger;
     // 괴수 슬로우 스택
@@ -54,21 +55,15 @@ public class Boss : MonBase
     private void Awake()
     {
         Init();
-        //ChargeProjectile();
         StartCoroutine(GetUpSequence());
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.V)) 
         {
             ActivateWeakPoint();
-        }
-
-        if (Input.GetKeyDown(KeyCode.S)) 
-        {
-            Die();
-        }
+        }   
     }
 
     private void FixedUpdate()
@@ -127,23 +122,44 @@ public class Boss : MonBase
             other.GetComponent<GameObject>().SetActive(false);
         }
         #endregion
+
+        #region Player
+        // 닿은 Collider 가 플레이어면
+        if (other.GetComponent<CharacterController>()) 
+        {
+            this.agent.speed = 0f;
+            bossAnimator.SetTrigger("Defeat");
+            // 체력 전체 마이너스
+            GameManager.instance.HpMin(GameManager.instance.playerHp);
+        }
+        #endregion
     }
 
-    #region 애니메이션 및 사운드
+    #region 애니메이션 및 사운드sssss
     // 일어나는 애니메이션 코루틴
     private IEnumerator GetUpSequence() 
     {
-        yield return new WaitForSecondsRealtime(5f);
+        yield return new WaitForSecondsRealtime(5.4f);
         // 걷기 시작 및 agent 움직임 on
         bossAnimator.SetBool("IsStart", true);
-        agent.isStopped = false;
+        this.agent.speed = bossData.moveSpeed;
     }
     // 보스 움직임과 소리
     protected override void Move()
     {
         base.Move();
-        bossAudioSource.clip = bossMoveClip;
-        bossAudioSource.PlayOneShot(bossAudioSource.clip);
+    }
+    public void Walk() 
+    {
+        bossAudioSource.PlayOneShot(bossMoveClip);
+    }
+    public void Roar() 
+    {
+        bossAudioSource.PlayOneShot(bossAttackClip);
+    }
+    public void Fall() 
+    {
+        bossAudioSource.PlayOneShot(bossDieClip);
     }
     // 슬로우 코루틴
     private IEnumerator SlowCoroutine(float slowtime, float slowMulti)
@@ -182,8 +198,6 @@ public class Boss : MonBase
         // startPos 할당 및 괴수 초기위치 설정
         startPos = new Vector3(3f, 0.27f, 287.5f);
         gameObject.transform.position = startPos;
-        // Init 시에는 agent 움직임 멈춤
-        agent.isStopped = true;
 
         // 괴수 애니메이터 및 사운드 할당
         bossAnimator = gameObject.GetComponent<Animator>();
@@ -192,19 +206,30 @@ public class Boss : MonBase
         // HP 게이지 할당
         hpGauge = gameObject.transform.Find("Canvas").Find("Gauge").GetComponent<Image>();
 
-        // 모든 변수는 CSV 로 읽어와야하며 배율도 수정해야함
-        minionSpawnTime = new WaitForSecondsRealtime(0.5f);
-        fireTime = new WaitForSecondsRealtime(2f);
-        weakTime = new WaitForSecondsRealtime(10f);
-        inactiveTime = new WaitForSecondsRealtime(5f);
-        animationWaitTime = new WaitForSecondsRealtime(6f);
+        // 졸개 소환 위치 관련 변수
         spawnPoints = new List<Vector3>();
         spawnPointIdxs = new List<int>();
         spawnAdjustHeight = new Vector3(0f, 20f, 0f);
 
-        this.healthPoint = 10000;
-        this.moveSpeed = 100f;
-        this.attackCooltime = 5f;
+        // 모든 변수는 CSV 로 읽어와야하며 배율도 수정해야함
+        // 소환 이펙트 - 졸개 소환 코루틴 사이 yield return time
+        minionSpawnTime = new WaitForSecondsRealtime(1f);
+        // 투사체 발사를 위해 대기하는 yield return time
+        fireTime = new WaitForSecondsRealtime(projectileData.coolTime);
+        // 피버타임 지속시간
+        weakTime = new WaitForSecondsRealtime(8f);
+        // 괴수 약점 재활성화 시간
+        inactiveTime = new WaitForSecondsRealtime((float)bossData.weakPointDuration);
+        // 괴수 공격 시 애니메이션과 일치시키기 위한 yield return time
+        attackWaitTime = new WaitForSecondsRealtime(bossData.atkCoolTime * 0.1f);
+
+        // 괴수 이동속도
+        this.agent.speed = 0f;
+        // 괴수 체력
+        this.healthPoint = 50;
+        // 괴수 공격 쿨타임
+        this.attackCooltime = bossData.atkCoolTime;
+        // 괴수 최대 체력
         this.maxHealthPoint = healthPoint;
     }
 
@@ -213,25 +238,33 @@ public class Boss : MonBase
     // 데미지 차감 함수 및 체력 게이지 업데이트
     protected override void GetHit(Collider other, int damage)
     {
+        // 체력에서 데미지 감산
         healthPoint -= damage;
+        // 체력 게이지 업데이트
         hpGauge.fillAmount = (float)healthPoint / (float)maxHealthPoint;
 
+        // 만약 남은 체력이 0 초과면
         if (healthPoint > 0) 
         {
             /* Do Nothing */
         }
+        // 만약 0 이하이면
         else if (healthPoint <= 0) 
         {
-            Die();
+            // Die 애니메이션이 활성화되지 않은 경우만
+            if (bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Die") == false) 
+            {
+                Die();
+            }
         }
     }
     // Weak Point 에서 사용할 수 있도록 열어준 GetHit 메서드
     public void GetHitWeakPoint(Collider other, int damage)
     {
-        this.GetHit(other, (int)(damage * 1.5f));
+        // 데미지 배율 적용
+        this.GetHit(other, (int)(damage * bossData.weakPointMultiflier));
     }
     #endregion
-
 
     #region 약점 관련 기능
     // 약점 찾아오는 메서드
@@ -239,19 +272,49 @@ public class Boss : MonBase
     {
         weakPointList = new List<WeakPoint>();
         weakPointList.AddRange(FindObjectsOfType<WeakPoint>());
+        tempList = new List<WeakPoint>();
     }
     // 넘겨줄 약점 활성화 메서드
     public void ActivateWeakPoint()
     {
-        int num = Random.Range(0, weakPointList.Count);
-        weakPointList[num].StartWeakRoutine();
+        // 임시 리스트 클리어 후 약점 리스트를 할당
+        tempList.Clear();
+        tempList = weakPointList;
+
+        CheckWeakPointToOn();
     }
+    private void CheckWeakPointToOn() 
+    {
+        int num = Random.Range(0, tempList.Count);
+        Debug.LogWarning(num);
+
+        if (tempList.Count > 0)
+        {
+            if (tempList[num].isFeverOn == true)
+            {
+                tempList.Remove(tempList[num]);
+                CheckWeakPointToOn();
+            }
+            else if (tempList[num].isFeverOn == false)
+            {
+                tempList[num].StartWeakRoutine();
+            }
+        }
+        else
+        {
+            /* Do Nothing */
+            Debug.LogWarning("There's no WeakPoint to Activate");
+        }
+    }
+
     #endregion
 
     #region 투사체 관련 기능
     // 보스의 투사체 발사 위치 할당
     private void FindFireHolder()
     {
+        // projectileData 에서 값을 받아와 할당
+        // 왜 배열 크기로 하려는 projectileData.respawnNumber 가 null 인지 모르겠음
         fireHolders = new Transform[5];
         Transform fireHolder = gameObject.transform.Find("FireHolder").transform;
 
@@ -318,7 +381,7 @@ public class Boss : MonBase
     {
         int randomNum = Random.Range(min, max);
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 2; i++)
         {
             if (randomNum >= max * 0.5f)
             {
@@ -382,16 +445,13 @@ public class Boss : MonBase
     {
         // 애니메이터의 IsAreaTouched 값 변경
         bossAnimator.SetBool("IsAreaTouched", true);
-        // 현재 걷고 있는 오디오 정지
-        bossAudioSource.Stop();
-        bossAudioSource.clip = bossAttackClip;
-        // 사운드 변경 - 괴수 공격 사운드
-        bossAudioSource.PlayOneShot(bossAudioSource.clip);
-        agent.isStopped = true;
-        yield return animationWaitTime;
+        agent.speed = 0f;
+        yield return attackWaitTime;
+
         SpawnMinion();
         ChargeProjectile();
-        agent.isStopped = false;
+
+        agent.speed = bossData.moveSpeed;
         bossAnimator.SetBool("IsAreaTouched", false);
     }
 
@@ -399,15 +459,9 @@ public class Boss : MonBase
     // 보스 죽음
     protected override void Die()
     {
-        //base.Die();
-        // 현재 재생 중 오디오 정지
-        bossAudioSource.Stop();
-        bossAudioSource.clip = bossDieClip;
-        bossAudioSource.PlayOneShot(bossAudioSource.clip);
+        base.Die();
+        agent.speed = 0f;
         // 애니메이션 트리거 on
-        bossAnimator.SetBool("IsStart", false);
-        bossAnimator.SetBool("IsAreaTouched", false);
-        bossAnimator.SetBool("IsDie", true);
-        agent.isStopped = true;
+        bossAnimator.SetTrigger("Die");
     }
 }

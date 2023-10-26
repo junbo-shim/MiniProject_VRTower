@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        hpText.text = "100 / "+playerHp.ToString();
+        hpText.text = playerHp.ToString() + " / 100";
         coinText.text = coin.ToString();
     }
     
@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
         float fillHp = hp;
 
         fillHp = (fillHp - 0) / (100 - 0);
-        Debug.Log(fillHp);
+        //Debug.Log(fillHp);
         return fillHp;
     }
     public void SetPlayerState(string state)
