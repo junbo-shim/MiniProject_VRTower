@@ -44,7 +44,6 @@ public class Boss : MonBase
     public WaitForSecondsRealtime attackWaitTime;
     // 괴수 약점 오브젝트 리스트
     public List<WeakPoint> weakPointList;
-    private List<WeakPoint> tempList;
     // 괴수 약점 bool 변수
     public bool isWeakTrigger;
     // 괴수 슬로우 스택
@@ -272,38 +271,30 @@ public class Boss : MonBase
     {
         weakPointList = new List<WeakPoint>();
         weakPointList.AddRange(FindObjectsOfType<WeakPoint>());
-        tempList = new List<WeakPoint>();
     }
     // 넘겨줄 약점 활성화 메서드
     public void ActivateWeakPoint()
     {
-        // 임시 리스트 클리어 후 약점 리스트를 할당
-        tempList.Clear();
-        tempList = weakPointList;
-
         CheckWeakPointToOn();
     }
     private void CheckWeakPointToOn() 
     {
-        int num = Random.Range(0, tempList.Count);
+        int num = Random.Range(0, weakPointList.Count);
+        bool isPointFound = false;
         Debug.LogWarning(num);
 
-        if (tempList.Count > 0)
+        while (isPointFound == false || ) 
         {
-            if (tempList[num].isFeverOn == true)
+            if (weakPointList[num].isFeverOn == true)
             {
-                tempList.Remove(tempList[num]);
-                CheckWeakPointToOn();
+                num = Random.Range(0, weakPointList.Count);
+                Debug.LogWarning(num);
             }
-            else if (tempList[num].isFeverOn == false)
+            else if (weakPointList[num].isFeverOn == false)
             {
-                tempList[num].StartWeakRoutine();
+                weakPointList[num].StartWeakRoutine();
+                isPointFound = true;
             }
-        }
-        else
-        {
-            /* Do Nothing */
-            Debug.LogWarning("There's no WeakPoint to Activate");
         }
     }
 
