@@ -9,9 +9,18 @@ public class TurretShoot : MonoBehaviour
     public BulletData bulletData;
                                             // 
     private float nextFireTime = 0f;
+    public UnitDataScriptableObject unitDataScriptableObject;
 
- 
 
+    private void Awake()
+    {
+        // CSVReader로부터 읽어온 스크립터블 오브젝트 데이터 
+        foreach (var data in unitDataScriptableObject.items)
+        {
+            fireRate = data.Firing_Interval;
+
+        }
+    }
 
 
     private void Update()

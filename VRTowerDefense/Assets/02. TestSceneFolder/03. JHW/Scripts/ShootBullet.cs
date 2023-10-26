@@ -9,10 +9,20 @@ public class ShootBullet : MonoBehaviour
     private Rigidbody rb;
     private int chk = 0;
 
-    //public TowerDataScriptableObject projectileData;
+    public TowerDataScriptableObject projectileData;
 
     private void Awake()
     {
+        // CSVReader로부터 읽어온 스크립터블 오브젝트 데이터 
+        foreach (var data in projectileData.items)
+        {
+            Debug.Log("CSVID: " + data.CSVID + ", Description: " + data.Description + ", Model: " + data.Model + "Atk: " + data.Atk);
+            bulletData.damage = data.Atk;
+            bulletData.speed = data.projectile_Speed;
+            bulletData.slow = data.Movement_Speed;
+            bulletData.debuffDuration = data.Debuff;
+        }
+
         rb = GetComponent<Rigidbody>();
     }
 
@@ -24,11 +34,7 @@ public class ShootBullet : MonoBehaviour
 
     private void Start()
     {
-        //// CSVReader로부터 읽어온 스크립터블 오브젝트 데이터 
-        //foreach (var data in projectileData.items)
-        //{
-        //    Debug.Log("CSVID: " + data.CSVID + ", Description: " + data.Description + ", Model: " + data.Model + "Atk: " + data.Atk);
-        //}
+
     }
 
     private void OnDisable()
